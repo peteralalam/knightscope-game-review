@@ -1,0 +1,641 @@
+"use client";
+
+import { Chess, type Color, type PieceSymbol, type Square } from "chess.js";
+import {
+  type ChangeEvent,
+  type CSSProperties,
+  type DragEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  formatEvaluation,
+  GRADE_META,
+  GRADE_ORDER,
+  parsePgn,
+  positionFenAt,
+  reviewMove,
+  summarizeSide,
+  type ParsedGame,
+  type ReviewedMove,
+  type SideSummary,
+} from "../lib/chess-review";
+import { StockfishClient } from "../lib/stockfish-client";
+
+const SAMPLE_PGN = `[Event "A Night at the Opera"]
+[Site "Paris, France"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Paul Morphy"]
+[Black "Duke Karl / Count Isouard"]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5
+6. Bc4 Nf6 7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5
+11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6
+15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0`;
+
+const ENGINE_PRESETS = {
+  quick: { label: "Quick", nodes: 35_000 },
+  balanced: { label: "Balanced", nodes: 90_000 },
+  deep: { label: "Deep", nodes: 220_000 },
+} as const;
+
+type EnginePreset = keyof typeof ENGINE_PRESETS;
+type AnalysisState = "idle" | "loading" | "analyzing" | "complete" | "cancelled" | "error";
+
+const PIECES: Record<Color, Record<PieceSymbol, string>> = {
+  w: { k: "♔", q: "♕", r: "♖", b: "♗", n: "♘", p: "♙" },
+  b: { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" },
+};
+
+const PIECE_NAMES: Record<PieceSymbol, string> = {
+  k: "king",
+  q: "queen",
+  r: "rook",
+  b: "bishop",
+  n: "knight",
+  p: "pawn",
+};
+
+function playerName(game: ParsedGame, color: Color) {
+  return game.headers[color === "w" ? "White" : "Black"] || (color === "w" ? "White" : "Black");
+}
+
+function playerRating(game: ParsedGame, color: Color) {
+  return game.headers[color === "w" ? "WhiteElo" : "BlackElo"] || "Unrated";
+}
+
+function playerInitial(name: string) {
+  const parts = name.split(/[\s/]+/).filter(Boolean);
+  return (parts[0]?.[0] || "?") + (parts.length > 1 ? parts.at(-1)?.[0] || "" : "");
+}
+
+function displayResult(result: string) {
+  if (result === "1-0") return "White won";
+  if (result === "0-1") return "Black won";
+  if (result === "1/2-1/2") return "Draw";
+  return "Game review";
+}
+
+function ratingRange(summary: SideSummary) {
+  const rating = summary.estimatedRating;
+  return rating ? `${rating.low}–${rating.high}` : "More moves needed";
+}
+
+function ImportPanel({
+  pgn,
+  onPgnChange,
+  onFile,
+  onReview,
+  onSample,
+  error,
+  compact = false,
+}: {
+  pgn: string;
+  onPgnChange: (value: string) => void;
+  onFile: (file: File) => void;
+  onReview: () => void;
+  onSample: () => void;
+  error: string;
+  compact?: boolean;
+}) {
+  const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) onFile(file);
+  };
+
+  return (
+    <section className={`import-card${compact ? " import-card--compact" : ""}`} aria-labelledby="import-title">
+      <div className="import-copy">
+        <span className="eyebrow">Private analysis · no account needed</span>
+        <h1 id="import-title">See the story behind every move.</h1>
+        <p>
+          Drop in a PGN. KnightScope runs Stockfish in your browser, grades every decision,
+          and turns the engine output into a review you can actually follow.
+        </p>
+      </div>
+
+      <label
+        className="drop-zone"
+        htmlFor="pgn-file"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={handleDrop}
+      >
+        <span className="drop-icon">↥</span>
+        <strong>Choose or drop a PGN</strong>
+        <span>.pgn or plain text · processed on this device</span>
+        <input
+          id="pgn-file"
+          type="file"
+          accept=".pgn,text/plain,application/x-chess-pgn"
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            const file = event.target.files?.[0];
+            if (file) onFile(file);
+            event.target.value = "";
+          }}
+        />
+      </label>
+
+      <div className="or-divider"><span>or paste notation</span></div>
+
+      <textarea
+        className="pgn-input"
+        value={pgn}
+        onChange={(event) => onPgnChange(event.target.value)}
+        placeholder={'[White "Player one"]\n[Black "Player two"]\n\n1. e4 e5 2. Nf3 ...'}
+        aria-label="PGN notation"
+        spellCheck={false}
+      />
+
+      {error && <p className="form-error" role="alert">{error}</p>}
+
+      <div className="import-actions">
+        <button className="button button--primary" onClick={onReview} disabled={!pgn.trim()}>
+          <span>Review this game</span><span aria-hidden="true">→</span>
+        </button>
+        <button className="button button--ghost" onClick={onSample}>Try the Opera Game</button>
+      </div>
+    </section>
+  );
+}
+
+function PlayerStrip({
+  game,
+  color,
+  summary,
+  complete,
+}: {
+  game: ParsedGame;
+  color: Color;
+  summary: SideSummary;
+  complete: boolean;
+}) {
+  const name = playerName(game, color);
+  return (
+    <div className="player-strip">
+      <div className={`player-avatar player-avatar--${color}`} aria-hidden="true">{playerInitial(name)}</div>
+      <div className="player-identity">
+        <strong>{name}</strong>
+        <span>{playerRating(game, color)}</span>
+      </div>
+      <div className="player-metrics">
+        <div><span>Accuracy</span><strong>{complete ? `${summary.accuracy.toFixed(1)}%` : "—"}</strong></div>
+        <div><span>Est. range</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
+      </div>
+    </div>
+  );
+}
+
+function ChessBoard({
+  fen,
+  orientation,
+  lastMove,
+  review,
+}: {
+  fen: string;
+  orientation: Color;
+  lastMove?: { from: Square; to: Square };
+  review?: ReviewedMove;
+}) {
+  const chess = useMemo(() => new Chess(fen), [fen]);
+  const files = orientation === "w" ? ["a", "b", "c", "d", "e", "f", "g", "h"] : ["h", "g", "f", "e", "d", "c", "b", "a"];
+  const ranks = orientation === "w" ? [8, 7, 6, 5, 4, 3, 2, 1] : [1, 2, 3, 4, 5, 6, 7, 8];
+
+  return (
+    <div className="board" role="grid" aria-label={`Chess position, ${orientation === "w" ? "white" : "black"} side below`}>
+      {ranks.flatMap((rank, rowIndex) =>
+        files.map((file, columnIndex) => {
+          const square = `${file}${rank}` as Square;
+          const piece = chess.get(square);
+          const fileIndex = file.charCodeAt(0) - 97;
+          const isLight = (fileIndex + rank) % 2 === 0;
+          const isLastMove = lastMove?.from === square || lastMove?.to === square;
+          const isDestination = lastMove?.to === square;
+          return (
+            <div
+              key={square}
+              className={`square square--${isLight ? "light" : "dark"}${isLastMove ? " square--last" : ""}`}
+              role="gridcell"
+              aria-label={`${square}${piece ? `, ${piece.color === "w" ? "white" : "black"} ${PIECE_NAMES[piece.type]}` : ", empty"}`}
+            >
+              {columnIndex === 0 && <span className="coord coord--rank">{rank}</span>}
+              {rowIndex === 7 && <span className="coord coord--file">{file}</span>}
+              {piece && (
+                <span className={`piece piece--${piece.color}`} aria-hidden="true">
+                  {PIECES[piece.color][piece.type]}
+                </span>
+              )}
+              {isDestination && review && (
+                <span className={`move-marker grade-${review.grade}`} aria-label={GRADE_META[review.grade].label}>
+                  {GRADE_META[review.grade].symbol}
+                </span>
+              )}
+            </div>
+          );
+        }),
+      )}
+    </div>
+  );
+}
+
+function EvaluationBar({ expectedWhite, label }: { expectedWhite: number; label: string }) {
+  const white = Math.max(4, Math.min(96, expectedWhite * 100));
+  return (
+    <div className="eval-bar" aria-label={`Position evaluation ${label}`}>
+      <div className="eval-bar__black" style={{ height: `${100 - white}%` }} />
+      <div className="eval-bar__white" style={{ height: `${white}%` }} />
+      <span className={`eval-bar__label${expectedWhite < 0.5 ? " eval-bar__label--dark" : ""}`}>{label}</span>
+    </div>
+  );
+}
+
+function MoveButton({
+  move,
+  review,
+  selected,
+  onClick,
+}: {
+  move?: ParsedGame["moves"][number];
+  review?: ReviewedMove;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  if (!move) return <span className="move-slot move-slot--empty" />;
+  const grade = review?.grade;
+  return (
+    <button
+      className={`move-slot${selected ? " move-slot--selected" : ""}`}
+      data-grade={grade}
+      onClick={onClick}
+      aria-label={`${move.moveNumber}${move.color === "b" ? " black" : " white"}, ${move.san}${grade ? `, ${GRADE_META[grade].label}` : ""}`}
+    >
+      <span>{move.san}</span>
+      {grade && <span className={`move-grade grade-${grade}`} aria-hidden="true">{GRADE_META[grade].short || GRADE_META[grade].symbol}</span>}
+    </button>
+  );
+}
+
+function AccuracyRing({ value, color }: { value: number; color: Color }) {
+  const rounded = Math.round(value);
+  return (
+    <div className={`accuracy-ring accuracy-ring--${color}`} style={{ "--accuracy": `${rounded * 3.6}deg` } as CSSProperties}>
+      <div><strong>{value.toFixed(1)}</strong><span>accuracy</span></div>
+    </div>
+  );
+}
+
+function SelectedMoveCard({ review, move }: { review?: ReviewedMove; move?: ParsedGame["moves"][number] }) {
+  if (!move) {
+    return (
+      <div className="selected-card selected-card--intro">
+        <span className="eyebrow">Game overview</span>
+        <h2>Start at the beginning</h2>
+        <p>Use the move list or board controls to walk through the engine’s review.</p>
+      </div>
+    );
+  }
+  if (!review) {
+    return (
+      <div className="selected-card selected-card--waiting">
+        <span className="thinking-dot" /><span>Waiting for this move’s engine pass…</span>
+      </div>
+    );
+  }
+  const meta = GRADE_META[review.grade];
+  return (
+    <article className={`selected-card selected-card--${review.grade}`}>
+      <div className="selected-card__heading">
+        <span className={`grade-medallion grade-${review.grade}`}>{meta.symbol}</span>
+        <div>
+          <span className="eyebrow">Move {review.moveNumber}{review.color === "b" ? "…" : "."}</span>
+          <h2>{review.san} <small>{meta.label}</small></h2>
+        </div>
+        <strong className="selected-eval">{formatEvaluation(review.cpWhiteAfter, review.mateWhiteAfter)}</strong>
+      </div>
+      <p>{review.explanation}</p>
+      <div className="line-block">
+        <span>{review.bestMove === review.uci ? "Engine continuation" : `Better was ${review.bestMoveSan}`}</span>
+        <div className="pv-line">
+          {review.bestLineSan.length ? review.bestLineSan.map((san, index) => <kbd key={`${san}-${index}`}>{san}</kbd>) : <em>No continuation</em>}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function SummaryPanel({
+  game,
+  reviews,
+  white,
+  black,
+  complete,
+}: {
+  game: ParsedGame;
+  reviews: ReviewedMove[];
+  white: SideSummary;
+  black: SideSummary;
+  complete: boolean;
+}) {
+  return (
+    <section className="summary-section" aria-label="Game summary">
+      <div className="summary-title">
+        <div><span className="eyebrow">Review summary</span><h3>{displayResult(game.result)}</h3></div>
+        <span className="result-pill">{game.result}</span>
+      </div>
+      <div className="accuracy-pair">
+        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>single-game range</small></div>
+        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>single-game range</small></div>
+      </div>
+      <div className="grade-table" aria-label="Move classification counts">
+        <div className="grade-table__header"><span>Move quality</span><span>White</span><span>Black</span></div>
+        {GRADE_ORDER.map((grade) => (
+          <div className="grade-table__row" key={grade}>
+            <span><i className={`grade-dot grade-${grade}`} />{GRADE_META[grade].label}</span>
+            <strong>{white.counts[grade]}</strong>
+            <strong>{black.counts[grade]}</strong>
+          </div>
+        ))}
+      </div>
+      {complete && reviews.length > 0 && (
+        <p className="estimate-note">Rating ranges are broad performance estimates from this game—not account ratings.</p>
+      )}
+    </section>
+  );
+}
+
+export function ChessReviewApp() {
+  const [pgn, setPgn] = useState("");
+  const [game, setGame] = useState<ParsedGame | null>(null);
+  const [reviews, setReviews] = useState<ReviewedMove[]>([]);
+  const [cursor, setCursor] = useState(0);
+  const [orientation, setOrientation] = useState<Color>("w");
+  const [preset, setPreset] = useState<EnginePreset>("balanced");
+  const [analysisPreset, setAnalysisPreset] = useState<EnginePreset>("balanced");
+  const [analysisState, setAnalysisState] = useState<AnalysisState>("idle");
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [error, setError] = useState("");
+  const [importOpen, setImportOpen] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const engineRef = useRef<StockfishClient | null>(null);
+  const runRef = useRef(0);
+
+  const isComplete = analysisState === "complete" && Boolean(game) && reviews.length === game?.moves.length;
+  const whiteSummary = useMemo(() => summarizeSide(reviews, "w", game?.headers ?? {}), [reviews, game]);
+  const blackSummary = useMemo(() => summarizeSide(reviews, "b", game?.headers ?? {}), [reviews, game]);
+  const currentMove = game && cursor > 0 ? game.moves[cursor - 1] : undefined;
+  const currentReview = cursor > 0 ? reviews[cursor - 1] : undefined;
+  const currentFen = game ? positionFenAt(game, cursor) : "";
+
+  const expectedWhite = useMemo(() => {
+    if (!reviews.length) return 0.5;
+    if (cursor <= 0) return reviews[0].expectedWhiteBefore;
+    return reviews[Math.min(cursor, reviews.length) - 1]?.expectedWhiteAfter ?? 0.5;
+  }, [cursor, reviews]);
+
+  const evaluationLabel = useMemo(() => {
+    if (!reviews.length) return "0.00";
+    if (cursor <= 0) return formatEvaluation(reviews[0].cpWhiteBefore, reviews[0].mateWhiteBefore);
+    const review = reviews[Math.min(cursor, reviews.length) - 1];
+    return review ? formatEvaluation(review.cpWhiteAfter, review.mateWhiteAfter) : "0.00";
+  }, [cursor, reviews]);
+
+  const cancelAnalysis = useCallback(() => {
+    runRef.current += 1;
+    engineRef.current?.dispose();
+    engineRef.current = null;
+    setAnalysisState((state) => state === "analyzing" || state === "loading" ? "cancelled" : state);
+  }, []);
+
+  const analyzeGame = useCallback(async (parsed: ParsedGame) => {
+    cancelAnalysis();
+    const runId = runRef.current + 1;
+    runRef.current = runId;
+    setGame(parsed);
+    setReviews([]);
+    setCursor(0);
+    setPlaying(false);
+    setError("");
+    setImportOpen(false);
+    setProgress({ current: 0, total: parsed.moves.length });
+    setAnalysisState("loading");
+
+    const selectedPreset = preset;
+    setAnalysisPreset(selectedPreset);
+    let engine: StockfishClient | null = null;
+    const completed: ReviewedMove[] = [];
+    try {
+      engine = new StockfishClient();
+      engineRef.current = engine;
+      await engine.initialize();
+      if (runRef.current !== runId) return;
+      setAnalysisState("analyzing");
+      for (let index = 0; index < parsed.moves.length; index += 1) {
+        const move = parsed.moves[index];
+        const result = await engine.analyzeMove(move.before, move.uci, ENGINE_PRESETS[selectedPreset].nodes);
+        if (runRef.current !== runId) return;
+        const reviewed = reviewMove(parsed, index, result);
+        completed.push(reviewed);
+        setReviews([...completed]);
+        setProgress({ current: index + 1, total: parsed.moves.length });
+        setCursor(index + 1);
+      }
+      if (runRef.current !== runId) return;
+      const interesting = completed.findIndex((move) => move.index >= 8 && !["best", "good"].includes(move.grade));
+      setCursor(interesting >= 0 ? interesting + 1 : Math.min(1, completed.length));
+      setAnalysisState("complete");
+    } catch (caught) {
+      if (runRef.current !== runId) return;
+      const message = caught instanceof Error ? caught.message : "The review could not be completed.";
+      if (message !== "Analysis cancelled.") {
+        setError(message);
+        setAnalysisState("error");
+      }
+    } finally {
+      if (engine && engineRef.current === engine) {
+        engine.dispose();
+        engineRef.current = null;
+      }
+    }
+  }, [cancelAnalysis, preset]);
+
+  useEffect(() => () => {
+    runRef.current += 1;
+    engineRef.current?.dispose();
+  }, []);
+
+  useEffect(() => {
+    if (!playing || !game) return;
+    const timer = window.setInterval(() => {
+      setCursor((current) => {
+        if (current >= game.moves.length) {
+          setPlaying(false);
+          return current;
+        }
+        return current + 1;
+      });
+    }, 850);
+    return () => window.clearInterval(timer);
+  }, [playing, game]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement;
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || !game) return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setPlaying(false);
+        setCursor((value) => Math.max(0, value - 1));
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setPlaying(false);
+        setCursor((value) => Math.min(game.moves.length, value + 1));
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [game]);
+
+  const submitPgn = () => {
+    try {
+      const parsed = parsePgn(pgn);
+      void analyzeGame(parsed);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "The PGN could not be read.");
+    }
+  };
+
+  const useSample = () => {
+    setPgn(SAMPLE_PGN);
+    setError("");
+    void analyzeGame(parsePgn(SAMPLE_PGN));
+  };
+
+  const readFile = (file: File) => {
+    if (file.size > 1_000_000) {
+      setError("That file is over 1 MB. Please choose a single-game PGN.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPgn(String(reader.result ?? ""));
+      setError("");
+    };
+    reader.onerror = () => setError("The file could not be read.");
+    reader.readAsText(file);
+  };
+
+  const analysisActive = analysisState === "loading" || analysisState === "analyzing";
+
+  return (
+    <div className="app-shell">
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="KnightScope home">
+          <span className="brand-mark" aria-hidden="true">♞</span>
+          <span><strong>KnightScope</strong><small>GAME REVIEW</small></span>
+        </a>
+        <div className="topbar-actions">
+          <span className="local-badge"><i /> Stockfish 18 · on-device</span>
+          <label className="engine-select">
+            <span>Engine effort</span>
+            <select value={preset} onChange={(event) => setPreset(event.target.value as EnginePreset)} disabled={analysisActive}>
+              {Object.entries(ENGINE_PRESETS).map(([key, value]) => <option key={key} value={key}>{value.label}</option>)}
+            </select>
+          </label>
+          {game && <button className="button button--compact" onClick={() => setImportOpen(true)}>＋ New PGN</button>}
+        </div>
+      </header>
+
+      <main id="top">
+        {!game ? (
+          <div className="landing">
+            <div className="landing-orbit landing-orbit--one" />
+            <div className="landing-orbit landing-orbit--two" />
+            <ImportPanel pgn={pgn} onPgnChange={setPgn} onFile={readFile} onReview={submitPgn} onSample={useSample} error={error} />
+            <div className="trust-row" aria-label="Features">
+              <span><b>01</b> Engine-backed grades</span>
+              <span><b>02</b> Visual move replay</span>
+              <span><b>03</b> Heuristic rating range</span>
+            </div>
+          </div>
+        ) : (
+          <div className="workspace">
+            <section className="board-column" aria-label="Game board">
+              <PlayerStrip game={game} color={orientation === "w" ? "b" : "w"} summary={orientation === "w" ? blackSummary : whiteSummary} complete={isComplete} />
+              <div className="board-stage">
+                <EvaluationBar expectedWhite={expectedWhite} label={evaluationLabel} />
+                <ChessBoard fen={currentFen} orientation={orientation} lastMove={currentMove} review={currentReview} />
+              </div>
+              <PlayerStrip game={game} color={orientation} summary={orientation === "w" ? whiteSummary : blackSummary} complete={isComplete} />
+
+              <div className="board-controls" aria-label="Board navigation">
+                <button onClick={() => { setPlaying(false); setCursor(0); }} aria-label="First position" title="First position">|‹</button>
+                <button onClick={() => { setPlaying(false); setCursor((value) => Math.max(0, value - 1)); }} aria-label="Previous move" title="Previous move">‹</button>
+                <button className="play-button" onClick={() => setPlaying((value) => !value)} aria-label={playing ? "Pause replay" : "Play moves"} title={playing ? "Pause" : "Play"}>{playing ? "Ⅱ" : "▶"}</button>
+                <button onClick={() => { setPlaying(false); setCursor((value) => Math.min(game.moves.length, value + 1)); }} aria-label="Next move" title="Next move">›</button>
+                <button onClick={() => { setPlaying(false); setCursor(game.moves.length); }} aria-label="Last position" title="Last position">›|</button>
+                <span className="control-divider" />
+                <button onClick={() => setOrientation((value) => value === "w" ? "b" : "w")} aria-label="Flip board" title="Flip board">↻</button>
+              </div>
+
+              <p className="keyboard-hint">Tip: use <kbd>←</kbd> <kbd>→</kbd> to step through moves</p>
+            </section>
+
+            <aside className="review-column">
+              {analysisActive && (
+                <div className="analysis-progress" role="status" aria-live="polite">
+                  <div><span className="engine-pulse" /><strong>{analysisState === "loading" ? "Loading Stockfish…" : `Reviewing move ${progress.current + 1} of ${progress.total}`}</strong><button onClick={cancelAnalysis}>Cancel</button></div>
+                  <div className="progress-track"><span style={{ width: `${progress.total ? (progress.current / progress.total) * 100 : 2}%` }} /></div>
+                </div>
+              )}
+              {analysisState === "cancelled" && (
+                <div className="analysis-message"><span>Review paused at move {progress.current}.</span><button onClick={() => void analyzeGame(game)}>Start again</button></div>
+              )}
+              {analysisState === "error" && (
+                <div className="analysis-message analysis-message--error" role="alert"><span>{error}</span><button onClick={() => void analyzeGame(game)}>Retry</button></div>
+              )}
+
+              <SelectedMoveCard move={currentMove} review={currentReview} />
+
+              <div className="panel-scroll">
+                <div className="move-list-heading"><div><span className="eyebrow">Move by move</span><h3>Full notation</h3></div><span>{game.moves.length} plies</span></div>
+                <div className="move-list" aria-label="Moves">
+                  {Array.from({ length: Math.ceil(game.moves.length / 2) }, (_, row) => {
+                    const whiteIndex = row * 2;
+                    const blackIndex = whiteIndex + 1;
+                    return (
+                      <div className="move-row" key={row}>
+                        <span className="move-number">{row + 1}.</span>
+                        <MoveButton move={game.moves[whiteIndex]} review={reviews[whiteIndex]} selected={cursor === whiteIndex + 1} onClick={() => { setPlaying(false); setCursor(whiteIndex + 1); }} />
+                        <MoveButton move={game.moves[blackIndex]} review={reviews[blackIndex]} selected={cursor === blackIndex + 1} onClick={() => { setPlaying(false); setCursor(blackIndex + 1); }} />
+                      </div>
+                    );
+                  })}
+                </div>
+                <SummaryPanel game={game} reviews={reviews} white={whiteSummary} black={blackSummary} complete={isComplete} />
+                <footer className="review-footer">
+                  <span>Model KS-1 · {ENGINE_PRESETS[analysisPreset].nodes / 1000}k nodes per search</span>
+                  <a href="https://github.com/nmrugg/stockfish.js" target="_blank" rel="noreferrer">Stockfish 18 · GPL v3</a>
+                </footer>
+              </div>
+            </aside>
+          </div>
+        )}
+      </main>
+
+      {importOpen && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setImportOpen(false); }}>
+          <div className="modal" role="dialog" aria-modal="true" aria-label="Import another PGN">
+            <button className="modal-close" onClick={() => setImportOpen(false)} aria-label="Close">×</button>
+            <ImportPanel compact pgn={pgn} onPgnChange={setPgn} onFile={readFile} onReview={submitPgn} onSample={useSample} error={error} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
