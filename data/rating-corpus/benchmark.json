@@ -1,0 +1,1573 @@
+{
+ "samples": 4271,
+ "protocol": "Model choice, hyperparameters and the interval model use 5-fold player-grouped cross-validation on train+validation; the final model is refit on train+validation; every held-out number is on test.",
+ "timeControls": {
+  "blitz": {
+   "splits": {
+    "train+validation": 1443,
+    "test": 358
+   },
+   "players": {
+    "train+validation": 1418,
+    "test": 348
+   },
+   "chosen": {
+    "isotonic": null,
+    "ridge": 300,
+    "gbm": [
+     0.03,
+     200
+    ]
+   },
+   "cvMae": {
+    "isotonic": 271.8,
+    "ridge": 255.5,
+    "gbm": 253.7
+   },
+   "test": {
+    "constant": {
+     "n": 358,
+     "mae": 301.3,
+     "medianAe": 309.0,
+     "rmse": 343.8,
+     "r2": -0.001,
+     "bias": 10.8
+    },
+    "heuristic": {
+     "n": 358,
+     "mae": 476.4,
+     "medianAe": 438.0,
+     "rmse": 558.8,
+     "r2": -1.644,
+     "bias": -458.5
+    },
+    "errmodel": {
+     "n": 358,
+     "mae": 287.5,
+     "medianAe": 302.0,
+     "rmse": 327.9,
+     "r2": 0.089,
+     "bias": -3.1
+    },
+    "isotonic": {
+     "n": 358,
+     "mae": 260.4,
+     "medianAe": 240.6,
+     "rmse": 305.5,
+     "r2": 0.21,
+     "bias": 4.1
+    },
+    "ridge": {
+     "n": 358,
+     "mae": 242.8,
+     "medianAe": 231.6,
+     "rmse": 284.7,
+     "r2": 0.314,
+     "bias": 5.6
+    },
+    "gbm": {
+     "n": 358,
+     "mae": 235.1,
+     "medianAe": 217.6,
+     "rmse": 282.7,
+     "r2": 0.323,
+     "bias": 8.8
+    },
+    "ridge+opponent (not shipped)": {
+     "n": 358,
+     "mae": 233.8,
+     "medianAe": 209.1,
+     "rmse": 276.6,
+     "r2": 0.352,
+     "bias": 5.3
+    }
+   },
+   "maeByBand": {
+    "1400–1600": {
+     "constant": 456.8,
+     "heuristic": 226.7,
+     "errmodel": 421.7,
+     "isotonic": 372.6,
+     "ridge": 341.5,
+     "gbm": 326.9,
+     "ridge+opponent (not shipped)": 321.7,
+     "n": 62
+    },
+    "1600–1800": {
+     "constant": 323.2,
+     "heuristic": 283.6,
+     "errmodel": 293.5,
+     "isotonic": 246.9,
+     "ridge": 250.3,
+     "gbm": 238.5,
+     "ridge+opponent (not shipped)": 246.3,
+     "n": 67
+    },
+    "1800–2000": {
+     "constant": 101.3,
+     "heuristic": 373.1,
+     "errmodel": 89.7,
+     "isotonic": 144.6,
+     "ridge": 129.9,
+     "gbm": 141.1,
+     "ridge+opponent (not shipped)": 134.1,
+     "n": 58
+    },
+    "2000–2200": {
+     "constant": 77.0,
+     "heuristic": 565.8,
+     "errmodel": 95.4,
+     "isotonic": 142.1,
+     "ridge": 134.8,
+     "gbm": 145.9,
+     "ridge+opponent (not shipped)": 143.5,
+     "n": 45
+    },
+    "2200–2400": {
+     "constant": 285.7,
+     "heuristic": 671.1,
+     "errmodel": 286.9,
+     "isotonic": 231.9,
+     "ridge": 210.4,
+     "gbm": 199.4,
+     "ridge+opponent (not shipped)": 203.3,
+     "n": 71
+    },
+    "2400+": {
+     "constant": 514.0,
+     "heuristic": 777.3,
+     "errmodel": 495.3,
+     "isotonic": 406.2,
+     "ridge": 371.7,
+     "gbm": 346.1,
+     "ridge+opponent (not shipped)": 338.1,
+     "n": 55
+    }
+   },
+   "maeByDecisions": {
+    "<15": {
+     "constant": 238.6,
+     "heuristic": 461.4,
+     "errmodel": 216.6,
+     "isotonic": 175.6,
+     "ridge": 200.3,
+     "gbm": 191.0,
+     "ridge+opponent (not shipped)": 192.5,
+     "n": 18
+    },
+    "15–24": {
+     "constant": 316.3,
+     "heuristic": 438.5,
+     "errmodel": 301.5,
+     "isotonic": 274.8,
+     "ridge": 240.3,
+     "gbm": 245.5,
+     "ridge+opponent (not shipped)": 227.5,
+     "n": 109
+    },
+    "25–39": {
+     "constant": 304.5,
+     "heuristic": 501.8,
+     "errmodel": 294.2,
+     "isotonic": 268.5,
+     "ridge": 261.9,
+     "gbm": 250.5,
+     "ridge+opponent (not shipped)": 257.6,
+     "n": 139
+    },
+    "40+": {
+     "constant": 290.9,
+     "heuristic": 485.9,
+     "errmodel": 274.5,
+     "isotonic": 247.7,
+     "ridge": 225.3,
+     "gbm": 208.3,
+     "ridge+opponent (not shipped)": 213.6,
+     "n": 92
+    }
+   },
+   "maeByResult": {
+    "win": {
+     "constant": 312.1,
+     "heuristic": 435.9,
+     "errmodel": 297.9,
+     "isotonic": 274.8,
+     "ridge": 251.4,
+     "gbm": 249.4,
+     "ridge+opponent (not shipped)": 247.0,
+     "n": 172
+    },
+    "draw": {
+     "constant": 356.9,
+     "heuristic": 565.6,
+     "errmodel": 346.9,
+     "isotonic": 301.9,
+     "ridge": 251.0,
+     "gbm": 213.7,
+     "ridge+opponent (not shipped)": 206.0,
+     "n": 14
+    },
+    "loss": {
+     "constant": 286.0,
+     "heuristic": 509.7,
+     "errmodel": 272.3,
+     "isotonic": 242.7,
+     "ridge": 233.5,
+     "gbm": 222.6,
+     "ridge+opponent (not shipped)": 223.0,
+     "n": 172
+    }
+   },
+   "maeByPhaseComposition": {
+    "no endgame": {
+     "constant": 298.3,
+     "heuristic": 483.8,
+     "errmodel": 286.3,
+     "isotonic": 255.8,
+     "ridge": 243.1,
+     "gbm": 242.3,
+     "ridge+opponent (not shipped)": 236.9,
+     "n": 173
+    },
+    "some endgame": {
+     "constant": 297.2,
+     "heuristic": 491.6,
+     "errmodel": 280.5,
+     "isotonic": 257.6,
+     "ridge": 235.2,
+     "gbm": 229.1,
+     "ridge+opponent (not shipped)": 227.8,
+     "n": 88
+    },
+    "endgame-heavy": {
+     "constant": 310.3,
+     "heuristic": 449.4,
+     "errmodel": 295.8,
+     "isotonic": 271.2,
+     "ridge": 249.3,
+     "gbm": 227.9,
+     "ridge+opponent (not shipped)": 233.8,
+     "n": 97
+    }
+   },
+   "maeBySource": {
+    "lichess-puzzle-db": {
+     "constant": 301.3,
+     "heuristic": 476.4,
+     "errmodel": 287.5,
+     "isotonic": 260.4,
+     "ridge": 242.8,
+     "gbm": 235.1,
+     "ridge+opponent (not shipped)": 233.8,
+     "n": 358
+    }
+   },
+   "intervals": {
+    "heuristic": {
+     "coverage80": 0.43,
+     "meanWidth": 757,
+     "byDecisions": {
+      "<15": {
+       "n": 18,
+       "coverage": 0.667,
+       "meanWidth": 944
+      },
+      "15–24": {
+       "n": 109,
+       "coverage": 0.541,
+       "meanWidth": 839
+      },
+      "25–39": {
+       "n": 139,
+       "coverage": 0.374,
+       "meanWidth": 737
+      },
+      "40+": {
+       "n": 92,
+       "coverage": 0.337,
+       "meanWidth": 654
+      }
+     },
+     "byBand": {
+      "1400–1600": {
+       "n": 62,
+       "coverage": 0.774,
+       "meanWidth": 731
+      },
+      "1600–1800": {
+       "n": 67,
+       "coverage": 0.731,
+       "meanWidth": 763
+      },
+      "1800–2000": {
+       "n": 58,
+       "coverage": 0.534,
+       "meanWidth": 774
+      },
+      "2000–2200": {
+       "n": 45,
+       "coverage": 0.267,
+       "meanWidth": 758
+      },
+      "2200–2400": {
+       "n": 71,
+       "coverage": 0.141,
+       "meanWidth": 737
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.073,
+       "meanWidth": 787
+      }
+     }
+    },
+    "errmodel": {
+     "coverage80": 0.816,
+     "meanWidth": 872,
+     "byDecisions": {
+      "<15": {
+       "n": 18,
+       "coverage": 0.889,
+       "meanWidth": 886
+      },
+      "15–24": {
+       "n": 109,
+       "coverage": 0.817,
+       "meanWidth": 879
+      },
+      "25–39": {
+       "n": 139,
+       "coverage": 0.806,
+       "meanWidth": 872
+      },
+      "40+": {
+       "n": 92,
+       "coverage": 0.815,
+       "meanWidth": 861
+      }
+     },
+     "byBand": {
+      "1400–1600": {
+       "n": 62,
+       "coverage": 0.629,
+       "meanWidth": 874
+      },
+      "1600–1800": {
+       "n": 67,
+       "coverage": 1.0,
+       "meanWidth": 875
+      },
+      "1800–2000": {
+       "n": 58,
+       "coverage": 1.0,
+       "meanWidth": 874
+      },
+      "2000–2200": {
+       "n": 45,
+       "coverage": 1.0,
+       "meanWidth": 873
+      },
+      "2200–2400": {
+       "n": 71,
+       "coverage": 0.986,
+       "meanWidth": 869
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.236,
+       "meanWidth": 869
+      }
+     }
+    },
+    "isotonic": {
+     "coverage80": 0.832,
+     "meanWidth": 847,
+     "byDecisions": {
+      "<15": {
+       "n": 18,
+       "coverage": 0.833,
+       "meanWidth": 847
+      },
+      "15–24": {
+       "n": 109,
+       "coverage": 0.771,
+       "meanWidth": 847
+      },
+      "25–39": {
+       "n": 139,
+       "coverage": 0.835,
+       "meanWidth": 847
+      },
+      "40+": {
+       "n": 92,
+       "coverage": 0.902,
+       "meanWidth": 847
+      }
+     },
+     "byBand": {
+      "1400–1600": {
+       "n": 62,
+       "coverage": 0.613,
+       "meanWidth": 847
+      },
+      "1600–1800": {
+       "n": 67,
+       "coverage": 0.91,
+       "meanWidth": 847
+      },
+      "1800–2000": {
+       "n": 58,
+       "coverage": 0.948,
+       "meanWidth": 847
+      },
+      "2000–2200": {
+       "n": 45,
+       "coverage": 1.0,
+       "meanWidth": 847
+      },
+      "2200–2400": {
+       "n": 71,
+       "coverage": 0.944,
+       "meanWidth": 847
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.582,
+       "meanWidth": 847
+      }
+     },
+     "model": {
+      "a": 115118.757,
+      "b": 0.0,
+      "qLow": -1.178,
+      "qHigh": 1.318
+     }
+    },
+    "ridge": {
+     "coverage80": 0.841,
+     "meanWidth": 806,
+     "byDecisions": {
+      "<15": {
+       "n": 18,
+       "coverage": 0.833,
+       "meanWidth": 806
+      },
+      "15–24": {
+       "n": 109,
+       "coverage": 0.853,
+       "meanWidth": 806
+      },
+      "25–39": {
+       "n": 139,
+       "coverage": 0.784,
+       "meanWidth": 806
+      },
+      "40+": {
+       "n": 92,
+       "coverage": 0.913,
+       "meanWidth": 806
+      }
+     },
+     "byBand": {
+      "1400–1600": {
+       "n": 62,
+       "coverage": 0.565,
+       "meanWidth": 806
+      },
+      "1600–1800": {
+       "n": 67,
+       "coverage": 0.925,
+       "meanWidth": 806
+      },
+      "1800–2000": {
+       "n": 58,
+       "coverage": 0.983,
+       "meanWidth": 806
+      },
+      "2000–2200": {
+       "n": 45,
+       "coverage": 1.0,
+       "meanWidth": 806
+      },
+      "2200–2400": {
+       "n": 71,
+       "coverage": 0.915,
+       "meanWidth": 806
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.673,
+       "meanWidth": 806
+      }
+     },
+     "model": {
+      "a": 104717.165,
+      "b": 0.0,
+      "qLow": -1.209,
+      "qHigh": 1.282
+     }
+    },
+    "gbm": {
+     "coverage80": 0.849,
+     "meanWidth": 802,
+     "byDecisions": {
+      "<15": {
+       "n": 18,
+       "coverage": 0.889,
+       "meanWidth": 802
+      },
+      "15–24": {
+       "n": 109,
+       "coverage": 0.844,
+       "meanWidth": 802
+      },
+      "25–39": {
+       "n": 139,
+       "coverage": 0.813,
+       "meanWidth": 802
+      },
+      "40+": {
+       "n": 92,
+       "coverage": 0.902,
+       "meanWidth": 802
+      }
+     },
+     "byBand": {
+      "1400–1600": {
+       "n": 62,
+       "coverage": 0.677,
+       "meanWidth": 802
+      },
+      "1600–1800": {
+       "n": 67,
+       "coverage": 0.851,
+       "meanWidth": 802
+      },
+      "1800–2000": {
+       "n": 58,
+       "coverage": 0.966,
+       "meanWidth": 802
+      },
+      "2000–2200": {
+       "n": 45,
+       "coverage": 1.0,
+       "meanWidth": 802
+      },
+      "2200–2400": {
+       "n": 71,
+       "coverage": 0.915,
+       "meanWidth": 802
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.709,
+       "meanWidth": 802
+      }
+     },
+     "model": {
+      "a": 105053.84,
+      "b": 0.0,
+      "qLow": -1.19,
+      "qHigh": 1.284
+     }
+    }
+   },
+   "ridgeCoefficients": {
+    "logMeanLoss": -45.1,
+    "logMedianLoss": -6.8,
+    "logP75Loss": 5.0,
+    "logP90Loss": 3.9,
+    "logComplexityWeightedLoss": -56.7,
+    "blunderRate": -9.8,
+    "mistakeRate": -3.9,
+    "inaccuracyRate": -14.0,
+    "top1Agreement": 48.0,
+    "top3Agreement": 32.5,
+    "criticalAccuracy": 0.0,
+    "onlyMoveSuccess": 0.0,
+    "opportunityConversion": 11.6,
+    "defensiveAccuracy": -3.6,
+    "conversionAccuracy": -12.2,
+    "middlegameAccuracy": -5.6,
+    "endgameAccuracy": -9.1,
+    "logMeaningfulDecisions": 22.7,
+    "logGameLength": 17.4,
+    "missing:criticalAccuracy": 2.7,
+    "missing:onlyMoveSuccess": -0.4,
+    "missing:opportunityConversion": -6.5,
+    "missing:defensiveAccuracy": -12.0,
+    "missing:conversionAccuracy": 46.3,
+    "missing:middlegameAccuracy": -3.9,
+    "missing:endgameAccuracy": 26.4
+   },
+   "parityCheck": [
+    {
+     "gameId": "0rQNJzX6",
+     "color": "w",
+     "prediction": 1780.9875
+    },
+    {
+     "gameId": "0rQNJzX6",
+     "color": "b",
+     "prediction": 1814.9698
+    },
+    {
+     "gameId": "2DhzQkxp",
+     "color": "w",
+     "prediction": 1970.1725
+    },
+    {
+     "gameId": "2DhzQkxp",
+     "color": "b",
+     "prediction": 2003.0448
+    },
+    {
+     "gameId": "2JVFpR8t",
+     "color": "w",
+     "prediction": 1954.7087
+    },
+    {
+     "gameId": "2JVFpR8t",
+     "color": "b",
+     "prediction": 1970.62
+    },
+    {
+     "gameId": "2VhbsMzu",
+     "color": "w",
+     "prediction": 2078.3991
+    },
+    {
+     "gameId": "2VhbsMzu",
+     "color": "b",
+     "prediction": 2181.0776
+    },
+    {
+     "gameId": "349uk7YQ",
+     "color": "w",
+     "prediction": 2115.363
+    },
+    {
+     "gameId": "349uk7YQ",
+     "color": "b",
+     "prediction": 2106.1588
+    },
+    {
+     "gameId": "39DALHGo",
+     "color": "w",
+     "prediction": 2434.7353
+    },
+    {
+     "gameId": "39DALHGo",
+     "color": "b",
+     "prediction": 2274.3445
+    },
+    {
+     "gameId": "3db0N6nu",
+     "color": "w",
+     "prediction": 2242.5181
+    },
+    {
+     "gameId": "3db0N6nu",
+     "color": "b",
+     "prediction": 2305.7446
+    },
+    {
+     "gameId": "41C5XPYX",
+     "color": "w",
+     "prediction": 2153.0553
+    },
+    {
+     "gameId": "41C5XPYX",
+     "color": "b",
+     "prediction": 2113.306
+    },
+    {
+     "gameId": "4BO9IQSD",
+     "color": "w",
+     "prediction": 1707.8998
+    },
+    {
+     "gameId": "4BO9IQSD",
+     "color": "b",
+     "prediction": 1805.7648
+    },
+    {
+     "gameId": "4j85IIlw",
+     "color": "w",
+     "prediction": 1850.3087
+    },
+    {
+     "gameId": "4j85IIlw",
+     "color": "b",
+     "prediction": 1943.0614
+    },
+    {
+     "gameId": "4XrxOqfl",
+     "color": "w",
+     "prediction": 2136.1032
+    },
+    {
+     "gameId": "4XrxOqfl",
+     "color": "b",
+     "prediction": 2147.0342
+    },
+    {
+     "gameId": "4ZYDR7um",
+     "color": "w",
+     "prediction": 2007.4629
+    },
+    {
+     "gameId": "4ZYDR7um",
+     "color": "b",
+     "prediction": 2064.4404
+    },
+    {
+     "gameId": "54RQxeqQ",
+     "color": "w",
+     "prediction": 1768.834
+    }
+   ]
+  },
+  "rapid": {
+   "splits": {
+    "train+validation": 2006,
+    "test": 464
+   },
+   "players": {
+    "train+validation": 1781,
+    "test": 421
+   },
+   "chosen": {
+    "isotonic": null,
+    "ridge": 30,
+    "gbm": [
+     0.03,
+     400
+    ]
+   },
+   "cvMae": {
+    "isotonic": 359.2,
+    "ridge": 288.3,
+    "gbm": 272.7
+   },
+   "test": {
+    "constant": {
+     "n": 464,
+     "mae": 341.3,
+     "medianAe": 324.0,
+     "rmse": 417.0,
+     "r2": -0.001,
+     "bias": -16.1
+    },
+    "heuristic": {
+     "n": 464,
+     "mae": 407.6,
+     "medianAe": 360.5,
+     "rmse": 500.2,
+     "r2": -0.44,
+     "bias": -338.6
+    },
+    "errmodel": {
+     "n": 464,
+     "mae": 261.0,
+     "medianAe": 217.5,
+     "rmse": 329.5,
+     "r2": 0.375,
+     "bias": -15.6
+    },
+    "isotonic": {
+     "n": 464,
+     "mae": 307.8,
+     "medianAe": 270.9,
+     "rmse": 374.2,
+     "r2": 0.194,
+     "bias": -11.4
+    },
+    "ridge": {
+     "n": 464,
+     "mae": 249.1,
+     "medianAe": 212.5,
+     "rmse": 314.7,
+     "r2": 0.43,
+     "bias": -14.7
+    },
+    "gbm": {
+     "n": 464,
+     "mae": 241.0,
+     "medianAe": 209.6,
+     "rmse": 302.9,
+     "r2": 0.472,
+     "bias": -3.4
+    },
+    "ridge+opponent (not shipped)": {
+     "n": 464,
+     "mae": 238.1,
+     "medianAe": 197.9,
+     "rmse": 301.1,
+     "r2": 0.478,
+     "bias": -17.1
+    }
+   },
+   "maeByBand": {
+    "800–1000": {
+     "constant": 815.8,
+     "heuristic": 243.1,
+     "errmodel": 420.5,
+     "isotonic": 595.4,
+     "ridge": 439.2,
+     "gbm": 439.4,
+     "ridge+opponent (not shipped)": 410.1,
+     "n": 17
+    },
+    "1000–1200": {
+     "constant": 654.8,
+     "heuristic": 151.4,
+     "errmodel": 324.4,
+     "isotonic": 471.3,
+     "ridge": 365.2,
+     "gbm": 294.2,
+     "ridge+opponent (not shipped)": 303.1,
+     "n": 32
+    },
+    "1200–1400": {
+     "constant": 466.1,
+     "heuristic": 158.2,
+     "errmodel": 245.8,
+     "isotonic": 322.9,
+     "ridge": 235.7,
+     "gbm": 189.5,
+     "ridge+opponent (not shipped)": 235.5,
+     "n": 46
+    },
+    "1400–1600": {
+     "constant": 269.1,
+     "heuristic": 207.5,
+     "errmodel": 192.1,
+     "isotonic": 282.2,
+     "ridge": 213.1,
+     "gbm": 212.8,
+     "ridge+opponent (not shipped)": 188.2,
+     "n": 51
+    },
+    "1600–1800": {
+     "constant": 66.5,
+     "heuristic": 323.1,
+     "errmodel": 210.2,
+     "isotonic": 203.5,
+     "ridge": 156.8,
+     "gbm": 198.8,
+     "ridge+opponent (not shipped)": 163.6,
+     "n": 85
+    },
+    "1800–2000": {
+     "constant": 111.0,
+     "heuristic": 376.5,
+     "errmodel": 179.3,
+     "isotonic": 153.4,
+     "ridge": 168.0,
+     "gbm": 210.7,
+     "ridge+opponent (not shipped)": 174.0,
+     "n": 81
+    },
+    "2000–2200": {
+     "constant": 334.3,
+     "heuristic": 546.5,
+     "errmodel": 240.8,
+     "isotonic": 243.5,
+     "ridge": 206.8,
+     "gbm": 199.6,
+     "ridge+opponent (not shipped)": 221.4,
+     "n": 65
+    },
+    "2200–2400": {
+     "constant": 518.2,
+     "heuristic": 736.9,
+     "errmodel": 350.7,
+     "isotonic": 431.0,
+     "ridge": 320.5,
+     "gbm": 273.4,
+     "ridge+opponent (not shipped)": 298.6,
+     "n": 50
+    },
+    "2400+": {
+     "constant": 704.8,
+     "heuristic": 863.7,
+     "errmodel": 456.1,
+     "isotonic": 575.2,
+     "ridge": 495.1,
+     "gbm": 399.0,
+     "ridge+opponent (not shipped)": 434.6,
+     "n": 37
+    }
+   },
+   "maeByDecisions": {
+    "<15": {
+     "constant": 382.4,
+     "heuristic": 347.2,
+     "errmodel": 331.5,
+     "isotonic": 356.8,
+     "ridge": 302.8,
+     "gbm": 255.2,
+     "ridge+opponent (not shipped)": 316.2,
+     "n": 55
+    },
+    "15–24": {
+     "constant": 359.8,
+     "heuristic": 325.3,
+     "errmodel": 250.2,
+     "isotonic": 303.1,
+     "ridge": 245.6,
+     "gbm": 256.7,
+     "ridge+opponent (not shipped)": 223.8,
+     "n": 137
+    },
+    "25–39": {
+     "constant": 316.0,
+     "heuristic": 438.8,
+     "errmodel": 254.8,
+     "isotonic": 301.6,
+     "ridge": 238.8,
+     "gbm": 235.8,
+     "ridge+opponent (not shipped)": 224.9,
+     "n": 177
+    },
+    "40+": {
+     "constant": 337.8,
+     "heuristic": 503.2,
+     "errmodel": 247.1,
+     "isotonic": 297.8,
+     "ridge": 242.2,
+     "gbm": 219.8,
+     "ridge+opponent (not shipped)": 238.3,
+     "n": 95
+    }
+   },
+   "maeByResult": {
+    "win": {
+     "constant": 334.4,
+     "heuristic": 383.8,
+     "errmodel": 262.3,
+     "isotonic": 302.0,
+     "ridge": 248.2,
+     "gbm": 237.3,
+     "ridge+opponent (not shipped)": 240.2,
+     "n": 225
+    },
+    "draw": {
+     "constant": 283.5,
+     "heuristic": 356.2,
+     "errmodel": 150.9,
+     "isotonic": 196.3,
+     "ridge": 211.5,
+     "gbm": 219.9,
+     "ridge+opponent (not shipped)": 216.2,
+     "n": 14
+    },
+    "loss": {
+     "constant": 351.7,
+     "heuristic": 434.6,
+     "errmodel": 266.5,
+     "isotonic": 320.5,
+     "ridge": 252.4,
+     "gbm": 246.1,
+     "ridge+opponent (not shipped)": 237.4,
+     "n": 225
+    }
+   },
+   "maeByPhaseComposition": {
+    "no endgame": {
+     "constant": 346.6,
+     "heuristic": 406.8,
+     "errmodel": 276.9,
+     "isotonic": 313.0,
+     "ridge": 255.8,
+     "gbm": 242.6,
+     "ridge+opponent (not shipped)": 244.0,
+     "n": 222
+    },
+    "some endgame": {
+     "constant": 282.0,
+     "heuristic": 426.6,
+     "errmodel": 248.4,
+     "isotonic": 283.4,
+     "ridge": 228.7,
+     "gbm": 259.4,
+     "ridge+opponent (not shipped)": 229.9,
+     "n": 112
+    },
+    "endgame-heavy": {
+     "constant": 383.1,
+     "heuristic": 392.7,
+     "errmodel": 244.5,
+     "isotonic": 320.0,
+     "ridge": 255.2,
+     "gbm": 222.5,
+     "ridge+opponent (not shipped)": 235.2,
+     "n": 130
+    }
+   },
+   "maeBySource": {
+    "lichess-datasnaek": {
+     "constant": 348.4,
+     "heuristic": 219.2,
+     "errmodel": 244.0,
+     "isotonic": 296.8,
+     "ridge": 242.0,
+     "gbm": 229.9,
+     "ridge+opponent (not shipped)": 229.6,
+     "n": 206
+    },
+    "lichess-puzzle-db": {
+     "constant": 335.6,
+     "heuristic": 558.1,
+     "errmodel": 274.5,
+     "isotonic": 316.6,
+     "ridge": 254.8,
+     "gbm": 249.9,
+     "ridge+opponent (not shipped)": 244.9,
+     "n": 258
+    }
+   },
+   "intervals": {
+    "heuristic": {
+     "coverage80": 0.552,
+     "meanWidth": 775,
+     "byDecisions": {
+      "<15": {
+       "n": 55,
+       "coverage": 0.745,
+       "meanWidth": 945
+      },
+      "15–24": {
+       "n": 137,
+       "coverage": 0.701,
+       "meanWidth": 830
+      },
+      "25–39": {
+       "n": 177,
+       "coverage": 0.492,
+       "meanWidth": 750
+      },
+      "40+": {
+       "n": 95,
+       "coverage": 0.337,
+       "meanWidth": 644
+      }
+     },
+     "byBand": {
+      "800–1000": {
+       "n": 17,
+       "coverage": 0.824,
+       "meanWidth": 741
+      },
+      "1000–1200": {
+       "n": 32,
+       "coverage": 1.0,
+       "meanWidth": 761
+      },
+      "1200–1400": {
+       "n": 46,
+       "coverage": 0.978,
+       "meanWidth": 811
+      },
+      "1400–1600": {
+       "n": 51,
+       "coverage": 0.882,
+       "meanWidth": 750
+      },
+      "1600–1800": {
+       "n": 85,
+       "coverage": 0.576,
+       "meanWidth": 769
+      },
+      "1800–2000": {
+       "n": 81,
+       "coverage": 0.58,
+       "meanWidth": 778
+      },
+      "2000–2200": {
+       "n": 65,
+       "coverage": 0.262,
+       "meanWidth": 787
+      },
+      "2200–2400": {
+       "n": 50,
+       "coverage": 0.12,
+       "meanWidth": 772
+      },
+      "2400+": {
+       "n": 37,
+       "coverage": 0.027,
+       "meanWidth": 781
+      }
+     }
+    },
+    "errmodel": {
+     "coverage80": 0.841,
+     "meanWidth": 906,
+     "byDecisions": {
+      "<15": {
+       "n": 55,
+       "coverage": 0.8,
+       "meanWidth": 1053
+      },
+      "15–24": {
+       "n": 137,
+       "coverage": 0.891,
+       "meanWidth": 965
+      },
+      "25–39": {
+       "n": 177,
+       "coverage": 0.853,
+       "meanWidth": 879
+      },
+      "40+": {
+       "n": 95,
+       "coverage": 0.768,
+       "meanWidth": 788
+      }
+     },
+     "byBand": {
+      "800–1000": {
+       "n": 17,
+       "coverage": 0.647,
+       "meanWidth": 931
+      },
+      "1000–1200": {
+       "n": 32,
+       "coverage": 0.75,
+       "meanWidth": 942
+      },
+      "1200–1400": {
+       "n": 46,
+       "coverage": 0.87,
+       "meanWidth": 976
+      },
+      "1400–1600": {
+       "n": 51,
+       "coverage": 0.941,
+       "meanWidth": 908
+      },
+      "1600–1800": {
+       "n": 85,
+       "coverage": 0.941,
+       "meanWidth": 914
+      },
+      "1800–2000": {
+       "n": 81,
+       "coverage": 0.963,
+       "meanWidth": 893
+      },
+      "2000–2200": {
+       "n": 65,
+       "coverage": 0.908,
+       "meanWidth": 887
+      },
+      "2200–2400": {
+       "n": 50,
+       "coverage": 0.62,
+       "meanWidth": 870
+      },
+      "2400+": {
+       "n": 37,
+       "coverage": 0.514,
+       "meanWidth": 869
+      }
+     }
+    },
+    "isotonic": {
+     "coverage80": 0.862,
+     "meanWidth": 1112,
+     "byDecisions": {
+      "<15": {
+       "n": 55,
+       "coverage": 0.764,
+       "meanWidth": 1207
+      },
+      "15–24": {
+       "n": 137,
+       "coverage": 0.891,
+       "meanWidth": 1127
+      },
+      "25–39": {
+       "n": 177,
+       "coverage": 0.864,
+       "meanWidth": 1092
+      },
+      "40+": {
+       "n": 95,
+       "coverage": 0.874,
+       "meanWidth": 1069
+      }
+     },
+     "byBand": {
+      "800–1000": {
+       "n": 17,
+       "coverage": 0.588,
+       "meanWidth": 1127
+      },
+      "1000–1200": {
+       "n": 32,
+       "coverage": 0.781,
+       "meanWidth": 1141
+      },
+      "1200–1400": {
+       "n": 46,
+       "coverage": 0.826,
+       "meanWidth": 1147
+      },
+      "1400–1600": {
+       "n": 51,
+       "coverage": 0.941,
+       "meanWidth": 1109
+      },
+      "1600–1800": {
+       "n": 85,
+       "coverage": 1.0,
+       "meanWidth": 1113
+      },
+      "1800–2000": {
+       "n": 81,
+       "coverage": 1.0,
+       "meanWidth": 1102
+      },
+      "2000–2200": {
+       "n": 65,
+       "coverage": 0.908,
+       "meanWidth": 1103
+      },
+      "2200–2400": {
+       "n": 50,
+       "coverage": 0.74,
+       "meanWidth": 1094
+      },
+      "2400+": {
+       "n": 37,
+       "coverage": 0.459,
+       "meanWidth": 1093
+      }
+     },
+     "model": {
+      "a": 153611.695,
+      "b": 578210.743,
+      "qLow": -1.359,
+      "qHigh": 1.268
+     }
+    },
+    "ridge": {
+     "coverage80": 0.856,
+     "meanWidth": 913,
+     "byDecisions": {
+      "<15": {
+       "n": 55,
+       "coverage": 0.818,
+       "meanWidth": 974
+      },
+      "15–24": {
+       "n": 137,
+       "coverage": 0.854,
+       "meanWidth": 923
+      },
+      "25–39": {
+       "n": 177,
+       "coverage": 0.859,
+       "meanWidth": 901
+      },
+      "40+": {
+       "n": 95,
+       "coverage": 0.874,
+       "meanWidth": 887
+      }
+     },
+     "byBand": {
+      "800–1000": {
+       "n": 17,
+       "coverage": 0.529,
+       "meanWidth": 923
+      },
+      "1000–1200": {
+       "n": 32,
+       "coverage": 0.625,
+       "meanWidth": 932
+      },
+      "1200–1400": {
+       "n": 46,
+       "coverage": 0.87,
+       "meanWidth": 936
+      },
+      "1400–1600": {
+       "n": 51,
+       "coverage": 0.98,
+       "meanWidth": 911
+      },
+      "1600–1800": {
+       "n": 85,
+       "coverage": 0.976,
+       "meanWidth": 914
+      },
+      "1800–2000": {
+       "n": 81,
+       "coverage": 0.963,
+       "meanWidth": 907
+      },
+      "2000–2200": {
+       "n": 65,
+       "coverage": 0.938,
+       "meanWidth": 908
+      },
+      "2200–2400": {
+       "n": 50,
+       "coverage": 0.8,
+       "meanWidth": 902
+      },
+      "2400+": {
+       "n": 37,
+       "coverage": 0.432,
+       "meanWidth": 901
+      }
+     },
+     "model": {
+      "a": 108995.92,
+      "b": 301509.439,
+      "qLow": -1.323,
+      "qHigh": 1.288
+     }
+    },
+    "gbm": {
+     "coverage80": 0.877,
+     "meanWidth": 872,
+     "byDecisions": {
+      "<15": {
+       "n": 55,
+       "coverage": 0.836,
+       "meanWidth": 878
+      },
+      "15–24": {
+       "n": 137,
+       "coverage": 0.854,
+       "meanWidth": 873
+      },
+      "25–39": {
+       "n": 177,
+       "coverage": 0.904,
+       "meanWidth": 871
+      },
+      "40+": {
+       "n": 95,
+       "coverage": 0.884,
+       "meanWidth": 869
+      }
+     },
+     "byBand": {
+      "800–1000": {
+       "n": 17,
+       "coverage": 0.588,
+       "meanWidth": 873
+      },
+      "1000–1200": {
+       "n": 32,
+       "coverage": 0.875,
+       "meanWidth": 874
+      },
+      "1200–1400": {
+       "n": 46,
+       "coverage": 0.848,
+       "meanWidth": 874
+      },
+      "1400–1600": {
+       "n": 51,
+       "coverage": 0.98,
+       "meanWidth": 872
+      },
+      "1600–1800": {
+       "n": 85,
+       "coverage": 0.941,
+       "meanWidth": 872
+      },
+      "1800–2000": {
+       "n": 81,
+       "coverage": 0.926,
+       "meanWidth": 871
+      },
+      "2000–2200": {
+       "n": 65,
+       "coverage": 0.892,
+       "meanWidth": 871
+      },
+      "2200–2400": {
+       "n": 50,
+       "coverage": 0.84,
+       "meanWidth": 871
+      },
+      "2400+": {
+       "n": 37,
+       "coverage": 0.676,
+       "meanWidth": 871
+      }
+     },
+     "model": {
+      "a": 111863.558,
+      "b": 27626.552,
+      "qLow": -1.274,
+      "qHigh": 1.318
+     }
+    }
+   },
+   "ridgeCoefficients": {
+    "logMeanLoss": 163.2,
+    "logMedianLoss": 18.8,
+    "logP75Loss": 37.7,
+    "logP90Loss": 21.6,
+    "logComplexityWeightedLoss": -247.9,
+    "blunderRate": -35.5,
+    "mistakeRate": -50.1,
+    "inaccuracyRate": -36.5,
+    "top1Agreement": 112.1,
+    "top3Agreement": 71.5,
+    "criticalAccuracy": -2.7,
+    "onlyMoveSuccess": 0.0,
+    "opportunityConversion": 63.0,
+    "defensiveAccuracy": -9.2,
+    "conversionAccuracy": -11.1,
+    "middlegameAccuracy": 17.0,
+    "endgameAccuracy": -11.7,
+    "logMeaningfulDecisions": 35.1,
+    "logGameLength": 85.5,
+    "missing:criticalAccuracy": -21.9,
+    "missing:onlyMoveSuccess": 7.5,
+    "missing:opportunityConversion": -6.0,
+    "missing:defensiveAccuracy": -23.4,
+    "missing:conversionAccuracy": 81.0,
+    "missing:middlegameAccuracy": 16.6,
+    "missing:endgameAccuracy": 45.8
+   },
+   "parityCheck": [
+    {
+     "gameId": "0ims0W0G",
+     "color": "w",
+     "prediction": 1956.1912
+    },
+    {
+     "gameId": "0ims0W0G",
+     "color": "b",
+     "prediction": 1892.2219
+    },
+    {
+     "gameId": "0KgsUgHe",
+     "color": "w",
+     "prediction": 2226.4395
+    },
+    {
+     "gameId": "0KgsUgHe",
+     "color": "b",
+     "prediction": 1926.3665
+    },
+    {
+     "gameId": "1heLxxHy",
+     "color": "w",
+     "prediction": 1943.0865
+    },
+    {
+     "gameId": "1heLxxHy",
+     "color": "b",
+     "prediction": 2081.9261
+    },
+    {
+     "gameId": "1yuc7dGu",
+     "color": "w",
+     "prediction": 1876.6346
+    },
+    {
+     "gameId": "1yuc7dGu",
+     "color": "b",
+     "prediction": 1711.6542
+    },
+    {
+     "gameId": "1zRjgcqm",
+     "color": "w",
+     "prediction": 1821.3255
+    },
+    {
+     "gameId": "1zRjgcqm",
+     "color": "b",
+     "prediction": 1743.7456
+    },
+    {
+     "gameId": "2cQpPQh8",
+     "color": "w",
+     "prediction": 1605.9751
+    },
+    {
+     "gameId": "2cQpPQh8",
+     "color": "b",
+     "prediction": 1824.0714
+    },
+    {
+     "gameId": "2FpFvoMt",
+     "color": "w",
+     "prediction": 1689.8082
+    },
+    {
+     "gameId": "2FpFvoMt",
+     "color": "b",
+     "prediction": 1709.313
+    },
+    {
+     "gameId": "2JLvTLrM",
+     "color": "w",
+     "prediction": 1471.2698
+    },
+    {
+     "gameId": "2JLvTLrM",
+     "color": "b",
+     "prediction": 1434.3171
+    },
+    {
+     "gameId": "2JS7Df08",
+     "color": "w",
+     "prediction": 2032.9499
+    },
+    {
+     "gameId": "2JS7Df08",
+     "color": "b",
+     "prediction": 1907.3715
+    },
+    {
+     "gameId": "2LX2IAdw",
+     "color": "w",
+     "prediction": 2108.4519
+    },
+    {
+     "gameId": "2LX2IAdw",
+     "color": "b",
+     "prediction": 2046.7362
+    },
+    {
+     "gameId": "2tn4UTF3",
+     "color": "w",
+     "prediction": 1761.8757
+    },
+    {
+     "gameId": "2tn4UTF3",
+     "color": "b",
+     "prediction": 2096.2257
+    },
+    {
+     "gameId": "2YUbUpWZ",
+     "color": "w",
+     "prediction": 1933.4637
+    },
+    {
+     "gameId": "2YUbUpWZ",
+     "color": "b",
+     "prediction": 1719.7976
+    },
+    {
+     "gameId": "3j0kRr01",
+     "color": "w",
+     "prediction": 1542.1053
+    }
+   ]
+  }
+ }
+}

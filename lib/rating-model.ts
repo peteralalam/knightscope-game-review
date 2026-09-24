@@ -344,6 +344,7 @@ export function estimatePerformance(
       calibrated: true,
       extrapolated: regression.extrapolated,
       heldOutMae: regression.params.heldOut.mae,
+      heldOutCoverage: regression.params.heldOut.coverage80,
     };
   }
 

@@ -200,6 +200,10 @@ export interface GreatDiagnostics {
   freeCapture: boolean;
   /** The move was already in the line of the mover's previous Great / Brilliant move. */
   plannedFollowUp: boolean;
+  /** The mover's previous move was already critical (Great, Brilliant, or part of the same run). */
+  continuesCriticalSequence: boolean;
+  /** The position before the move already occurred earlier in the game with the same side to move. */
+  repeatedPosition: boolean;
   opponentPreviousMoveLoss: number;
   greatReason?: string;
   /** "great", or the first rule that rejected the promotion. */
@@ -315,6 +319,8 @@ export interface PerformanceEstimate {
   extrapolated?: boolean;
   /** Mean absolute error of this model on held-out players (Elo points). */
   heldOutMae?: number;
+  /** Share of held-out players whose rating fell inside the 80 % range. */
+  heldOutCoverage?: number;
 }
 
 export type TimeControlClass =
@@ -574,6 +580,35 @@ function formatMoverEvaluation(evaluation: Evaluation, color: Color) {
   );
 }
 
+const CONTINUATION_DECISION = "rejected: continues the critical sequence credited to an earlier move";
+const FOLLOW_UP_DECISION = "rejected: planned follow-up of the previous Great/Brilliant move";
+
+/**
+ * A run of consecutive critical moves by one side – a perpetual check, a king
+ * shuffle holding a fortress, the forced follow-through of an attack – is one
+ * decision, credited once, to the move that started it.
+ */
+function continuesCriticalSequence(context: ReviewContext) {
+  const own = context.previousOwn;
+  if (!own) return false;
+  return (
+    own.grade === "great" ||
+    own.grade === "brilliant" ||
+    own.greatDiagnostics?.decision === CONTINUATION_DECISION ||
+    own.greatDiagnostics?.decision === FOLLOW_UP_DECISION
+  );
+}
+
+/** Same placement, side to move, castling and en-passant rights as an earlier position in the game. */
+function positionRepeated(game: ParsedGame, moveIndex: number) {
+  const key = (fen: string) => fen.split(" ").slice(0, 4).join(" ");
+  const current = key(game.moves[moveIndex].before);
+  for (let index = moveIndex - 2; index >= 0; index -= 2) {
+    if (key(game.moves[index].before) === current) return true;
+  }
+  return false;
+}
+
 /**
  * The move was already the planned continuation of the mover's previous Great /
  * Brilliant move: that line had the opponent's actual reply followed by this
@@ -778,7 +813,8 @@ export function reviewMove(
 
       let decision = "brilliant";
       if (checkEvasion) decision = "rejected: check evasion";
-      else if (isPlannedFollowUp(move, context)) decision = "rejected: planned follow-up of the previous Great/Brilliant move";
+      else if (isPlannedFollowUp(move, context)) decision = FOLLOW_UP_DECISION;
+      else if (context.previousOwn?.grade === "brilliant") decision = "rejected: continues the combination credited to the previous Brilliant move";
       else if (unstable) decision = "rejected: evaluation unstable across searches";
       else if (!candidateList.length) decision = "rejected: no candidate search (cannot judge alternatives)";
       else if (playedCandidate === undefined && !isTop) decision = "rejected: move not confirmed by the candidate search";
@@ -845,6 +881,8 @@ export function reviewMove(
   const baseline = context.previous ? 1 - context.previous.expectedBefore : 0.5;
   const freeCapture = isFreeCapture(move.before, move.uci);
   const plannedFollowUp = isPlannedFollowUp(move, context);
+  const continuesSequence = continuesCriticalSequence(context);
+  const repeatedPosition = positionRepeated(game, moveIndex);
   const forcedMove = checkEvasion || legalMoveCount <= 2;
   if (
     grade !== "brilliant" &&
@@ -870,7 +908,9 @@ export function reviewMove(
     else if (mateInOne) decision = "rejected: mate in one";
     else if (forcedMove) decision = "rejected: forced (check evasion or ≤ 2 legal moves)";
     else if (unstable) decision = "rejected: evaluation unstable across searches";
-    else if (plannedFollowUp) decision = "rejected: planned follow-up of the previous Great/Brilliant move";
+    else if (plannedFollowUp) decision = FOLLOW_UP_DECISION;
+    else if (continuesSequence) decision = CONTINUATION_DECISION;
+    else if (repeatedPosition) decision = "rejected: the same position already occurred (decision already made)";
     else if (playedE < GREAT.minExpectedAfter) decision = "rejected: only postpones defeat";
     else if ((outcomeImportance ?? 0) < GREAT.minImportance) decision = "rejected: alternatives lead to the same outcome";
     else if (!objectiveChange && playedBand - alternativeBand < GREAT.minBandDrop) {
@@ -915,6 +955,8 @@ export function reviewMove(
       obviousRecapture,
       freeCapture,
       plannedFollowUp,
+      continuesCriticalSequence: continuesSequence,
+      repeatedPosition,
       opponentPreviousMoveLoss: round4(opponentLoss)!,
       greatReason,
       decision,

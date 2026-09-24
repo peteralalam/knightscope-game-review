@@ -1,13 +1,45 @@
 {
   "note": "Measured in this project's 4-core container while four corpus-analysis processes were also running, so absolute times are pessimistic; the ratios are what matter. Browser = headless Chromium against the production build; Node = the same UciEngine and pipeline.",
   "rows": [
-    ["Download", "1.8 MB, same-origin static asset", "99.1 MB, opt-in, from R2; SHA-256 verified, then Cache Storage"],
-    ["Network", "nn-61e7af4bb97d (1.1 MB Lite net, sscg13; P_hm features)", "nn-1a298aa575a0 (official Stockfish 19)"],
-    ["Parallel engines (browser)", "up to 4 (3 here)", "up to 2 (memory)"],
-    ["Download + verify + cache (local network)", "–", "2.0 s"],
-    ["Opera Game, Quick, browser", "9.7 s", "19.2 s"],
-    ["Opera Game, Deep, browser", "–", "97 s (Auto chose Full)"],
-    ["Kasparov–Topalov, Balanced, Node, 3 engines", "Brilliant: 36.Bf1 only; 24.Rxd4 not found", "Brilliant: 24.Rxd4, 25.Re7+, 30.Rxb7, 30...Qc4, 36.Bf1 (140 s)"],
-    ["Tablebases", "none (Syzygy compiled out)", "none (Syzygy compiled out)"]
+    [
+      "Download",
+      "1.8 MB, same-origin static asset",
+      "99.1 MB, opt-in, from R2; SHA-256 verified, then Cache Storage"
+    ],
+    [
+      "Network",
+      "nn-61e7af4bb97d (1.1 MB Lite net, sscg13; P_hm features)",
+      "nn-1a298aa575a0 (official Stockfish 19)"
+    ],
+    [
+      "Parallel engines (browser)",
+      "up to 4 (3 here)",
+      "up to 2 (memory)"
+    ],
+    [
+      "Download + verify + cache (local network)",
+      "–",
+      "2.0 s"
+    ],
+    [
+      "Opera Game, Quick, browser",
+      "9.7 s",
+      "19.2 s"
+    ],
+    [
+      "Opera Game, Deep, browser",
+      "–",
+      "97 s (Auto chose Full)"
+    ],
+    [
+      "Kasparov–Topalov, Balanced, Node, 3 engines",
+      "Brilliant: 36.Bf1 only (24.Rxd4 not found); Great: 22...Nbxd5, 25.Re7+, 27.b4+, 29...Bb7, 34.Qa1+",
+      "Brilliant: 24.Rxd4, 30.Rxb7, 36.Bf1; Great: 22...Nbxd5, 25...Kb6, 27.b4+, 29...Bb7, 34.Qa1+ (140 s)"
+    ],
+    [
+      "Tablebases",
+      "none (Syzygy compiled out)",
+      "none (Syzygy compiled out)"
+    ]
   ]
 }

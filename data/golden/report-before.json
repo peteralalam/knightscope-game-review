@@ -1,0 +1,776 @@
+[
+  {
+    "title": "Paul Morphy – Duke Karl / Count Isouard (1858.??.??)",
+    "preset": "balanced",
+    "meta": {
+      "modelVersion": "ks-review-2.0",
+      "engineVersion": "Stockfish 19 Lite WASM [stockfish.js npm lite-single]",
+      "primaryNodes": 150000,
+      "candidateNodes": 150000,
+      "candidateMultiPv": 3,
+      "candidateSearches": 21,
+      "acceptanceSearches": 1,
+      "verificationSearches": 6,
+      "elapsedMs": 2110
+    },
+    "counts": {
+      "book": 7,
+      "inaccuracy": 3,
+      "best": 12,
+      "great": 4,
+      "good": 2,
+      "mistake": 1,
+      "brilliant": 2,
+      "excellent": 1,
+      "blunder": 1
+    },
+    "moves": [
+      {
+        "move": "1.e4",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "1...e5",
+        "grade": "book",
+        "loss": 0.0028,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "2.Nf3",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "2...d6",
+        "grade": "book",
+        "loss": 0.0211,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "3.d4",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "3...Bg4",
+        "grade": "book",
+        "loss": 0.0478,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "4.dxe5",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "4...Bxf3",
+        "grade": "inaccuracy",
+        "loss": 0.0546,
+        "reason": "Nd7 was stronger: this move gives up 5.5 percentage points of expected score (42% → 37%)."
+      },
+      {
+        "move": "5.Qxf3",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "5...dxe5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "6.Bc4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "6...Nf6",
+        "grade": "inaccuracy",
+        "loss": 0.0934,
+        "reason": "Qf6 was stronger: this move gives up 9.3 percentage points of expected score (38% → 28%)."
+      },
+      {
+        "move": "7.Qb3",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Critical move: it keeps the position better, while the best alternative, Be3, scores 60% against 71% (balanced)."
+      },
+      {
+        "move": "7...Qe7",
+        "grade": "good",
+        "loss": 0.0496,
+        "reason": "Bc5 was stronger: this move gives up 5.0 percentage points of expected score (28% → 25%)."
+      },
+      {
+        "move": "8.Nc3",
+        "grade": "inaccuracy",
+        "loss": 0.0682,
+        "reason": "Qxb7 was stronger: this move gives up 6.8 percentage points of expected score (75% → 71%)."
+      },
+      {
+        "move": "8...c6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "9.Bg5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "9...b5",
+        "grade": "mistake",
+        "loss": 0.1541,
+        "reason": "Qc7 was stronger: this move gives up 15.4 percentage points of expected score (32% → 17%)."
+      },
+      {
+        "move": "10.Nxb5",
+        "grade": "brilliant",
+        "loss": 0,
+        "reason": "Best move. Sacrifices the knight on b5. Taking it leaves the opponent worse off (13% for them after the capture), and the move keeps the position better (83% expected score)."
+      },
+      {
+        "move": "10...cxb5",
+        "grade": "good",
+        "loss": 0.0492,
+        "reason": "Qb4+ was stronger: this move gives up 4.9 percentage points of expected score (17% → 12%)."
+      },
+      {
+        "move": "11.Bxb5+",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Qxb5+, scores 57% against 91%."
+      },
+      {
+        "move": "11...Nbd7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "12.O-O-O",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Critical move: it keeps the position winning, while the best alternative, Bxf6, scores 79% against 92% (better)."
+      },
+      {
+        "move": "12...Rd8",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Practically equal to Stockfish's top choice Rb8."
+      },
+      {
+        "move": "13.Rxd7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "13...Rxd7",
+        "grade": "excellent",
+        "loss": 0.0154,
+        "reason": "Nearly as good as Stockfish's Nxd7 (1.5 points of expected score)."
+      },
+      {
+        "move": "14.Rd1",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Bxd7+, scores 69% against 95%."
+      },
+      {
+        "move": "14...Qe6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "15.Bxd7+",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "15...Nxd7",
+        "grade": "blunder",
+        "loss": 0.0146,
+        "reason": "Allows a forced mate in 2. Qxd7 avoided it."
+      },
+      {
+        "move": "16.Qb8+",
+        "grade": "brilliant",
+        "loss": 0,
+        "reason": "Best move. Sacrifices the queen. Stockfish's best defence takes it, and the move leads to a forced mate in 2."
+      },
+      {
+        "move": "16...Nxb8",
+        "grade": "best",
+        "loss": 0,
+        "reason": "The only legal move."
+      },
+      {
+        "move": "17.Rd8#",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Delivers checkmate."
+      }
+    ]
+  },
+  {
+    "title": "Garry Kasparov – Veselin Topalov (1999.01.20)",
+    "preset": "balanced",
+    "meta": {
+      "modelVersion": "ks-review-2.0",
+      "engineVersion": "Stockfish 19 Lite WASM [stockfish.js npm lite-single]",
+      "primaryNodes": 150000,
+      "candidateNodes": 150000,
+      "candidateMultiPv": 3,
+      "candidateSearches": 78,
+      "acceptanceSearches": 5,
+      "verificationSearches": 15,
+      "elapsedMs": 6377
+    },
+    "counts": {
+      "book": 7,
+      "best": 50,
+      "excellent": 8,
+      "good": 9,
+      "great": 8,
+      "inaccuracy": 2,
+      "brilliant": 3
+    },
+    "moves": [
+      {
+        "move": "1.e4",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "1...d6",
+        "grade": "book",
+        "loss": 0.0274,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "2.d4",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "2...Nf6",
+        "grade": "book",
+        "loss": 0,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "3.Nc3",
+        "grade": "book",
+        "loss": 0.0092,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "3...g6",
+        "grade": "book",
+        "loss": 0.0265,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "4.Be3",
+        "grade": "book",
+        "loss": 0.0073,
+        "reason": "A known opening-theory move."
+      },
+      {
+        "move": "4...Bg7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "5.Qd2",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "5...c6",
+        "grade": "excellent",
+        "loss": 0.0167,
+        "reason": "Nearly as good as Stockfish's O-O (1.7 points of expected score)."
+      },
+      {
+        "move": "6.f3",
+        "grade": "good",
+        "loss": 0.0308,
+        "reason": "Bh6 was stronger: this move gives up 3.1 percentage points of expected score (58% → 54%)."
+      },
+      {
+        "move": "6...b5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "7.Nge2",
+        "grade": "excellent",
+        "loss": 0.0092,
+        "reason": "Nearly as good as Stockfish's a3 (0.9 points of expected score)."
+      },
+      {
+        "move": "7...Nbd7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "8.Bh6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "8...Bxh6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "9.Qxh6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "9...Bb7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "10.a3",
+        "grade": "excellent",
+        "loss": 0.0137,
+        "reason": "Nearly as good as Stockfish's h4 (1.4 points of expected score)."
+      },
+      {
+        "move": "10...e5",
+        "grade": "excellent",
+        "loss": 0.0096,
+        "reason": "Nearly as good as Stockfish's a5 (1.0 points of expected score)."
+      },
+      {
+        "move": "11.O-O-O",
+        "grade": "best",
+        "loss": 0.0037,
+        "reason": "Practically equal to Stockfish's top choice dxe5."
+      },
+      {
+        "move": "11...Qe7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "12.Kb1",
+        "grade": "excellent",
+        "loss": 0.0096,
+        "reason": "Nearly as good as Stockfish's dxe5 (1.0 points of expected score)."
+      },
+      {
+        "move": "12...a6",
+        "grade": "good",
+        "loss": 0.031,
+        "reason": "O-O-O was stronger: this move gives up 3.1 percentage points of expected score (47% → 44%)."
+      },
+      {
+        "move": "13.Nc1",
+        "grade": "good",
+        "loss": 0.0393,
+        "reason": "g4 was stronger: this move gives up 3.9 percentage points of expected score (56% → 52%)."
+      },
+      {
+        "move": "13...O-O-O",
+        "grade": "good",
+        "loss": 0.0311,
+        "reason": "exd4 was stronger: this move gives up 3.1 percentage points of expected score (48% → 46%)."
+      },
+      {
+        "move": "14.Nb3",
+        "grade": "good",
+        "loss": 0.0211,
+        "reason": "Qe3 was stronger: this move gives up 2.1 percentage points of expected score (54% → 52%)."
+      },
+      {
+        "move": "14...exd4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "15.Rxd4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "15...c5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "16.Rd1",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "16...Nb6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "17.g3",
+        "grade": "good",
+        "loss": 0.0221,
+        "reason": "Qe3 was stronger: this move gives up 2.2 percentage points of expected score (53% → 50%)."
+      },
+      {
+        "move": "17...Kb8",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "18.Na5",
+        "grade": "good",
+        "loss": 0.0331,
+        "reason": "Qe3 was stronger: this move gives up 3.3 percentage points of expected score (52% → 49%)."
+      },
+      {
+        "move": "18...Ba8",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "19.Bh3",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "19...d5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "20.Qf4+",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "20...Ka7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "21.Rhe1",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "21...d4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "22.Nd5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "22...Nbxd5",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Rxd5, scores 23% against 56%."
+      },
+      {
+        "move": "23.exd5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "23...Qd6",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Kb6, scores 8% against 56%."
+      },
+      {
+        "move": "24.Rxd4",
+        "grade": "inaccuracy",
+        "loss": 0.0657,
+        "reason": "Nc6+ was stronger: this move gives up 6.6 percentage points of expected score (41% → 35%)."
+      },
+      {
+        "move": "24...cxd4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "25.Re7+",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Qxd4+, scores 31% against 52%."
+      },
+      {
+        "move": "25...Kb6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "26.Qxd4+",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Critical move: it keeps the position balanced, while the best alternative, Nc4+, scores 33% against 47% (worse)."
+      },
+      {
+        "move": "26...Kxa5",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "27.b4+",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Qc3+, scores 31% against 56%."
+      },
+      {
+        "move": "27...Ka4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "28.Qc3",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "28...Qxd5",
+        "grade": "brilliant",
+        "loss": 0,
+        "reason": "Best move. Leaves the knight on f6 en prise. Taking it leaves the opponent worse off (18% for them after the capture), and the move keeps the position balanced (49% expected score)."
+      },
+      {
+        "move": "29.Ra7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "29...Bb7",
+        "grade": "brilliant",
+        "loss": 0,
+        "reason": "Best move. Sacrifices the bishop on b7. Stockfish's best defence takes it, and the move keeps the position balanced (47% expected score)."
+      },
+      {
+        "move": "30.Rxb7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "30...Qc4",
+        "grade": "good",
+        "loss": 0.0453,
+        "reason": "Rd6 was stronger: this move gives up 4.5 percentage points of expected score (48% → 44%)."
+      },
+      {
+        "move": "31.Qxf6",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "31...Kxa3",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "32.Qxa6+",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "32...Kxb4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "The only legal move."
+      },
+      {
+        "move": "33.c3+",
+        "grade": "inaccuracy",
+        "loss": 0.0706,
+        "reason": "Bd7 was stronger: this move gives up 7.1 percentage points of expected score (55% → 50%)."
+      },
+      {
+        "move": "33...Kxc3",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "34.Qa1+",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Qa3+, scores 13% against 49%."
+      },
+      {
+        "move": "34...Kd2",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "35.Qb2+",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Qa3, scores 11% against 50%."
+      },
+      {
+        "move": "35...Kd1",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "36.Bf1",
+        "grade": "brilliant",
+        "loss": 0,
+        "reason": "Best move. Sacrifices the bishop on f1. Taking it leaves the opponent worse off (0% for them after the capture), and the move keeps the position balanced (50% expected score)."
+      },
+      {
+        "move": "36...Rd2",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "37.Rd7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "37...Rxd7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "38.Bxc4",
+        "grade": "great",
+        "loss": 0,
+        "reason": "Only move: the best alternative, Be2+, scores 11% against 71%."
+      },
+      {
+        "move": "38...bxc4",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "39.Qxh8",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "39...Rd3",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "40.Qa8",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "40...c3",
+        "grade": "excellent",
+        "loss": 0.0157,
+        "reason": "Nearly as good as Stockfish's f5 (1.6 points of expected score)."
+      },
+      {
+        "move": "41.Qa4+",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "41...Ke1",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      },
+      {
+        "move": "42.f4",
+        "grade": "good",
+        "loss": 0.022,
+        "reason": "Qe4+ was stronger: this move gives up 2.2 percentage points of expected score (81% → 80%)."
+      },
+      {
+        "move": "42...f5",
+        "grade": "excellent",
+        "loss": 0.0154,
+        "reason": "Nearly as good as Stockfish's Rd2 (1.5 points of expected score)."
+      },
+      {
+        "move": "43.Kc1",
+        "grade": "excellent",
+        "loss": 0.0064,
+        "reason": "Nearly as good as Stockfish's Qc6 (0.6 points of expected score)."
+      },
+      {
+        "move": "43...Rd2",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice."
+      },
+      {
+        "move": "44.Qa7",
+        "grade": "best",
+        "loss": 0,
+        "reason": "Stockfish's top choice; several moves were about as good."
+      }
+    ]
+  }
+]

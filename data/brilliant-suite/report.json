@@ -940,10 +940,10 @@
       "category": "underpromotion",
       "mustNotBeBrilliant": true,
       "move": "f1=N+",
-      "grade": "great",
-      "reason": "Only move that keeps the win: the best alternative, Ke1, scores 50% against 88% (balanced).",
+      "grade": "best",
+      "reason": "Stockfish's top choice.",
       "brilliantDiagnostics": null,
-      "greatDecision": "great",
+      "greatDecision": "rejected: continues the critical sequence credited to an earlier move",
       "source": "https://lichess.org/training/0GvdU"
     },
     {
@@ -951,10 +951,10 @@
       "category": "underpromotion",
       "mustNotBeBrilliant": true,
       "move": "e8=N+",
-      "grade": "great",
-      "reason": "Critical move: it keeps the position better, while the best alternative, e8=Q, scores 45% against 83% (balanced).",
+      "grade": "best",
+      "reason": "Stockfish's top choice.",
       "brilliantDiagnostics": null,
-      "greatDecision": "great",
+      "greatDecision": "rejected: continues the critical sequence credited to an earlier move",
       "source": "https://lichess.org/training/0iUQl"
     },
     {

@@ -1,0 +1,31 @@
+{
+ "pairs": 240,
+ "byTimeControl": {
+  "blitz": {
+   "n": 98,
+   "quick": {
+    "mae": 273.2,
+    "coverage80": 0.827
+   },
+   "balanced": {
+    "mae": 271.1,
+    "coverage80": 0.888
+   },
+   "meanShiftBalancedMinusQuick": -10.7,
+   "meanAbsShift": 35.2
+  },
+  "rapid": {
+   "n": 142,
+   "quick": {
+    "mae": 235.3,
+    "coverage80": 0.852
+   },
+   "balanced": {
+    "mae": 225.7,
+    "coverage80": 0.859
+   },
+   "meanShiftBalancedMinusQuick": 16.2,
+   "meanAbsShift": 69.7
+  }
+ }
+}

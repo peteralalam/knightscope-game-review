@@ -40,11 +40,13 @@ if (goldenBefore && goldenAfter) {
     after.moves.forEach((move, ply) => {
       const old = before.moves[ply];
       if (!["great", "brilliant"].includes(old.grade) && !["great", "brilliant"].includes(move.grade)) return;
-      const why = move.brilliant && move.grade !== "brilliant" && old.grade === "brilliant"
-        ? move.brilliant.decision
-        : move.great && move.grade !== "great"
-          ? move.great.decision
-          : move.grade === "great" ? move.great?.greatReason ?? "" : move.grade === "brilliant" ? "kept" : "";
+      const why = move.grade === "brilliant"
+        ? "Brilliant kept"
+        : move.grade === "great"
+          ? `${old.grade === "brilliant" ? `not Brilliant (${move.brilliant?.decision.replace("rejected: ", "")}); ` : ""}${move.great?.greatReason ?? ""}`
+          : old.grade === "brilliant" && move.brilliant
+            ? move.brilliant.decision
+            : move.great?.decision ?? "";
       rows.push([move.move, LABEL[old.grade], LABEL[move.grade], why.replace(/\|/g, "/")]);
     });
     table(["Move", "Before (ks-review-2.0)", "After", "Why"], rows);
@@ -90,10 +92,10 @@ const writeDistribution = (title, report, before) => {
   out();
   const p = report.pathologies;
   out(`- sides with more than 3 Great moves in one game: ${p.sidesWithMoreThan3Great.length}${p.sidesWithMoreThan3Great.length ? ` (${p.sidesWithMoreThan3Great.join(", ")})` : ""}`);
-  out(`- Great recaptures: ${p.greatRecaptures.length}; Great while already winning and still winning: ${p.greatWhileDecided.length}`);
+  out(`- Great recaptures: ${p.greatRecaptures.length}; Great although the best alternative still kept a better/winning position with the same engine verdict: ${p.greatWhileDecided.length}`);
   out(`- Brilliant without a detected sacrifice: ${p.brilliantsWithoutSacrifice.length}; Brilliant where a quiet move already won: ${p.brilliantsWhereAlternativeAlreadyWon.length}; Brilliant from a worse position (< 40%): ${p.brilliantsFromLosingPositions.length}; consecutive Brilliants by one side: ${p.consecutiveBrilliantsSameSide.length}`);
   out(`- Miss share of tactical errors (Mistake + Miss + Blunder): ${p.missShareOfTacticalErrors}`);
-  out(`- Book moves losing more than 0.05: ${p.bookMovesLosingOver5Points}; deepest Book ply: ${p.maxBookPly}; games re-entering Book after leaving it (transpositions): ${p.bookAfterNonBookMove}`);
+  out(`- Book: moves losing more than 0.05 EP shown as Book: ${p.bookMovesLosingOver5Points}; last Book ply per game: median ${p.bookPliesMedian}, 95th percentile ${p.bookPliesP95}, max ${p.maxBookPly}; games that show Book again after a non-Book move: ${p.bookAfterNonBookMove} (a theory move graded on its merits because it lost ≥ 0.05, or a transposition back into theory)`);
   out();
   if (report.greatDecisions) {
     out("Great candidates (near-best and unique) and the rule that decided them:");
@@ -137,7 +139,7 @@ if (summary && bench) {
   }
   out("## 5. Split");
   out();
-  out(`${summary.splitMethod}. Train ${summary.splits.train}, validation ${summary.splits.validation}, test ${summary.splits.test} game-sides; players appearing in more than one split: **${summary.leakingPlayers}**. Hyperparameters and the interval model were chosen on validation; every number below is on test.`);
+  out(`${summary.splitMethod[0].toUpperCase()}${summary.splitMethod.slice(1)}. Train ${summary.splits.train}, validation ${summary.splits.validation}, test ${summary.splits.test} game-sides; players appearing in more than one split: **${summary.leakingPlayers}**. ${bench.protocol}`);
   out();
   out("## 6. Held-out accuracy");
   out();
@@ -153,12 +155,28 @@ if (summary && bench) {
       table([label, "n", ...models], Object.entries(data).map(([key, value]) => [key, String(value.n), ...models.map((model) => String(Math.round(value[model])))]));
     }
   }
+  const preset = read("data/rating-corpus/preset-check.json");
+  if (preset) {
+    out("### Analysis preset (Quick-trained model, Balanced in the app)");
+    out();
+    out(`${preset.pairs} test game-sides re-analyzed at Balanced; same shipped model on both feature sets.`);
+    out();
+    table(["Time control", "n", "MAE Quick", "MAE Balanced", "Coverage Quick", "Coverage Balanced", "Mean shift (Balanced − Quick)", "Mean absolute shift"],
+      Object.entries(preset.byTimeControl).map(([tc, v]) => [tc, String(v.n), String(v.quick.mae), String(v.balanced.mae), String(v.quick.coverage80), String(v.balanced.coverage80), String(v.meanShiftBalancedMinusQuick), String(v.meanAbsShift)]));
+  }
   out("## 7. 80% interval calibration (test)");
+  out();
+  out("Coverage is close to 80% overall and by game length. By *true* rating band it is not: the estimate is a conditional mean, so it is pulled toward the population average, and players at the extremes (under 1200, over 2400) fall outside their range more often while mid-range players are over-covered. That is the honest limit of what one game reveals; the range is calibrated for a player whose rating you do not already know.");
   out();
   for (const [tc, report] of Object.entries(bench.timeControls)) {
     out(`### ${tc}`);
     out();
-    table(["Model", "Coverage", "Validation coverage", "Mean width"], Object.entries(report.intervals).map(([name, value]) => [name, String(value.coverage80), String(value.validationCoverage80), String(value.meanWidth)]));
+    table(["Model", "Coverage of the 80% range", "Mean width"], Object.entries(report.intervals).map(([name, value]) => [name, String(value.coverage80), String(value.meanWidth)]));
+    if (report.intervals.ridge.model) {
+      const m = report.intervals.ridge.model;
+      out(`Shipped interval model: s(n) = sqrt(${Math.round(m.a)} + ${Math.round(m.b)}/n), bounds at ${m.qLow}·s and +${m.qHigh}·s (10th/90th percentiles of out-of-fold standardized residuals).`);
+      out();
+    }
     const ridge = report.intervals.ridge;
     out("Ridge (shipped) by meaningful decisions:");
     out();

@@ -118,7 +118,14 @@ function main() {
       });
     }
   }
-  for (const row of rows) row.split = splitOf(row.component);
+  for (const row of rows) {
+    row.split = splitOf(row.component);
+    // Anonymous group id for player-grouped cross-validation inside train + validation.
+    row.group = createHash("sha256").update(row.component).digest("hex").slice(0, 12);
+  }
+  // The opponent's features, for the (not shipped) "opponent-aware" experiment.
+  const bySide = new Map(rows.map((row) => [`${row.gameId}:${row.color}`, row]));
+  for (const row of rows) row.opponentX = bySide.get(`${row.gameId}:${row.color === "w" ? "b" : "w"}`)?.x ?? null;
   // Per-decision inputs are large; they only feed the error-model baseline.
   const publicRow = (row) => {
     const copy = { ...row };
@@ -139,7 +146,8 @@ function main() {
   }
   const leaking = [...splitsByPlayer.values()].filter((splits) => splits.size > 1).length;
   const count = (predicate) => rows.filter(predicate).length;
-  const bands = [...new Set(rows.map((row) => row.band))].sort();
+  const bandOrder = ["800–1000", "1000–1200", "1200–1400", "1400–1600", "1600–1800", "1800–2000", "2000–2200", "2200–2400", "2400+"];
+  const bands = bandOrder.filter((band) => rows.some((row) => row.band === band));
   const summary = {
     games: analyses.length,
     samples: rows.length,

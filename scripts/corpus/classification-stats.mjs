@@ -99,7 +99,8 @@ export function classificationReport(analyses) {
     pathologies: {
       sidesWithMoreThan3Great: perSideGreat.filter((side) => side.great > 3).map((side) => `${side.id}:${side.color} (${side.great} in ${side.moves})`),
       greatRecaptures: allMoves.filter((move) => move.g === "great" && move.fr === "recapture").map((move) => `${move.analysis.id}#${move.i} ${move.san}`),
-      greatWhileDecided: allMoves.filter((move) => move.g === "great" && move.great && move.great.positionStateBefore === "winning" && move.great.objectiveTransition === "win vs win").map((move) => `${move.analysis.id}#${move.i} ${move.san}`),
+      // Great where the best alternative still left the mover better or winning (≥ 60 %).
+      greatWhileDecided: allMoves.filter((move) => move.g === "great" && (move.great?.secondBestExpectedScore ?? 0) > 0.6 && move.great.objectiveTransition === "win vs win").map((move) => `${move.analysis.id}#${move.i} ${move.san}`),
       brilliantsWithoutSacrifice: allMoves.filter((move) => move.g === "brilliant" && !move.sac).map((move) => `${move.analysis.id}#${move.i} ${move.san}`),
       brilliantsWhereAlternativeAlreadyWon: allMoves.filter((move) => move.g === "brilliant" && (move.brill?.bestAlternativeExpectedScore ?? 0) >= 0.95).map((move) => `${move.analysis.id}#${move.i} ${move.san}`),
       brilliantsFromLosingPositions: allMoves.filter((move) => move.g === "brilliant" && move.eb < 0.4).map((move) => `${move.analysis.id}#${move.i} ${move.san} (E ${move.eb})`),
@@ -107,6 +108,14 @@ export function classificationReport(analyses) {
       missShareOfTacticalErrors: Math.round((tacticalErrors.filter((move) => move.g === "miss").length / Math.max(1, tacticalErrors.length)) * 1000) / 1000,
       bookMovesLosingOver5Points: book.filter((move) => move.loss > 0.05).length,
       maxBookPly: Math.max(0, ...book.map((move) => move.i + 1)),
+      bookPliesMedian: (() => {
+        const depths = analyses.map((analysis) => Math.max(0, ...analysis.moves.filter((move) => move.book).map((move) => move.i + 1))).sort((a, b) => a - b);
+        return depths[depths.length >> 1] ?? 0;
+      })(),
+      bookPliesP95: (() => {
+        const depths = analyses.map((analysis) => Math.max(0, ...analysis.moves.filter((move) => move.book).map((move) => move.i + 1))).sort((a, b) => a - b);
+        return depths[Math.floor(depths.length * 0.95)] ?? 0;
+      })(),
       bookAfterNonBookMove: analyses.filter((analysis) => {
         let left = false;
         for (const move of analysis.moves) {

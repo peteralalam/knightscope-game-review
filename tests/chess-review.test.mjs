@@ -316,6 +316,24 @@ test("Great is withheld for recaptures and for the planned follow-up of a Great 
   const followUp = reviewMove(game, index, topMove(game, index, hold, { candidates: [hold, withE(0.2, ["b5d7"])] }), context);
   assert.equal(followUp.grade, "best");
   assert.equal(followUp.greatDiagnostics.plannedFollowUp, true);
+
+  // A run of only-moves (perpetual check, fortress shuffle) is credited once,
+  // even when the opponent's reply was not the predicted one.
+  const unpredicted = { ...context, previousOwn: { ...context.previousOwn, resultingEvaluation: { pv: [own.uci] } } };
+  const continued = reviewMove(game, index, topMove(game, index, hold, { candidates: [hold, withE(0.2, ["b5d7"])] }), unpredicted);
+  assert.equal(continued.grade, "best");
+  assert.equal(continued.greatDiagnostics.continuesCriticalSequence, true);
+  assert.match(continued.greatDiagnostics.decision, /continues the critical sequence/);
+});
+
+test("Great is not re-awarded when the same position recurs", () => {
+  const shuffle = parsePgn("1. Nf3 Nf6 2. Ng1 Ng8 3. Nf3 Nf6 *");
+  const hold = withE(0.5, ["g1f3", "g8f6"]);
+  const first = reviewMove(shuffle, 0, topMove(shuffle, 0, withE(0.5, ["g1f3"]), { candidates: [withE(0.5, ["g1f3"]), withE(0.2, ["e2e4"])] }), { useBook: false });
+  assert.equal(first.grade, "great");
+  const again = reviewMove(shuffle, 4, topMove(shuffle, 4, hold, { candidates: [hold, withE(0.2, ["e2e4"])] }), { useBook: false });
+  assert.equal(again.grade, "best");
+  assert.equal(again.greatDiagnostics.repeatedPosition, true);
 });
 
 test("Miss vs Blunder: failing to cash in vs also losing ground", () => {
@@ -396,6 +414,16 @@ test("summary exposes accuracy, phase accuracy, features and the legacy rating s
   assert.equal(summary.features.top1Agreement, 1);
   assert.ok(summary.performance);
   assert.equal(summary.performance.timeControl, "rapid");
-  assert.equal(summary.performance.calibrated, false);
+  // The calibrated Lichess regression is the default once parameters exist.
+  assert.equal(summary.performance.calibrated, true);
+  assert.equal(summary.performance.ratingSystem, "Lichess rapid (equivalent)");
+  assert.match(summary.performance.model, /^lichess-rapid-ridge/);
+  assert.ok(summary.performance.heldOutMae > 0);
+  assert.ok(summary.performance.confidenceLow < summary.performance.estimatedPerformanceRating);
+  assert.ok(summary.performance.confidenceHigh > summary.performance.estimatedPerformanceRating);
   assert.equal(summary.estimatedRating.center, summary.performance.estimatedPerformanceRating);
+
+  const bullet = summarizeSide(reviews, "w", { TimeControl: "60+0" }).performance;
+  assert.match(bullet.model, /^lichess-blitz-ridge/);
+  assert.equal(bullet.extrapolated, true);
 });

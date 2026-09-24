@@ -27,9 +27,22 @@ npm test       # build + unit, rating-model, engine/pipeline and Brilliant suite
 npm run lint
 ```
 
-Evidence that the classifications and the rating estimate are reliable – corpus statistics, the Brilliant
-adversarial suite, held-out rating accuracy and interval coverage – is in
-[`docs/validation-report.md`](docs/validation-report.md), generated from the committed JSON under `data/`.
+Evidence that the classifications and the rating estimate are reliable is in
+[`docs/validation-report.md`](docs/validation-report.md), generated from the committed JSON under `data/`. It covers
+corpus statistics, the Brilliant adversarial suite, held-out rating accuracy and interval coverage. In brief:
+
+- **Classification distribution**: 140 curated games (Balanced) and 2,140 rated Lichess games (Quick), reported per 1000 moves overall and by rating band. Great fell from 36 to 20 per 1000 moves after the uniqueness/importance split, with at most 5 per player per game (was 9).
+- **Brilliant adversarial suite**: 42 positions, of which 17 are traps and 25 sound sacrifices. It produces **0 false positives**, and 15 of the sound sacrifices are recognised.
+- **Rating**: 4,271 game-sides from 3,963 Lichess players, with a player-disjoint split. Held-out MAE is 243 (blitz) and 249 (rapid), against 301 / 341 for always guessing the average and 476 / 408 for the previous heuristic. The 80% range covered 84% / 86%.
+
+Corpus tooling (`scripts/corpus/`):
+
+```sh
+npm run corpus:suite     # Brilliant adversarial suite → data/brilliant-suite/report.json
+npm run corpus:report    # docs/validation-report.md from data/
+```
+
+Rebuilding the corpora is documented at the top of each script. The engine searches are cached in `.cache/corpus/`, so re-grading after a classifier change takes minutes instead of hours.
 
 ## Engine
 
@@ -188,7 +201,9 @@ Never Great:
 - forced moves (check evasions with ≤ 5 replies, or ≤ 2 legal moves);
 - moves that only postpone defeat (< 25%);
 - unstable evaluations;
-- the **planned follow-up** of the mover's previous Great/Brilliant move (its line predicted the reply and this move), because the credit belongs to the earlier decision.
+- the **planned follow-up** of the mover's previous Great/Brilliant move (its line predicted the reply and this move), because the credit belongs to the earlier decision;
+- any move in a **run of consecutive critical moves** after the first, such as a perpetual check or a fortress king shuffle. One decision is credited once;
+- a move from a position that **already occurred** in the game.
 
 Reasons are typed:
 - *only move that holds*;
@@ -218,7 +233,8 @@ The UI shows them under *Why this grade*.
    Also rejected:
    - **pseudo-sacrifices**: the material comes back by force within 4 plies;
    - **forced sacrifices**: every alternative is mated;
-   - the **planned follow-up** of a previous Great/Brilliant move.
+   - the **planned follow-up** of a previous Great/Brilliant move, and a second Brilliant directly after one (a combination is credited once);
+   - a sacrifice that appears only along the engine line (nothing left en prise on the board) and is regained within that line.
 6. For rated players, a modest non-obviousness edge over the alternative (0 / 0.01 / 0.03 EP below 1200 / below 2000 / above). Soundness never depends on rating.
 7. Stability. The deeper verification search must agree, and after the opponent's best reply the mover must still stand within 0.15 EP of the promised evaluation. This hindsight check catches horizon artifacts.
 
@@ -312,9 +328,16 @@ Results are in [`docs/validation-report.md`](docs/validation-report.md) §4–7:
 
 ## Limitations
 
-- The browser engine is Stockfish 19 **Lite** (1 MB net). It is far stronger than any human, but it can misjudge very deep sacrificial ideas. For example, it doesn't find Kasparov's 24.Rxd4 at Balanced; at Deep it rates it co-best. The verification and hindsight checks keep such misjudgements from producing false Brilliants, but they cannot create insight the engine lacks. Use Deep for critical games.
-- Rating estimates use uncalibrated priors until the calibration step is run on real rated games.
-- No Syzygy tablebases in the browser build.
+- **Lite is not the official evaluation.** The default engine uses Stockfish 19's search with a small third-party network. It is far stronger than any human, but it misses very deep ideas. For example, it doesn't find Kasparov's 24.Rxd4 at Balanced, while the Full engine rates it Brilliant (see the report, §8). The Full engine needs an R2 bucket to host its 99 MB file.
+- **One game says little about rating.** On held-out Lichess players the estimate is off by about 240–250 points on average (blitz / rapid). That is 20–30% better than always guessing the average, but it is not a rating.
+- **The 80% range is calibrated overall, not per band.** It covers 82–86% overall, but players far from the average are covered less often, because single-game estimates regress toward the mean.
+- **Rating-corpus coverage.**
+  - Blitz has no games below 1400.
+  - Rapid below 1400 comes only from 2016–17 games.
+  - Every puzzle-database game contains at least one tactical error, because that is how Lichess selects puzzle games.
+  - The model was trained on Quick-preset analysis. Re-analyzing 120 test games at Balanced moved estimates by 35–70 points on average, with no systematic shift (−11 / +16) and an equal or better MAE (`data/rating-corpus/preset-check.json`).
+- **Great and Brilliant are rule-based.** They are checked on corpora and an adversarial suite, not against human annotations. `docs/validation-report.md` lists every rule's hit counts.
+- **No Syzygy tablebases** in either browser build.
 
 ## Licenses
 

@@ -120,7 +120,12 @@ function ratingDetail(summary: SideSummary) {
   const rating = summary.performance;
   if (!rating) return "too few real decisions";
   const scale = rating.calibrated ? rating.ratingSystem : "uncalibrated prior";
-  return `≈${rating.estimatedPerformanceRating} ${scale}${rating.extrapolated ? " (nearest model)" : ""} · ${rating.meaningfulMoves} decisions`;
+  const model = !rating.extrapolated
+    ? ""
+    : rating.timeControl === "unknown"
+      ? " (no time control in PGN: rapid assumed)"
+      : ` (${rating.timeControl}: nearest model)`;
+  return `≈${rating.estimatedPerformanceRating} ${scale}${model} · ${rating.meaningfulMoves} decisions`;
 }
 
 function ImportPanel({
@@ -338,7 +343,7 @@ function GradeEvidence({ review }: { review: ReviewedMove }) {
       <summary>Why {review.grade === "brilliant" || review.grade === "great" ? "this grade" : "not Great / Brilliant"}</summary>
       {brilliant && (
         <dl>
-          <div><dt>Sacrifice</dt><dd>{brilliant.sacrificedPiece} on {brilliant.sacrificeSquare} ({brilliant.sacrificeValue} pawns)</dd></div>
+          <div><dt>Sacrifice</dt><dd>{brilliant.sacrificedPiece} on {brilliant.sacrificeSquare} (net {brilliant.sacrificeValue} {brilliant.sacrificeValue === 1 ? "pawn" : "pawns"})</dd></div>
           <div><dt>Best defence</dt><dd>{brilliant.bestDefense ?? "—"}{brilliant.acceptanceIsBestDefense ? " (takes it)" : " (declines)"}</dd></div>
           <div><dt>If accepted</dt><dd>{pct(brilliant.expectedScoreAfterAcceptance)} for the mover</dd></div>
           <div><dt>Best alternative</dt><dd>{pct(brilliant.bestAlternativeExpectedScore)}</dd></div>
@@ -438,7 +443,7 @@ function SummaryPanel({
         <p className="estimate-note">
           {white.performance?.calibrated
             ? <>Lichess-equivalent estimated game performance: the Lichess {white.performance.timeControl === "blitz" || white.performance.timeControl === "bullet" ? "blitz" : "rapid"} rating
-              whose typical games look like this one, with an 80% range that held for about 80% of held-out Lichess players.
+              whose typical games look like this one, with an 80% range that contained the true rating for {Math.round((white.performance.heldOutCoverage ?? 0.8) * 100)}% of held-out Lichess players.
               It is not a Chess.com or FIDE rating, and one game says little: on held-out players the estimate was off by
               {" "}{Math.round((white.performance.heldOutMae ?? 0) / 10) * 10} points on average.</>
             : <>Ranges are 80% intervals from an uncalibrated, prior-based model – not account ratings.</>}
@@ -674,7 +679,7 @@ export function ChessReviewApp() {
         </div>
       </header>
 
-      {engineMode !== "lite" && fullEngine.state !== "ready" && fullEngine.state !== "unknown" && (
+      {(engineMode === "full" || (engineMode === "auto" && preset === "deep")) && fullEngine.state !== "ready" && fullEngine.state !== "unknown" && (
         <div className="engine-download" role="status">
           {fullEngine.state === "downloading" ? (
             <>
@@ -684,7 +689,7 @@ export function ChessReviewApp() {
           ) : (
             <>
               <span>
-                {engineMode === "full" ? "The full engine" : "Auto uses the full engine for Deep reviews once it"} is a one-time ≈99 MB download,
+                {engineMode === "full" ? "The full engine" : "For Deep reviews, Auto switches to the full engine once it"} is a one-time ≈99 MB download,
                 verified (SHA-256) and cached in this browser. Only the engine file is downloaded; your games never leave the device.
                 {fullEngine.state === "error" && <b> {fullEngine.message}</b>}
               </span>

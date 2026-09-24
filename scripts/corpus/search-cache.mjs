@@ -114,14 +114,15 @@ export class CachedEngine {
   }
 
   async search(request) {
-    const fen = validateSearchRequest(request);
-    const hit = this.cache.get(request, fen);
+    // A hit was validated when it was stored; skip the (slow) chess.js replay.
+    const hit = this.cache.get(request, "");
     if (hit) {
       this.cache.hits += 1;
       this.engineVersion = hit.engineVersion;
       return hit;
     }
     this.cache.misses += 1;
+    validateSearchRequest(request);
     this.engine ??= this.createEngine();
     if (this.pendingNewGame) {
       await this.engine.newGame();

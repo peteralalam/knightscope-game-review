@@ -143,7 +143,7 @@ function sacrificeKind(piece: PieceSymbol, material: number, movedPiece: boolean
  * to move. Pieces that were already capturable before the move are ignored –
  * the move did not offer them. Pawns are never counted as a sacrificed piece.
  */
-export function staticSacrifices(beforeFen: string, moveUci: string, minMaterial: number): Sacrifice[] {
+function staticSacrificesUncached(beforeFen: string, moveUci: string, minMaterial: number): Sacrifice[] {
   const board = tryChess(beforeFen);
   if (!board) return [];
   const mover = board.turn();
@@ -188,7 +188,7 @@ export function staticSacrifices(beforeFen: string, moveUci: string, minMaterial
  * against the position before the move. A deficit of at least `minMaterial`
  * that is not repaid by an immediate recapture is a realized sacrifice.
  */
-export function pvSacrifice(
+function pvSacrificeUncached(
   beforeFen: string,
   moveUci: string,
   continuation: string[],
@@ -293,7 +293,7 @@ export function isObviousRecapture(
  * the exchange on that square wins at least the target's value less a pawn,
  * and never less than a pawn.
  */
-export function isFreeCapture(beforeFen: string, moveUci: string) {
+function isFreeCaptureUncached(beforeFen: string, moveUci: string) {
   const board = tryChess(beforeFen);
   if (!board) return false;
   const { to } = uciParts(moveUci);
@@ -314,7 +314,7 @@ export function givesMateInOne(beforeFen: string, moveUci: string) {
   }
 }
 
-export function legalMoveCount(fen: string) {
+function legalMoveCountUncached(fen: string) {
   return tryChess(fen)?.moves().length ?? 0;
 }
 
@@ -335,3 +335,30 @@ export function gamePhase(fen: string, ply: number): "opening" | "middlegame" | 
   if (ply < 20 && nonPawn >= 56) return "opening";
   return "middlegame";
 }
+
+// --- Memoization ---------------------------------------------------------------
+// The classifier re-reviews every move several times per analysis (after each
+// search stage and in the hindsight pass), and these board computations are
+// pure functions of their arguments, so results are cached. Returned objects
+// are treated as immutable by all callers.
+const MEMO_LIMIT = 20_000;
+function memoize<Args extends unknown[], Result>(compute: (...args: Args) => Result) {
+  const cache = new Map<string, Result>();
+  return (...args: Args): Result => {
+    const key = args.map((arg) => (Array.isArray(arg) ? arg.join(" ") : String(arg))).join("|");
+    const hit = cache.get(key);
+    if (hit !== undefined || cache.has(key)) return hit as Result;
+    if (cache.size >= MEMO_LIMIT) cache.clear();
+    const value = compute(...args);
+    cache.set(key, value);
+    return value;
+  };
+}
+
+/** See staticSacrificesUncached. */
+export const staticSacrifices = memoize(staticSacrificesUncached);
+/** See pvSacrificeUncached. */
+export const pvSacrifice = memoize(pvSacrificeUncached);
+/** See isFreeCaptureUncached. */
+export const isFreeCapture = memoize(isFreeCaptureUncached);
+export const legalMoveCount = memoize(legalMoveCountUncached);
