@@ -5,6 +5,7 @@ import {
   isObviousRecapture,
   legalMoveCount as countLegalMoves,
   lineMaterialGain,
+  materialTrajectory,
   PIECE_NAME,
   pvSacrifice,
   staticSacrifices,
@@ -115,12 +116,99 @@ export interface Criticality {
   bestAlternativeSan?: string;
   /** Candidate moves within the "good" band of the best move. */
   goodMoves?: number;
+  /**
+   * Genuinely viable moves: candidates within the "good" band of the best move.
+   * A lower bound when every searched candidate was viable (`viableMovesAtLeast`).
+   */
+  viableMoves?: number;
+  viableMovesAtLeast?: boolean;
   onlyMove: boolean;
+  /**
+   * UNIQUENESS: how much better the played move is than the best alternative, in
+   * human expected score (the candidate-pass gap, never negative).
+   */
+  moveUniqueness?: number;
+  /**
+   * IMPORTANCE: how much of that gap changes the likely RESULT. Both scores are
+   * clamped to the undecided range [OUTCOME_BANDS.losing, OUTCOME_BANDS.winning]
+   * before subtracting, so choosing between two already-winning (or two
+   * already-lost) continuations has zero importance however large the raw gap.
+   */
+  outcomeImportance?: number;
+  /** Outcome band after the played move vs after the best alternative, e.g. "balanced vs losing". */
+  outcomeTransition?: string;
+  /** Stockfish WDL result class (win/draw/loss) after the played move vs the best alternative. */
+  objectiveTransition?: string;
+}
+
+/** Evidence for (or against) a Brilliant. Material is in pawn units from the mover's side. */
+export interface BrilliantDiagnostics {
+  materialBefore: number;
+  materialAfterMove: number;
+  /** After Stockfish's best reply (which may decline the offer). */
+  materialAfterBestDefense: number;
+  materialAfterPV: number;
+  pvPliesInspected: number;
+  sacrificedPiece: string;
+  sacrificeSquare: string;
+  sacrificeKind: string;
+  sacrificeValue: number;
+  expectedScoreBefore: number;
+  expectedScoreAfter: number;
+  /** Mover's expected score when the opponent takes the material (forced-capture search when declined). */
+  expectedScoreAfterAcceptance?: number;
+  bestDefense?: string;
+  acceptanceIsBestDefense: boolean;
+  recoveredAfterPlies?: number;
+  forcedMate?: number;
+  bestMoveRank: number | null;
+  bestAlternativeExpectedScore?: number;
+  /** Expected score of the move in the deeper verification search, when one ran. */
+  deepVerificationScore?: number;
+  /** "brilliant", or the first rule that rejected the promotion. */
+  decision: string;
+}
+
+/** Why a move was (or was not) promoted to Great. Produced for every Great candidate. */
+export interface GreatDiagnostics {
+  evaluationBefore: string;
+  bestMove: string;
+  playedMove: string;
+  bestExpectedScore: number;
+  playedExpectedScore: number;
+  secondBestExpectedScore?: number;
+  thirdBestExpectedScore?: number;
+  gapBestToSecond?: number;
+  numberOfAcceptableMoves?: number;
+  acceptableMovesIsLowerBound?: boolean;
+  legalMoveCount: number;
+  positionStateBefore: string;
+  positionStateAfter: string;
+  /** State before the opponent's previous move (the baseline an error is measured from). */
+  positionStateBeforeOpponentMove?: string;
+  onlyMove: boolean;
+  outcomeTransition?: string;
+  objectiveTransition?: string;
+  moveUniqueness?: number;
+  outcomeImportance?: number;
+  /** Expected score gained over the pre-opponent-move baseline (an opponent error created a chance). */
+  tacticalOpportunity: number;
+  forcedMove: boolean;
+  obviousRecapture: boolean;
+  freeCapture: boolean;
+  /** The move was already in the line of the mover's previous Great / Brilliant move. */
+  plannedFollowUp: boolean;
+  opponentPreviousMoveLoss: number;
+  greatReason?: string;
+  /** "great", or the first rule that rejected the promotion. */
+  decision: string;
 }
 
 export interface ReviewContext {
   /** The opponent's move immediately before this one, already reviewed. */
   previous?: ReviewedMove;
+  /** The mover's own previous move, already reviewed. */
+  previousOwn?: ReviewedMove;
   /** Mover's rating from the PGN, used only to tune how non-obvious a Brilliant must be. */
   playerRating?: number;
   /**
@@ -175,6 +263,10 @@ export interface ReviewedMove extends ParsedMove {
   sacrifice?: Sacrifice;
   brilliantReason?: string;
   greatReason?: string;
+  /** Present for every Brilliant candidate (near-best move that gives up material), promoted or not. */
+  brilliantDiagnostics?: BrilliantDiagnostics;
+  /** Present for every Great candidate (near-best and unique), promoted or not. */
+  greatDiagnostics?: GreatDiagnostics;
   miss?: MissInfo;
   classificationReason: string;
   explanation: string;
@@ -184,9 +276,14 @@ export interface ReviewedMove extends ParsedMove {
 export interface PerformanceFeatures {
   meaningfulMoves: number;
   effectiveMoves: number;
+  /** Plies in the whole game (both sides). */
+  gameLength: number;
   meanLoss: number;
   medianLoss: number;
+  p75Loss: number;
   p90Loss: number;
+  /** Mean loss weighted by how much was at stake (balanced positions count most). */
+  complexityWeightedLoss: number;
   blunderRate: number;
   mistakeRate: number;
   inaccuracyRate: number;
@@ -197,6 +294,9 @@ export interface PerformanceFeatures {
   conversionAccuracy: number | null;
   defensiveAccuracy: number | null;
   opportunityConversion: number | null;
+  openingAccuracy: number | null;
+  middlegameAccuracy: number | null;
+  endgameAccuracy: number | null;
 }
 
 export interface PerformanceEstimate {
@@ -209,6 +309,10 @@ export interface PerformanceEstimate {
   ratingSystem: string;
   model: string;
   calibrated: boolean;
+  /** The game's time control has no model of its own; the nearest (blitz / rapid) was used. */
+  extrapolated?: boolean;
+  /** Mean absolute error of this model on held-out players (Elo points). */
+  heldOutMae?: number;
 }
 
 export type TimeControlClass =
@@ -415,8 +519,8 @@ function describeSacrifice(sacrifice: Sacrifice) {
 function describeOutcome(played: Evaluation) {
   const mate = matingIn(played);
   if (mate !== undefined && mate > 0) return `leads to a forced mate in ${mate}`;
-  const band = outcomeBand(played.expectedScore);
-  return `keeps the position ${OUTCOME_WORDS[band]} (${percent(played.expectedScore)} expected score)`;
+  const band = outcomeBand(played.humanExpectedScore);
+  return `keeps the position ${OUTCOME_WORDS[band]} (${percent(played.humanExpectedScore)} expected score)`;
 }
 
 interface Alternatives {
@@ -442,6 +546,45 @@ function splitCandidates(engine: EngineMoveResult, uci: string): Alternatives {
   };
 }
 
+const round4 = (value: number | undefined) => (value === undefined ? undefined : Math.round(value * 10_000) / 10_000);
+
+/** Clamp an expected score to the undecided range: differences inside a decided zone do not change the result. */
+function undecided(expected: number) {
+  return clamp(expected, OUTCOME_BANDS.losing, OUTCOME_BANDS.winning);
+}
+
+const RESULT_RANK = { loss: 0, draw: 1, win: 2 } as const;
+
+/** Stockfish's WDL verdict for one side: the outcome with probability ≥ ½, else a draw. */
+function objectiveResult(evaluation: Evaluation): keyof typeof RESULT_RANK {
+  if (evaluation.engineWdl.win >= 0.5) return "win";
+  if (evaluation.engineWdl.loss >= 0.5) return "loss";
+  return "draw";
+}
+
+function formatMoverEvaluation(evaluation: Evaluation, color: Color) {
+  const sign = color === "w" ? 1 : -1;
+  const mating = matingIn(evaluation);
+  const mated = matedIn(evaluation);
+  return formatEvaluation(
+    evaluation.cp === undefined ? undefined : evaluation.cp * sign,
+    mating !== undefined ? mating * sign : mated !== undefined ? -mated * sign : undefined,
+  );
+}
+
+/**
+ * The move was already the planned continuation of the mover's previous Great /
+ * Brilliant move: that line had the opponent's actual reply followed by this
+ * move. The credit belongs to the earlier move.
+ */
+function isPlannedFollowUp(move: ParsedMove, context: ReviewContext) {
+  const own = context.previousOwn;
+  const reply = context.previous;
+  if (!own || !reply || (own.grade !== "great" && own.grade !== "brilliant")) return false;
+  const line = own.resultingEvaluation.pv[0] === own.uci ? own.resultingEvaluation.pv : [own.uci, ...own.resultingEvaluation.pv];
+  return line[1] === reply.uci && line[2] === move.uci;
+}
+
 export function reviewMove(
   game: ParsedGame,
   moveIndex: number,
@@ -460,12 +603,12 @@ export function reviewMove(
     topCandidate?.pv[0] === move.uci;
   const resultingEvaluation = isTop && engine.bestMove === move.uci ? bestEvaluation : engine.played;
 
-  const bestE = bestEvaluation.expectedScore;
-  const playedE = resultingEvaluation.expectedScore;
+  const bestE = bestEvaluation.humanExpectedScore;
+  const playedE = resultingEvaluation.humanExpectedScore;
   let loss = isTop ? 0 : Math.max(0, bestE - playedE);
   if (!isTop && topCandidate && playedCandidate) {
     // Two independent comparisons of the same move; averaging damps search noise.
-    loss = (loss + Math.max(0, topCandidate.expectedScore - playedCandidate.expectedScore)) / 2;
+    loss = (loss + Math.max(0, topCandidate.humanExpectedScore - playedCandidate.humanExpectedScore)) / 2;
   }
 
   const bestMate = matingIn(bestEvaluation);
@@ -520,21 +663,36 @@ export function reviewMove(
   const unstable =
     context.unstable === true ||
     (engine.verification?.[0] !== undefined &&
-      Math.abs(engine.verification[0].expectedScore - bestE) > VERIFICATION.maxDrift);
+      Math.abs(engine.verification[0].humanExpectedScore - bestE) > VERIFICATION.maxDrift);
 
   // --- Criticality from the candidate pass --------------------------------
-  const playedScoreForGap = playedCandidate?.expectedScore ?? (isTop ? bestE : playedE);
-  const gap = bestAlternative ? playedScoreForGap - bestAlternative.expectedScore : undefined;
+  const playedScoreForGap = playedCandidate?.humanExpectedScore ?? (isTop ? bestE : playedE);
+  const gap = bestAlternative ? playedScoreForGap - bestAlternative.humanExpectedScore : undefined;
   const candidateList = engine.verification ?? engine.candidates ?? [];
   const goodMoves = candidateList.length
-    ? candidateList.filter((line) => candidateList[0].expectedScore - line.expectedScore <= LOSS_BANDS.good).length
+    ? candidateList.filter((line) => candidateList[0].humanExpectedScore - line.humanExpectedScore <= LOSS_BANDS.good).length
     : undefined;
+  const viableMoves = goodMoves;
+  const alternativeScore = bestAlternative?.humanExpectedScore;
+  const moveUniqueness = gap === undefined ? undefined : Math.max(0, gap);
+  const outcomeImportance =
+    alternativeScore === undefined ? undefined : Math.max(0, undecided(playedScoreForGap) - undecided(alternativeScore));
+  const playedResultClass = objectiveResult(playedCandidate ?? (isTop ? bestEvaluation : resultingEvaluation));
   const criticality: Criticality = {
     gap,
     bestAlternative: bestAlternative?.pv[0],
     bestAlternativeSan: bestAlternative ? uciToSan(move.before, bestAlternative.pv[0]) : undefined,
     goodMoves,
+    viableMoves,
+    viableMovesAtLeast: viableMoves !== undefined && viableMoves === candidateList.length,
     onlyMove: gap !== undefined && gap >= GREAT.minGap && (goodMoves ?? 2) <= 1,
+    moveUniqueness,
+    outcomeImportance,
+    outcomeTransition:
+      alternativeScore === undefined
+        ? undefined
+        : `${OUTCOME_WORDS[outcomeBand(playedScoreForGap)]} vs ${OUTCOME_WORDS[outcomeBand(alternativeScore)]}`,
+    objectiveTransition: bestAlternative ? `${playedResultClass} vs ${objectiveResult(bestAlternative)}` : undefined,
   };
 
   // --- Book ------------------------------------------------------------------
@@ -546,10 +704,15 @@ export function reviewMove(
     isBookPosition(move.after);
 
   // --- Brilliant -------------------------------------------------------------
+  // Brilliant = a real, sound, non-obvious sacrifice. Every sacrifice candidate
+  // (near-best move that gives up material) gets structured evidence and the
+  // first rule that rejected it. False positives are worse than misses, so each
+  // rule errs toward rejecting.
   let sacrifice: Sacrifice | undefined;
   let brilliantReason: string | undefined;
+  let brilliantDiagnostics: BrilliantDiagnostics | undefined;
   const nearBest = isTop || loss <= BRILLIANT.maxLoss;
-  if (!isBook && nearBest && legalMoveCount >= 2 && !mateInOne && !checkEvasion && !unstable && candidateList.length) {
+  if (!isBook && nearBest && legalMoveCount >= 2 && !mateInOne) {
     const statics = staticSacrifices(move.before, move.uci, BRILLIANT.minSacrifice);
     const continuation = resultingEvaluation.pv[0] === move.uci
       ? resultingEvaluation.pv.slice(1)
@@ -573,86 +736,184 @@ export function reviewMove(
           ? { ...offered, accepted: true, recoveredAfterPlies: realized.recoveredAfterPlies, deficitPly: realized.deficitPly }
           : undefined;
       } else {
+        // Declining is Stockfish's best defence. That is fine – the offer (and
+        // the threat behind it) can be the point – as long as ACCEPTING is not a
+        // refutation: the forced-capture search must leave the mover at least
+        // as well off as the main line.
         candidate = { ...offered, accepted: false };
         if (engine.acceptance) {
           acceptanceOk =
-            engine.acceptance.expectedScore >= BRILLIANT.minExpectedAfter &&
-            engine.acceptance.expectedScore >= playedE - BRILLIANT.acceptanceTolerance;
+            engine.acceptance.humanExpectedScore >= BRILLIANT.minExpectedAfter &&
+            engine.acceptance.humanExpectedScore >= playedE - BRILLIANT.acceptanceTolerance;
         }
       }
     } else if (realized && realized.piece !== "p") {
       candidate = realized;
     }
 
-    const alternativeScore = bestAlternative?.expectedScore;
-    const alternativeMate = matingIn(bestAlternative);
-    // A sacrifice that forces mate where the alternatives merely win is still meaningful.
-    const forcesMateAlone =
-      playedMate !== undefined && (alternativeMate === undefined || alternativeMate > playedMate + 1);
-    const unnecessary =
-      alternativeScore !== undefined && alternativeScore >= BRILLIANT.alternativeAlreadyWinning && !forcesMateAlone;
-    const edgeOk = gap === undefined || gap >= ratingEdge(context.playerRating);
-    const candidateConfirms = !playedCandidate || !topCandidate ||
-      topCandidate.expectedScore - playedCandidate.expectedScore <= BRILLIANT.maxLoss;
+    if (candidate) {
+      const alternativeScore = bestAlternative?.humanExpectedScore;
+      // When a quiet alternative already wins overwhelmingly, the sacrifice is
+      // a flourish – even a faster forced mate does not change the result.
+      const unnecessary = alternativeScore !== undefined && alternativeScore >= BRILLIANT.alternativeAlreadyWinning;
+      const edgeOk = gap === undefined || gap >= ratingEdge(context.playerRating);
+      const candidateConfirms = !playedCandidate || !topCandidate ||
+        topCandidate.humanExpectedScore - playedCandidate.humanExpectedScore <= BRILLIANT.maxLoss;
+      // Material regained by force almost at once is a combination, not a sacrifice.
+      const pseudo =
+        candidate.accepted === true &&
+        candidate.recoveredAfterPlies !== undefined &&
+        candidate.recoveredAfterPlies <= BRILLIANT.pseudoRecoveryPlies;
+      // Giving up material because every other move is mated is not a choice.
+      const forcedByMate =
+        bestAlternative !== undefined && matedIn(bestAlternative) !== undefined && outcomeBand(playedE) <= 2;
 
-    if (
-      candidate &&
-      acceptanceOk &&
-      playedE >= BRILLIANT.minExpectedAfter &&
-      !unnecessary &&
-      edgeOk &&
-      candidateConfirms &&
-      (playedCandidate !== undefined || isTop)
-    ) {
-      sacrifice = candidate;
-      const acceptanceText = candidate.accepted
-        ? candidate.recoveredAfterPlies !== undefined
-          ? `Stockfish's best defence takes it, and the material comes back ${candidate.recoveredAfterPlies} plies later`
-          : "Stockfish's best defence takes it"
-        : engine.acceptance
-          ? `Taking it leaves the opponent worse off (${percent(1 - engine.acceptance.expectedScore)} for them after the capture)`
-          : "Stockfish's best defence declines it";
-      brilliantReason = `${isTop ? "Best move" : "Near-best move"}. ${describeSacrifice(candidate)}. ${acceptanceText}, and the move ${describeOutcome(resultingEvaluation)}.`;
-      grade = "brilliant";
+      let decision = "brilliant";
+      if (checkEvasion) decision = "rejected: check evasion";
+      else if (isPlannedFollowUp(move, context)) decision = "rejected: planned follow-up of the previous Great/Brilliant move";
+      else if (unstable) decision = "rejected: evaluation unstable across searches";
+      else if (!candidateList.length) decision = "rejected: no candidate search (cannot judge alternatives)";
+      else if (playedCandidate === undefined && !isTop) decision = "rejected: move not confirmed by the candidate search";
+      else if (!candidateConfirms) decision = "rejected: candidate search rates another move higher";
+      else if (playedE < BRILLIANT.minExpectedAfter) decision = "rejected: position after the sacrifice is not good enough";
+      else if (!acceptanceOk) decision = "rejected: accepting the sacrifice refutes it";
+      else if (pseudo) decision = `rejected: material regained within ${candidate.recoveredAfterPlies} plies (pseudo-sacrifice)`;
+      else if (forcedByMate) decision = "rejected: forced – every alternative is mated";
+      else if (unnecessary) decision = "rejected: a simpler move was already winning";
+      else if (!edgeOk) decision = "rejected: not clearly better than the alternatives for this rating";
+
+      const trajectory = materialTrajectory(move.before, [move.uci, ...continuation.slice(0, BRILLIANT.pvPlies - 1)], move.color);
+      const verificationLine = engine.verification?.find((line) => line.pv[0] === move.uci);
+      const forcedMate = matingIn(resultingEvaluation);
+      brilliantDiagnostics = {
+        materialBefore: trajectory[0] ?? 0,
+        materialAfterMove: trajectory[1] ?? trajectory[0] ?? 0,
+        materialAfterBestDefense: trajectory[2] ?? trajectory[1] ?? 0,
+        materialAfterPV: trajectory.at(-1) ?? 0,
+        pvPliesInspected: Math.max(0, trajectory.length - 1),
+        sacrificedPiece: PIECE_NAME[candidate.piece],
+        sacrificeSquare: candidate.square,
+        sacrificeKind: candidate.kind,
+        sacrificeValue: candidate.material,
+        expectedScoreBefore: round4(bestE)!,
+        expectedScoreAfter: round4(playedE)!,
+        expectedScoreAfterAcceptance: round4(
+          candidate.accepted ? playedE : engine.acceptance?.humanExpectedScore,
+        ),
+        bestDefense: continuation[0] ? uciToSan(move.after, continuation[0]) : undefined,
+        acceptanceIsBestDefense: candidate.accepted === true,
+        recoveredAfterPlies: candidate.recoveredAfterPlies,
+        forcedMate: forcedMate !== undefined && forcedMate > 0 ? forcedMate : undefined,
+        bestMoveRank: isTop ? 1 : engine.playedRank,
+        bestAlternativeExpectedScore: round4(alternativeScore),
+        deepVerificationScore: round4(verificationLine?.humanExpectedScore),
+        decision,
+      };
+
+      if (decision === "brilliant") {
+        sacrifice = candidate;
+        const acceptanceText = candidate.accepted
+          ? candidate.recoveredAfterPlies !== undefined
+            ? `Stockfish's best defence takes it, and the material comes back ${candidate.recoveredAfterPlies} plies later`
+            : "Stockfish's best defence takes it"
+          : engine.acceptance
+            ? `Taking it leaves the opponent worse off (${percent(1 - engine.acceptance.humanExpectedScore)} for them after the capture)`
+            : "Stockfish's best defence declines it";
+        brilliantReason = `${isTop ? "Best move" : "Near-best move"}. ${describeSacrifice(candidate)}. ${acceptanceText}, and the move ${describeOutcome(resultingEvaluation)}.`;
+        grade = "brilliant";
+      }
     }
   }
 
   // --- Great -----------------------------------------------------------------
+  // Great = the move is (near-)best AND unique AND the uniqueness matters for the
+  // result. Uniqueness alone (a big gap between two winning moves) is not enough,
+  // and neither is being Stockfish's #1. Every candidate gets diagnostics.
   let greatReason: string | undefined;
+  let greatDiagnostics: GreatDiagnostics | undefined;
   const opponentLoss = context.previous?.expectedPointsLost ?? 0;
+  const baseline = context.previous ? 1 - context.previous.expectedBefore : 0.5;
+  const freeCapture = isFreeCapture(move.before, move.uci);
+  const plannedFollowUp = isPlannedFollowUp(move, context);
+  const forcedMove = checkEvasion || legalMoveCount <= 2;
   if (
     grade !== "brilliant" &&
     !isBook &&
-    (isTop || loss <= GREAT.maxLoss) &&
     legalMoveCount >= 2 &&
-    !obviousRecapture &&
-    !mateInOne &&
-    !checkEvasion &&
-    !unstable &&
-    // Taking a piece that is simply hanging is never a hard-to-find move.
-    !isFreeCapture(move.before, move.uci) &&
+    (isTop || loss <= GREAT.maxLoss) &&
     gap !== undefined &&
     bestAlternative &&
-    playedE >= GREAT.minExpectedAfter
+    gap >= GREAT.minGap
   ) {
     const playedBand = outcomeBand(playedScoreForGap);
-    const alternativeBand = outcomeBand(bestAlternative.expectedScore);
+    const alternativeBand = outcomeBand(bestAlternative.humanExpectedScore);
+    const baselineBand = outcomeBand(baseline);
+    // The alternative must change the likely result: either Stockfish's own WDL
+    // verdict (win / draw / loss) flips, or the human expected score falls by at
+    // least two outcome bands (e.g. winning → balanced, balanced → losing).
+    const objectiveChange = RESULT_RANK[playedResultClass] > RESULT_RANK[objectiveResult(bestAlternative)];
     const altSan = criticality.bestAlternativeSan ?? "the next-best move";
-    const altText = `the best alternative, ${altSan}, scores ${percent(bestAlternative.expectedScore)} against ${percent(playedScoreForGap)}`;
-    if (gap >= GREAT.onlyMoveGap) {
-      greatReason = `Only move: ${altText}.`;
-    } else if (gap >= GREAT.minGap && playedBand > alternativeBand) {
-      greatReason = `Critical move: it keeps the position ${OUTCOME_WORDS[playedBand]}, while ${altText} (${OUTCOME_WORDS[alternativeBand]}).`;
-    } else if (gap >= GREAT.minGap && opponentLoss >= GREAT.punishOpponentLoss) {
-      greatReason = `Punishes the opponent's error: ${altText}.`;
+    const altText = `the best alternative, ${altSan}, scores ${percent(bestAlternative.humanExpectedScore)} against ${percent(playedScoreForGap)}`;
+    let decision = "great";
+    if (obviousRecapture) decision = "rejected: recapture";
+    else if (freeCapture) decision = "rejected: takes a hanging piece";
+    else if (mateInOne) decision = "rejected: mate in one";
+    else if (forcedMove) decision = "rejected: forced (check evasion or ≤ 2 legal moves)";
+    else if (unstable) decision = "rejected: evaluation unstable across searches";
+    else if (plannedFollowUp) decision = "rejected: planned follow-up of the previous Great/Brilliant move";
+    else if (playedE < GREAT.minExpectedAfter) decision = "rejected: only postpones defeat";
+    else if ((outcomeImportance ?? 0) < GREAT.minImportance) decision = "rejected: alternatives lead to the same outcome";
+    else if (!objectiveChange && playedBand - alternativeBand < GREAT.minBandDrop) {
+      decision = "rejected: the alternative keeps the same result class";
     }
-    if (greatReason) grade = "great";
+
+    if (decision === "great") {
+      if (opponentLoss >= GREAT.punishOpponentLoss && baselineBand <= 2 && playedBand >= 3) {
+        greatReason = `Punishes the opponent's error: it turns a ${OUTCOME_WORDS[baselineBand]} position into a ${OUTCOME_WORDS[playedBand]} one, while ${altText} (${OUTCOME_WORDS[alternativeBand]}).`;
+      } else if (playedBand >= 2 && alternativeBand <= 1) {
+        greatReason = `Only move that holds: ${altText} (${OUTCOME_WORDS[alternativeBand]}).`;
+      } else if (playedBand === 4) {
+        greatReason = `Only move that keeps the win: ${altText} (${OUTCOME_WORDS[alternativeBand]}).`;
+      } else {
+        greatReason = `Critical move: it keeps the position ${OUTCOME_WORDS[playedBand]}, while ${altText} (${OUTCOME_WORDS[alternativeBand]}).`;
+      }
+      grade = "great";
+    }
+
+    greatDiagnostics = {
+      evaluationBefore: formatMoverEvaluation(bestEvaluation, move.color),
+      bestMove: bestMoveSan,
+      playedMove: move.san,
+      bestExpectedScore: round4(topCandidate?.humanExpectedScore ?? bestE)!,
+      playedExpectedScore: round4(playedScoreForGap)!,
+      secondBestExpectedScore: round4(candidateList[1]?.humanExpectedScore),
+      thirdBestExpectedScore: round4(candidateList[2]?.humanExpectedScore),
+      gapBestToSecond: candidateList[1] ? round4(candidateList[0].humanExpectedScore - candidateList[1].humanExpectedScore) : undefined,
+      numberOfAcceptableMoves: viableMoves,
+      acceptableMovesIsLowerBound: criticality.viableMovesAtLeast,
+      legalMoveCount,
+      positionStateBefore: OUTCOME_WORDS[outcomeBand(bestE)],
+      positionStateAfter: OUTCOME_WORDS[outcomeBand(playedE)],
+      positionStateBeforeOpponentMove: context.previous ? OUTCOME_WORDS[baselineBand] : undefined,
+      onlyMove: criticality.onlyMove,
+      outcomeTransition: criticality.outcomeTransition,
+      objectiveTransition: criticality.objectiveTransition,
+      moveUniqueness: round4(moveUniqueness),
+      outcomeImportance: round4(outcomeImportance),
+      tacticalOpportunity: round4(bestE - baseline)!,
+      forcedMove,
+      obviousRecapture,
+      freeCapture,
+      plannedFollowUp,
+      opponentPreviousMoveLoss: round4(opponentLoss)!,
+      greatReason,
+      decision,
+    };
   }
 
   // --- Miss ------------------------------------------------------------------
   let miss: MissInfo | undefined;
   if (grade !== "brilliant" && grade !== "great" && !isTop && legalMoveCount >= 2) {
-    const baseline = context.previous ? 1 - context.previous.expectedBefore : 0.5;
     const opportunity = bestE - baseline;
     const missedMateRelevant =
       bestMate !== undefined &&
@@ -714,8 +975,8 @@ export function reviewMove(
   const alternativesAlsoDecided =
     !bestAlternative ||
     (bestE >= 0.5
-      ? bestAlternative.expectedScore >= INFORMATIVENESS.decidedThreshold
-      : bestAlternative.expectedScore <= 1 - INFORMATIVENESS.decidedThreshold);
+      ? bestAlternative.humanExpectedScore >= INFORMATIVENESS.decidedThreshold
+      : bestAlternative.humanExpectedScore <= 1 - INFORMATIVENESS.decidedThreshold);
   if (isBook) {
     informativeness = INFORMATIVENESS.book;
     forcedReason ??= "opening theory";
@@ -800,6 +1061,8 @@ export function reviewMove(
     sacrifice,
     brilliantReason: grade === "brilliant" ? brilliantReason : undefined,
     greatReason: grade === "great" ? greatReason : undefined,
+    greatDiagnostics,
+    brilliantDiagnostics,
     miss,
     classificationReason: reason,
     explanation: reason,
@@ -906,12 +1169,22 @@ export function extractFeatures(sideMoves: ReviewedMove[]): PerformanceFeatures 
     moves.length ? moves.reduce((sum, move) => sum + move.accuracy, 0) / moves.length : null;
   const severe = (grades: Grade[]) => (move: ReviewedMove) => grades.includes(move.objectiveGrade);
 
+  const stakesWeight = (move: ReviewedMove) =>
+    move.informativeness * (0.25 + 4 * move.expectedBefore * (1 - move.expectedBefore));
+  const stakesTotal = decisions.reduce((sum, move) => sum + stakesWeight(move), 0);
+  const inPhase = (phase: Phase) => decisions.filter((move) => move.phase === phase);
+
   return {
     meaningfulMoves: decisions.filter((move) => move.informativeness >= 0.5).length,
     effectiveMoves,
+    gameLength: Math.max(...sideMoves.map((move) => move.index)) + 2,
     meanLoss,
     medianLoss: quantile(losses, 0.5),
+    p75Loss: quantile(losses, 0.75),
     p90Loss: quantile(losses, 0.9),
+    complexityWeightedLoss: stakesTotal > 0
+      ? decisions.reduce((sum, move) => sum + stakesWeight(move) * move.expectedPointsLost, 0) / stakesTotal
+      : meanLoss,
     blunderRate: rate(decisions, severe(["blunder"])) ?? 0,
     mistakeRate: rate(decisions, severe(["mistake", "miss"])) ?? 0,
     inaccuracyRate: rate(decisions, severe(["inaccuracy"])) ?? 0,
@@ -926,6 +1199,9 @@ export function extractFeatures(sideMoves: ReviewedMove[]): PerformanceFeatures 
     opportunityConversion: opportunities.length
       ? opportunities.filter((move) => !move.miss).length / opportunities.length
       : null,
+    openingAccuracy: meanAccuracy(inPhase("opening")),
+    middlegameAccuracy: meanAccuracy(inPhase("middlegame")),
+    endgameAccuracy: meanAccuracy(inPhase("endgame")),
   };
 }
 
@@ -957,8 +1233,10 @@ export function summarizeSide(
     if (value !== null) phaseAccuracy[phase] = value;
   }
 
+  const features = extractFeatures(sideMoves);
   const performance = estimatePerformance(sideMoves, {
     ...options,
+    features,
     timeControl: classifyTimeControl(headers.TimeControl),
   });
 
@@ -967,7 +1245,7 @@ export function summarizeSide(
     counts,
     moveCount: sideMoves.length,
     phaseAccuracy,
-    features: extractFeatures(sideMoves),
+    features,
     performance,
     estimatedRating: performance
       ? {

@@ -7,7 +7,10 @@ import {
   DEFAULT_ENGINE_ERROR_MODEL,
   estimatePerformance,
   humanModelLogLikelihood,
+  RATING_FEATURES,
+  ratingFeatureVector,
   ratingGrid,
+  regressionFromVector,
 } from "../lib/rating-model.ts";
 
 /** Deterministic PRNG so synthetic data is reproducible. */
@@ -137,4 +140,68 @@ test("calibration recovers a known model from synthetic rated games", () => {
   assert.equal(result.params.calibrated, true);
   assert.ok(result.holdout.correlation > 0.7, `r ${result.holdout.correlation}`);
   assert.ok(Math.abs(result.holdout.coverage80 - 0.8) < 0.15, `coverage ${result.holdout.coverage80}`);
+});
+
+test("calibrated regression: interval is residual-derived and widens for short games", () => {
+  const params = {
+    id: "test-ridge",
+    calibrated: true,
+    ratingSystem: "Lichess rapid (equivalent)",
+    trainedOn: "test",
+    imputation: RATING_FEATURES.map(() => 0),
+    missingIndicators: [9],
+    mean: [...RATING_FEATURES.map(() => 0), 0],
+    scale: [...RATING_FEATURES.map(() => 1), 1],
+    coefficients: [-300, ...RATING_FEATURES.slice(1).map(() => 0), 0],
+    intercept: 1500,
+    interval: { a: 40_000, b: 2_000_000, qLow: -1.3, qHigh: 1.3 },
+    clamp: [800, 2800],
+    heldOut: { mae: 250, coverage80: 0.8, samples: 100 },
+  };
+  const raw = RATING_FEATURES.map(() => 0);
+  raw[0] = Math.log(0.02 + 0.005);
+  const better = regressionFromVector(raw, 30, params);
+  raw[0] = Math.log(0.08 + 0.005);
+  const worse = regressionFromVector(raw, 30, params);
+  assert.ok(better.center > worse.center, "lower loss → higher estimate");
+  const short = regressionFromVector(raw, 8, params);
+  const long = regressionFromVector(raw, 60, params);
+  assert.ok(short.high - short.low > (long.high - long.low) * 1.5, "fewer decisions → wider range");
+  assert.equal(short.center, long.center);
+});
+
+test("feature vector: log-loss transforms and nulls for unmeasurable features", () => {
+  const vector = ratingFeatureVector({
+    meaningfulMoves: 20, effectiveMoves: 18, gameLength: 60, meanLoss: 0.03, medianLoss: 0.01, p75Loss: 0.03, p90Loss: 0.08,
+    complexityWeightedLoss: 0.035, blunderRate: 0.05, mistakeRate: 0.05, inaccuracyRate: 0.1, top1Agreement: 0.4,
+    topNAgreement: 0.7, criticalAccuracy: null, onlyMoveSuccess: null, conversionAccuracy: 80, defensiveAccuracy: null,
+    opportunityConversion: 0.5, openingAccuracy: 90, middlegameAccuracy: 75, endgameAccuracy: null,
+  });
+  assert.equal(vector.length, RATING_FEATURES.length);
+  assert.ok(Math.abs(vector[0] - Math.log(0.035)) < 1e-12);
+  assert.equal(vector[RATING_FEATURES.indexOf("criticalAccuracy")], null);
+  assert.equal(vector[RATING_FEATURES.indexOf("conversionAccuracy")], 0.8);
+  assert.ok(Math.abs(vector[RATING_FEATURES.indexOf("logMeaningfulDecisions")] - Math.log(21)) < 1e-12);
+});
+
+test("shipped regression parameters reproduce the offline benchmark's predictions", async () => {
+  const { REGRESSION_MODELS } = await import("../lib/rating-params.ts");
+  const { readFileSync, existsSync } = await import("node:fs");
+  const benchmarkPath = new URL("../data/rating-corpus/benchmark.json", import.meta.url);
+  const samplesPath = new URL("../data/rating-corpus/samples.jsonl", import.meta.url);
+  if (!Object.keys(REGRESSION_MODELS).length || !existsSync(benchmarkPath)) return;
+  const benchmark = JSON.parse(readFileSync(benchmarkPath, "utf8"));
+  const samples = new Map(
+    readFileSync(samplesPath, "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line)).map((row) => [`${row.gameId}:${row.color}`, row]),
+  );
+  let checked = 0;
+  for (const [tc, report] of Object.entries(benchmark.timeControls)) {
+    for (const expected of report.parityCheck) {
+      const row = samples.get(`${expected.gameId}:${expected.color}`);
+      const { center } = regressionFromVector(row.x, row.meaningfulMoves, REGRESSION_MODELS[tc]);
+      assert.ok(Math.abs(center - expected.prediction) < 0.01, `${tc} ${expected.gameId}: ${center} vs ${expected.prediction}`);
+      checked += 1;
+    }
+  }
+  assert.ok(checked >= 10);
 });

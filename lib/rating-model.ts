@@ -17,8 +17,8 @@
  * on rated games with `scripts/calibrate-rating.mjs` and replace
  * `DEFAULT_ENGINE_ERROR_MODEL` (per time control) with the output.
  */
-import type { PerformanceEstimate, ReviewedMove, TimeControlClass } from "./chess-review.ts";
-import { CALIBRATED_MODELS } from "./rating-params.ts";
+import type { PerformanceEstimate, PerformanceFeatures, ReviewedMove, TimeControlClass } from "./chess-review.ts";
+import { CALIBRATED_MODELS, REGRESSION_MODELS } from "./rating-params.ts";
 import { LOSS_BANDS } from "./review-config.ts";
 
 export const CATEGORY_COUNT = 6;
@@ -201,7 +201,117 @@ export function posteriorQuantile(posterior: Posterior, q: number) {
   return posterior.grid[posterior.grid.length - 1];
 }
 
+// --- Calibrated regression (the default when parameters exist) -------------
+//
+// A ridge regression from interpretable per-game features to the player's
+// Lichess rating, fitted separately for blitz and rapid on public rated Lichess
+// games with player-disjoint train / validation / test splits
+// (scripts/corpus/rating_benchmark.py). The 80 % interval comes from held-out
+// residuals: residual spread is modelled as s(n) = sqrt(a + b / n) in the number
+// of meaningful decisions n, and the 10th / 90th percentiles of the
+// standardized validation residuals set the bounds. Short games therefore get
+// wider ranges because they measurably are less predictable – not by fiat.
+
+/** Raw regression inputs, in order. `null` = not measurable in this game. */
+export const RATING_FEATURES = [
+  "logMeanLoss",
+  "logMedianLoss",
+  "logP75Loss",
+  "logP90Loss",
+  "logComplexityWeightedLoss",
+  "blunderRate",
+  "mistakeRate",
+  "inaccuracyRate",
+  "top1Agreement",
+  "top3Agreement",
+  "criticalAccuracy",
+  "onlyMoveSuccess",
+  "opportunityConversion",
+  "defensiveAccuracy",
+  "conversionAccuracy",
+  "middlegameAccuracy",
+  "endgameAccuracy",
+  "logMeaningfulDecisions",
+  "logGameLength",
+] as const;
+
+const LOSS_FLOOR = 0.005;
+const percentOrNull = (value: number | null) => (value === null ? null : value / 100);
+
+export function ratingFeatureVector(features: PerformanceFeatures): Array<number | null> {
+  return [
+    Math.log(features.meanLoss + LOSS_FLOOR),
+    Math.log(features.medianLoss + LOSS_FLOOR),
+    Math.log(features.p75Loss + LOSS_FLOOR),
+    Math.log(features.p90Loss + LOSS_FLOOR),
+    Math.log(features.complexityWeightedLoss + LOSS_FLOOR),
+    features.blunderRate,
+    features.mistakeRate,
+    features.inaccuracyRate,
+    features.top1Agreement,
+    features.topNAgreement,
+    percentOrNull(features.criticalAccuracy),
+    features.onlyMoveSuccess,
+    features.opportunityConversion,
+    percentOrNull(features.defensiveAccuracy),
+    percentOrNull(features.conversionAccuracy),
+    percentOrNull(features.middlegameAccuracy),
+    percentOrNull(features.endgameAccuracy),
+    Math.log(1 + features.meaningfulMoves),
+    Math.log(Math.max(1, features.gameLength)),
+  ];
+}
+
+export interface RegressionModelParams {
+  id: string;
+  calibrated: true;
+  ratingSystem: string;
+  trainedOn: string;
+  /** Train-set mean used for a missing raw feature (by RATING_FEATURES index). */
+  imputation: number[];
+  /** Raw features that get a 0/1 "was missing" indicator appended, by index. */
+  missingIndicators: number[];
+  mean: number[];
+  scale: number[];
+  coefficients: number[];
+  intercept: number;
+  interval: { a: number; b: number; qLow: number; qHigh: number };
+  clamp: [number, number];
+  heldOut: { mae: number; coverage80: number; samples: number };
+}
+
+/** Imputed raw features followed by the 0/1 missing indicators the model uses. */
+export function expandedFeatures(raw: Array<number | null>, params: RegressionModelParams) {
+  const values = raw.map((value, index) => value ?? params.imputation[index]);
+  for (const index of params.missingIndicators) values.push(raw[index] === null ? 1 : 0);
+  return values;
+}
+
+/** Estimate and 80 % interval from a raw feature vector (see ratingFeatureVector). */
+export function regressionFromVector(raw: Array<number | null>, meaningfulMoves: number, params: RegressionModelParams) {
+  const values = expandedFeatures(raw, params);
+  let prediction = params.intercept;
+  values.forEach((value, index) => {
+    prediction += params.coefficients[index] * ((value - params.mean[index]) / params.scale[index]);
+  });
+  const center = Math.min(params.clamp[1], Math.max(params.clamp[0], prediction));
+  const spread = Math.sqrt(Math.max(1, params.interval.a + params.interval.b / Math.max(1, meaningfulMoves)));
+  return { center, low: center + params.interval.qLow * spread, high: center + params.interval.qHigh * spread };
+}
+
+export function regressionEstimate(features: PerformanceFeatures, params: RegressionModelParams) {
+  return regressionFromVector(ratingFeatureVector(features), features.meaningfulMoves, params);
+}
+
+/** Which calibrated population a time control is estimated against. */
+export function regressionModelFor(timeControl: TimeControlClass) {
+  const key = timeControl === "blitz" || timeControl === "bullet" || timeControl === "ultrabullet" ? "blitz" : "rapid";
+  return { key, params: REGRESSION_MODELS[key], extrapolated: timeControl !== key };
+}
+
 export interface EstimateOptions {
+  /** Per-game features (extractFeatures); enables the calibrated regression. */
+  features?: PerformanceFeatures | null;
   timeControl?: TimeControlClass;
   params?: EngineErrorModelParams;
   /** Extra log-likelihood curves on the same grid, e.g. from a human move model. */
@@ -215,10 +325,30 @@ export function estimatePerformance(
   options: EstimateOptions = {},
 ): PerformanceEstimate | null {
   const timeControl = options.timeControl ?? "unknown";
-  const params = options.params ?? CALIBRATED_MODELS[timeControl] ?? DEFAULT_ENGINE_ERROR_MODEL;
   const decisions = decisionsFromReviews(sideMoves);
   const effective = decisions.reduce((sum, decision) => sum + decision.weight, 0);
   if (effective < (options.minimumEffectiveMoves ?? 4)) return null;
+
+  const regression = regressionModelFor(timeControl);
+  if (options.features && regression.params && !options.params && !options.additionalLogLikelihoods?.length) {
+    const { center, low, high } = regressionEstimate(options.features, regression.params);
+    const width = high - low;
+    return {
+      estimatedPerformanceRating: Math.round(center / 50) * 50,
+      confidenceLow: Math.floor(low / 50) * 50,
+      confidenceHigh: Math.ceil(high / 50) * 50,
+      confidence: width <= 500 ? "high" : width <= 800 ? "medium" : "low",
+      meaningfulMoves: options.features.meaningfulMoves,
+      timeControl,
+      ratingSystem: regression.params.ratingSystem,
+      model: regression.params.id,
+      calibrated: true,
+      extrapolated: regression.extrapolated,
+      heldOutMae: regression.params.heldOut.mae,
+    };
+  }
+
+  const params = options.params ?? CALIBRATED_MODELS[timeControl] ?? DEFAULT_ENGINE_ERROR_MODEL;
 
   const grid = ratingGrid(params);
   const curves = [engineLogLikelihood(decisions, timeControl, params, grid), ...(options.additionalLogLikelihoods ?? [])];

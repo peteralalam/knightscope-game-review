@@ -1,0 +1,554 @@
+[
+  {
+    "id": "greek-gift/04CUq",
+    "category": "greek-gift",
+    "source": "https://lichess.org/training/04CUq",
+    "game": "https://lichess.org/VlkBX6P1#27",
+    "themes": "attraction crushing deflection kingsideAttack middlegame sacrifice veryLong",
+    "puzzleRating": 2103,
+    "fen": "r3k1nr/pbp2p2/1pNbpq2/7p/3P2p1/3BPP2/PPQB2PP/R3K2R w KQkq - 3 14",
+    "moves": [
+      "e1g1",
+      "d6h2",
+      "g1h2",
+      "f6h4"
+    ],
+    "testedPly": 1,
+    "testedSan": "Bxh2+"
+  },
+  {
+    "id": "greek-gift/04vr5",
+    "category": "greek-gift",
+    "source": "https://lichess.org/training/04vr5",
+    "game": "https://lichess.org/xZO17Dp9/black#24",
+    "themes": "attraction crushing kingsideAttack long opening sacrifice",
+    "puzzleRating": 1551,
+    "fen": "rn1qk2r/5ppp/b1pbp3/p7/2pPB3/5N2/PP3PPP/R1BQR1K1 b kq - 0 12",
+    "moves": [
+      "e8g8",
+      "e4h7",
+      "g8h7",
+      "f3g5"
+    ],
+    "testedPly": 1,
+    "testedSan": "Bxh7+"
+  },
+  {
+    "id": "greek-gift/05IZx",
+    "category": "greek-gift",
+    "source": "https://lichess.org/training/05IZx",
+    "game": "https://lichess.org/c1UHnY72#23",
+    "themes": "advantage attraction clearance kingsideAttack long opening sacrifice",
+    "puzzleRating": 1877,
+    "fen": "r1bq1rk1/ppp3p1/5n1p/4b3/8/2PBB3/PP3PPP/RN1QK2R w KQ - 0 12",
+    "moves": [
+      "e1g1",
+      "e5h2",
+      "g1h2",
+      "f6g4"
+    ],
+    "testedPly": 1,
+    "testedSan": "Bxh2+"
+  },
+  {
+    "id": "greek-gift/05USr",
+    "category": "greek-gift",
+    "source": "https://lichess.org/training/05USr",
+    "game": "https://lichess.org/GTRWA4y4#21",
+    "themes": "advantage attraction kingsideAttack opening sacrifice short",
+    "puzzleRating": 1796,
+    "fen": "r2q1rk1/p1p3pp/2pbbn2/8/3p4/5N2/PPPPNPPP/R1BQ1RK1 w - - 0 11",
+    "moves": [
+      "f3d4",
+      "d6h2",
+      "g1h2",
+      "f6g4"
+    ],
+    "testedPly": 1,
+    "testedSan": "Bxh2+"
+  },
+  {
+    "id": "deflection/004Op",
+    "category": "deflection",
+    "source": "https://lichess.org/training/004Op",
+    "game": "https://lichess.org/tneg9Bzk#51",
+    "themes": "crushing deflection kingsideAttack middlegame pin sacrifice skewer veryLong",
+    "puzzleRating": 2136,
+    "fen": "2kr2r1/1bp4n/1pq1p2p/p1P5/1P3B2/P6P/5RP1/RB2Q1K1 w - - 3 26",
+    "moves": [
+      "e1f1",
+      "d8d1",
+      "f1d1",
+      "g8g2"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rd1"
+  },
+  {
+    "id": "deflection/00H87",
+    "category": "deflection",
+    "source": "https://lichess.org/training/00H87",
+    "game": "https://lichess.org/hQEAqclb/black#60",
+    "themes": "attraction crushing deflection endgame sacrifice skewer veryLong",
+    "puzzleRating": 2000,
+    "fen": "6k1/2q1pp2/p5pB/2p4n/3pP1Q1/P2P3P/1r4P1/5RK1 b - - 1 30",
+    "moves": [
+      "c7g3",
+      "g4c8",
+      "g8h7",
+      "f1f7"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qc8+"
+  },
+  {
+    "id": "deflection/00O9Z",
+    "category": "deflection",
+    "source": "https://lichess.org/training/00O9Z",
+    "game": "https://lichess.org/DKnGKRmQ#63",
+    "themes": "backRankMate deflection endgame fork master mate mateIn4 pin sacrifice veryLong",
+    "puzzleRating": 1860,
+    "fen": "5QR1/5p1p/1b3qp1/p6k/P2P4/8/1P2rPPP/5RK1 w - - 7 32",
+    "moves": [
+      "g8h8",
+      "f6f2",
+      "f1f2",
+      "e2e1"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qxf2+"
+  },
+  {
+    "id": "deflection/02u8i",
+    "category": "deflection",
+    "source": "https://lichess.org/training/02u8i",
+    "game": "https://lichess.org/B974cEjO/black#54",
+    "themes": "attraction crushing deflection discoveredAttack master middlegame pin sacrifice veryLong",
+    "puzzleRating": 2354,
+    "fen": "5r2/4Qpk1/6p1/qp1p1bNn/3P3P/pPr2P2/P3N3/K2R2R1 b - - 3 27",
+    "moves": [
+      "a5c7",
+      "g5e6",
+      "f5e6",
+      "g1g6"
+    ],
+    "testedPly": 1,
+    "testedSan": "Ne6+"
+  },
+  {
+    "id": "clearance/00eWz",
+    "category": "clearance",
+    "source": "https://lichess.org/training/00eWz",
+    "game": "https://lichess.org/T1YYoy2O#49",
+    "themes": "advantage clearance master middlegame pin sacrifice short",
+    "puzzleRating": 1546,
+    "fen": "4r1k1/p5bp/1q4p1/2pPrp2/1pP2N2/6PP/P4QB1/1R3RK1 w - - 2 25",
+    "moves": [
+      "f4e6",
+      "e5e6",
+      "d5e6",
+      "g7d4"
+    ],
+    "testedPly": 1,
+    "testedSan": "R5xe6"
+  },
+  {
+    "id": "clearance/00nCh",
+    "category": "clearance",
+    "source": "https://lichess.org/training/00nCh",
+    "game": "https://lichess.org/VIoIroOG/black#48",
+    "themes": "clearance mate mateIn2 middlegame sacrifice short",
+    "puzzleRating": 1069,
+    "fen": "3r1rk1/ppp2pp1/8/3nP3/2PPN1q1/3Q4/PP6/5K1R b - - 0 24",
+    "moves": [
+      "d5f4",
+      "e4f6",
+      "g7f6",
+      "d3h7"
+    ],
+    "testedPly": 1,
+    "testedSan": "Nf6+"
+  },
+  {
+    "id": "clearance/00rNc",
+    "category": "clearance",
+    "source": "https://lichess.org/training/00rNc",
+    "game": "https://lichess.org/nyOQHpNP#51",
+    "themes": "clearance mate mateIn2 middlegame sacrifice short",
+    "puzzleRating": 1540,
+    "fen": "1q5r/p3kpp1/2Q1p2p/3pP2P/2n3P1/2N2P2/PrP5/K3R1NR w - - 0 26",
+    "moves": [
+      "g1e2",
+      "b2a2",
+      "c3a2",
+      "b8b2"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rxa2+"
+  },
+  {
+    "id": "clearance/00UI2",
+    "category": "clearance",
+    "source": "https://lichess.org/training/00UI2",
+    "game": "https://lichess.org/eellQ95m/black#36",
+    "themes": "clearance crushing fork middlegame sacrifice veryLong",
+    "puzzleRating": 1937,
+    "fen": "2r3nr/p5pp/b3kp2/3p4/4p3/BP3P2/P1PN2PP/2KR3R b - - 0 18",
+    "moves": [
+      "f6f5",
+      "f3e4",
+      "f5e4",
+      "d2e4"
+    ],
+    "testedPly": 1,
+    "testedSan": "fxe4"
+  },
+  {
+    "id": "mating-sacrifice/00aBq",
+    "category": "mating-sacrifice",
+    "source": "https://lichess.org/training/00aBq",
+    "game": "https://lichess.org/0AybhVJm/black#36",
+    "themes": "backRankMate mate mateIn2 middlegame sacrifice short",
+    "puzzleRating": 951,
+    "fen": "r2r2k1/pp3ppp/1qn2b2/3R4/4QB2/1P3N2/P4PPP/4R1K1 b - - 0 18",
+    "moves": [
+      "d8d5",
+      "e4e8",
+      "a8e8",
+      "e1e8"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qe8+"
+  },
+  {
+    "id": "mating-sacrifice/00aDl",
+    "category": "mating-sacrifice",
+    "source": "https://lichess.org/training/00aDl",
+    "game": "https://lichess.org/pc79SSEd#43",
+    "themes": "attraction mate mateIn2 middlegame queensideAttack sacrifice short",
+    "puzzleRating": 1373,
+    "fen": "r5k1/1p3p2/2p1ppp1/3p4/2nP4/1QB2B1P/rPP2PP1/qNKR3R w - - 3 22",
+    "moves": [
+      "f3e2",
+      "a1b1",
+      "c1b1",
+      "a2a1"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qxb1+"
+  },
+  {
+    "id": "mating-sacrifice/00BrZ",
+    "category": "mating-sacrifice",
+    "source": "https://lichess.org/training/00BrZ",
+    "game": "https://lichess.org/ANKrgoJi#55",
+    "themes": "attraction kingsideAttack long mate mateIn3 middlegame sacrifice",
+    "puzzleRating": 1491,
+    "fen": "r6r/pp2kb2/3p1p1Q/1N1Pp3/3bP3/P2B2P1/1P4PP/7K w - - 6 28",
+    "moves": [
+      "h6d2",
+      "h8h2",
+      "h1h2",
+      "a8h8"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rxh2+"
+  },
+  {
+    "id": "mating-sacrifice/00pER",
+    "category": "mating-sacrifice",
+    "source": "https://lichess.org/training/00pER",
+    "game": "https://lichess.org/cQjDrt9I/black#42",
+    "themes": "kingsideAttack mate mateIn2 middlegame sacrifice short smotheredMate",
+    "puzzleRating": 1514,
+    "fen": "r2q1rk1/4N1bp/p2p2p1/2p3N1/Pp4P1/1Q5P/1P1n1P2/5RK1 b - - 0 21",
+    "moves": [
+      "g8h8",
+      "b3g8",
+      "f8g8",
+      "g5f7"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qg8+"
+  },
+  {
+    "id": "quiet-sacrifice/02aCK",
+    "category": "quiet-sacrifice",
+    "source": "https://lichess.org/training/02aCK",
+    "game": "https://lichess.org/XBIUOv2a/black#82",
+    "themes": "advancedPawn crushing endgame quietMove sacrifice veryLong",
+    "puzzleRating": 2073,
+    "fen": "8/5p1p/K3p1p1/2k5/Pp2PP2/1P6/2B4n/8 b - - 1 41",
+    "moves": [
+      "h2f3",
+      "a6b7",
+      "f3d4",
+      "a4a5"
+    ],
+    "testedPly": 1,
+    "testedSan": "Kb7"
+  },
+  {
+    "id": "quiet-sacrifice/02gol",
+    "category": "quiet-sacrifice",
+    "source": "https://lichess.org/training/02gol",
+    "game": "https://lichess.org/l0zZYkD9/black#92",
+    "themes": "advancedPawn crushing defensiveMove endgame promotion quietMove sacrifice veryLong",
+    "puzzleRating": 2786,
+    "fen": "4k3/1K3p2/4pPp1/1P2N2p/5P2/8/7P/2r5 b - - 10 46",
+    "moves": [
+      "c1b1",
+      "b5b6",
+      "b1h1",
+      "b7c6"
+    ],
+    "testedPly": 1,
+    "testedSan": "b6"
+  },
+  {
+    "id": "quiet-sacrifice/07Hgf",
+    "category": "quiet-sacrifice",
+    "source": "https://lichess.org/training/07Hgf",
+    "game": "https://lichess.org/cEepwzsq#63",
+    "themes": "crushing middlegame quietMove sacrifice short",
+    "puzzleRating": 2238,
+    "fen": "2r3k1/p4pp1/1p5p/1B1N4/3q2Pb/PQ1N1P1P/1P4K1/8 w - - 1 32",
+    "moves": [
+      "b5a6",
+      "c8c1",
+      "d3c1",
+      "d4f2"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rc1"
+  },
+  {
+    "id": "quiet-sacrifice/07Ivz",
+    "category": "quiet-sacrifice",
+    "source": "https://lichess.org/training/07Ivz",
+    "game": "https://lichess.org/CXG7irTQ/black#50",
+    "themes": "crushing endgame quietMove sacrifice veryLong",
+    "puzzleRating": 2499,
+    "fen": "3rr1k1/5p1p/1Q4p1/q1P5/5B2/2p1P2P/P4PP1/R5K1 b - - 4 25",
+    "moves": [
+      "a5a3",
+      "f4h6",
+      "a3b2",
+      "b6f6"
+    ],
+    "testedPly": 1,
+    "testedSan": "Bh6"
+  },
+  {
+    "id": "exchange-sacrifice/001XA",
+    "category": "exchange-sacrifice",
+    "source": "https://lichess.org/training/001XA",
+    "game": "https://lichess.org/KZRiN695/black#46",
+    "themes": "crushing discoveredAttack long master middlegame sacrifice",
+    "puzzleRating": 1787,
+    "fen": "1qr2rk1/pb2bppp/8/8/2p1N3/P1Bn2P1/2Q2PBP/1R3RK1 b - - 3 23",
+    "moves": [
+      "b8c7",
+      "b1b7",
+      "c7b7",
+      "e4f6"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rxb7"
+  },
+  {
+    "id": "exchange-sacrifice/006wz",
+    "category": "exchange-sacrifice",
+    "source": "https://lichess.org/training/006wz",
+    "game": "https://lichess.org/qT0W6o27/black#44",
+    "themes": "attraction crushing endgame fork long sacrifice",
+    "puzzleRating": 1444,
+    "fen": "2r5/4ppkp/5bp1/1p6/1P6/P3B3/2r2PPP/1R1R2K1 b - - 2 22",
+    "moves": [
+      "f6b2",
+      "b1b2",
+      "c2b2",
+      "e3d4"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rxb2"
+  },
+  {
+    "id": "exchange-sacrifice/00761",
+    "category": "exchange-sacrifice",
+    "source": "https://lichess.org/training/00761",
+    "game": "https://lichess.org/vu70Maig/black#56",
+    "themes": "attraction crushing endgame exposedKing fork long sacrifice",
+    "puzzleRating": 1349,
+    "fen": "3r2k1/1b3pbR/p2P2P1/3p2N1/2p5/2P2N2/PP6/2K5 b - - 0 28",
+    "moves": [
+      "f7g6",
+      "h7g7",
+      "g8g7",
+      "g5e6"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rxg7+"
+  },
+  {
+    "id": "exchange-sacrifice/00uDH",
+    "category": "exchange-sacrifice",
+    "source": "https://lichess.org/training/00uDH",
+    "game": "https://lichess.org/9Hn6Sv3F#89",
+    "themes": "advancedPawn crushing endgame sacrifice short",
+    "puzzleRating": 1200,
+    "fen": "2r5/3k1p2/5Pp1/PP1pP1P1/1K1B3P/5p2/8/8 w - - 1 45",
+    "moves": [
+      "d4c5",
+      "c8c5",
+      "b4c5",
+      "f3f2"
+    ],
+    "testedPly": 1,
+    "testedSan": "Rxc5"
+  },
+  {
+    "id": "underpromotion/03kqY",
+    "category": "underpromotion",
+    "source": "https://lichess.org/training/03kqY",
+    "game": "https://lichess.org/W9OcpQ5I#97",
+    "themes": "advancedPawn crushing endgame exposedKing fork promotion quietMove underPromotion veryLong",
+    "puzzleRating": 2771,
+    "fen": "8/2Q2ppk/4b2p/8/4P3/2p3P1/4KP1P/2r5 w - - 4 49",
+    "moves": [
+      "f2f4",
+      "e6b3",
+      "e4e5",
+      "c3c2",
+      "e5e6",
+      "f7e6",
+      "c7c3",
+      "c1d1",
+      "c3b3",
+      "c2c1n",
+      "e2d1",
+      "c1b3"
+    ],
+    "testedPly": 9,
+    "testedSan": "c1=N+"
+  },
+  {
+    "id": "underpromotion/09fof",
+    "category": "underpromotion",
+    "source": "https://lichess.org/training/09fof",
+    "game": "https://lichess.org/xu4XjIuN#107",
+    "themes": "advancedPawn advantage endgame promotion short underPromotion",
+    "puzzleRating": 2142,
+    "fen": "8/8/5R1p/8/3pb1P1/kpKp4/8/8 w - - 0 54",
+    "moves": [
+      "c3d4",
+      "d3d2",
+      "d4c3",
+      "d2d1n"
+    ],
+    "testedPly": 3,
+    "testedSan": "d1=N+"
+  },
+  {
+    "id": "underpromotion/0GvdU",
+    "category": "underpromotion",
+    "source": "https://lichess.org/training/0GvdU",
+    "game": "https://lichess.org/grHm1Zta#141",
+    "themes": "advancedPawn bishopEndgame crushing endgame exposedKing master promotion underPromotion veryLong",
+    "puzzleRating": 2756,
+    "fen": "8/8/1p6/pB3p2/P2kp3/1P3pK1/8/8 w - - 2 71",
+    "moves": [
+      "b5d7",
+      "d4e3",
+      "d7f5",
+      "f3f2",
+      "f5h3",
+      "e3e2",
+      "h3d7",
+      "f2f1n",
+      "g3f4",
+      "f1d2"
+    ],
+    "testedPly": 7,
+    "testedSan": "f1=N+"
+  },
+  {
+    "id": "underpromotion/0iUQl",
+    "category": "underpromotion",
+    "source": "https://lichess.org/training/0iUQl",
+    "game": "https://lichess.org/MTnmVikw/black#72",
+    "themes": "advancedPawn crushing endgame fork long promotion sacrifice underPromotion",
+    "puzzleRating": 2145,
+    "fen": "4r3/2p3kp/1pP1Pqp1/p2QRp2/P4P2/6P1/5K1P/8 b - - 1 36",
+    "moves": [
+      "e8d8",
+      "e6e7",
+      "d8d5",
+      "e7e8n",
+      "g7f7",
+      "e8f6"
+    ],
+    "testedPly": 3,
+    "testedSan": "e8=N+"
+  },
+  {
+    "id": "hanging-piece-capture/00TxB",
+    "category": "hanging-piece-capture",
+    "source": "https://lichess.org/training/00TxB",
+    "game": "https://lichess.org/J5i5UOW9#19",
+    "themes": "advantage hangingPiece oneMove opening",
+    "puzzleRating": 862,
+    "fen": "r2qkb1r/pp3ppp/2pp1nn1/8/4PB2/2N2B2/PPP2PPP/R2Q1RK1 w kq - 2 10",
+    "moves": [
+      "f1e1",
+      "g6f4"
+    ],
+    "testedPly": 1,
+    "testedSan": "Nxf4"
+  },
+  {
+    "id": "hanging-piece-capture/01Upi",
+    "category": "hanging-piece-capture",
+    "source": "https://lichess.org/training/01Upi",
+    "game": "https://lichess.org/4D0aEclD/black#42",
+    "themes": "advantage hangingPiece middlegame oneMove",
+    "puzzleRating": 1463,
+    "fen": "2kr3r/pp3p2/2p2n2/3qNQ1p/3P2p1/P7/1P3PPP/3R1RK1 b - - 1 21",
+    "moves": [
+      "c8b8",
+      "f5f6"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qxf6"
+  },
+  {
+    "id": "hanging-piece-capture/023cH",
+    "category": "hanging-piece-capture",
+    "source": "https://lichess.org/training/023cH",
+    "game": "https://lichess.org/e9r3tlTY#47",
+    "themes": "advantage hangingPiece middlegame oneMove pin",
+    "puzzleRating": 1161,
+    "fen": "Qn3rk1/p1p3pp/1p1p1q2/8/1P5b/P5P1/3N1PBP/R1B2K2 w - - 1 24",
+    "moves": [
+      "d2e4",
+      "f6a1"
+    ],
+    "testedPly": 1,
+    "testedSan": "Qxa1"
+  },
+  {
+    "id": "hanging-piece-capture/02e2t",
+    "category": "hanging-piece-capture",
+    "source": "https://lichess.org/training/02e2t",
+    "game": "https://lichess.org/1rxbvMCF#65",
+    "themes": "crushing endgame hangingPiece oneMove",
+    "puzzleRating": 670,
+    "fen": "8/pp3p2/r4k1p/2p1p2P/P2bK1P1/R4P2/7R/8 w - - 4 33",
+    "moves": [
+      "h2b2",
+      "d4b2"
+    ],
+    "testedPly": 1,
+    "testedSan": "Bxb2"
+  }
+]

@@ -4,7 +4,11 @@
  * Every Evaluation is expressed from the point of view of ONE side (whoever
  * the producer says – the UCI side to move for raw engine output, the moving
  * player after `invert` for played-move evaluations). Callers never compare
- * raw centipawns across sides; they compare `expectedScore`.
+ * raw centipawns across sides; they compare `humanExpectedScore`.
+ *
+ * Two scales are kept apart on purpose (see HUMAN_CURVE in review-config.ts):
+ *   engineWdl / engineExpectedScore           – Stockfish's own WDL, diagnostics only
+ *   humanWinProbability / humanExpectedScore  – Lichess's human curve, used for grading
  */
 
 export interface Wdl {
@@ -20,7 +24,7 @@ export interface TablebaseScore {
   plies: number;
 }
 
-import { EXPECTED_SCORE } from "./review-config.ts";
+import { HUMAN_CURVE } from "./review-config.ts";
 
 export interface Evaluation {
   /** Stockfish-normalized centipawns (100 = 50 % win chance in engine play). */
@@ -28,17 +32,20 @@ export interface Evaluation {
   /** Moves (not plies) to mate; positive = this side mates. 0 = this side is mated. */
   mate?: number;
   tablebase?: TablebaseScore;
-  /** Stockfish's WDL (engine-play outcome probabilities), normalized to sum to 1. */
-  winProbability: number;
-  drawProbability: number;
-  lossProbability: number;
-  /** Engine WDL expected score: P(win) + ½·P(draw). */
+  /** Stockfish's WDL (engine-play outcome probabilities), normalized to sum to 1. Diagnostics only. */
+  engineWdl: Wdl;
+  /** Engine WDL expected score: P(win) + ½·P(draw). Diagnostics only. */
   engineExpectedScore: number;
   /**
-   * Expected score used for grading, per `EXPECTED_SCORE.model` (human-calibrated
-   * by default). Decisive (0 / 1) for mates and tablebase results.
+   * Lichess's human curve on the centipawn score (undefined for mate / tablebase
+   * scores, where the curve is not defined). Counts draws as half a point.
    */
-  expectedScore: number;
+  humanWinProbability?: number;
+  /**
+   * The value every classification uses: humanWinProbability, or exactly 0 / 1
+   * for mates and tablebase results (and ½ for a drawn terminal position).
+   */
+  humanExpectedScore: number;
   depth: number;
   seldepth?: number;
   nodes: number;
@@ -69,8 +76,8 @@ export function expectedFromWdl(wdl: Wdl) {
 }
 
 /** Human-calibrated expected score for Stockfish-normalized centipawns. */
-export function humanExpectedScore(cp: number) {
-  return 1 / (1 + Math.exp(-EXPECTED_SCORE.humanSlopePerCp * cp));
+export function humanWinProbability(cp: number) {
+  return 1 / (1 + Math.exp(-HUMAN_CURVE.slopePerCp * cp));
 }
 
 function materialCount(fen: string) {
@@ -142,19 +149,15 @@ export function makeEvaluation(input: {
     wdl = DRAW_WDL;
   }
   const engineExpectedScore = expectedFromWdl(wdl);
-  const expectedScore =
-    !decisive && EXPECTED_SCORE.model === "human" && input.cp !== undefined
-      ? humanExpectedScore(input.cp)
-      : engineExpectedScore;
+  const human = !decisive && input.cp !== undefined ? humanWinProbability(input.cp) : undefined;
   return {
     cp: tablebase ? undefined : input.cp,
     mate: input.mate,
     tablebase,
-    winProbability: wdl.win,
-    drawProbability: wdl.draw,
-    lossProbability: wdl.loss,
+    engineWdl: wdl,
     engineExpectedScore,
-    expectedScore,
+    humanWinProbability: human,
+    humanExpectedScore: human ?? engineExpectedScore,
     depth: input.depth ?? 0,
     seldepth: input.seldepth,
     nodes: input.nodes ?? 0,
@@ -191,10 +194,10 @@ export function invertEvaluation(evaluation: Evaluation): Evaluation {
     tablebase: evaluation.tablebase
       ? { win: !evaluation.tablebase.win, plies: evaluation.tablebase.plies }
       : undefined,
-    winProbability: evaluation.lossProbability,
-    lossProbability: evaluation.winProbability,
+    engineWdl: { win: evaluation.engineWdl.loss, draw: evaluation.engineWdl.draw, loss: evaluation.engineWdl.win },
     engineExpectedScore: 1 - evaluation.engineExpectedScore,
-    expectedScore: 1 - evaluation.expectedScore,
+    humanWinProbability: evaluation.humanWinProbability === undefined ? undefined : 1 - evaluation.humanWinProbability,
+    humanExpectedScore: 1 - evaluation.humanExpectedScore,
   };
 }
 
@@ -203,7 +206,7 @@ export function matingIn(evaluation: Evaluation | undefined) {
   if (!evaluation || evaluation.mate === undefined) return undefined;
   if (evaluation.mate > 0) return evaluation.mate;
   // A flipped `mate 0` means this side has just delivered mate.
-  if (evaluation.mate === 0 && evaluation.expectedScore === 1) return 0;
+  if (evaluation.mate === 0 && evaluation.humanExpectedScore === 1) return 0;
   return undefined;
 }
 
@@ -211,7 +214,7 @@ export function matingIn(evaluation: Evaluation | undefined) {
 export function matedIn(evaluation: Evaluation | undefined) {
   if (!evaluation || evaluation.mate === undefined) return undefined;
   if (evaluation.mate < 0) return -evaluation.mate;
-  if (evaluation.mate === 0 && evaluation.expectedScore === 0) return 0;
+  if (evaluation.mate === 0 && evaluation.humanExpectedScore === 0) return 0;
   return undefined;
 }
 

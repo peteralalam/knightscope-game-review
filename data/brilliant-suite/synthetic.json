@@ -1,0 +1,77 @@
+[
+  {
+    "id": "sac-while-winning/opera-extra-queen",
+    "category": "sac-while-winning",
+    "note": "Opera Game before 16.Qb8+ with an extra White queen on h1: the queen sacrifice still mates in 2, but quiet moves already win (Rxd7 ≈ +41).",
+    "fen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR3Q w k - 0 16",
+    "moves": ["b3b8", "d7b8", "d1d8"],
+    "testedPly": 0
+  },
+  {
+    "id": "sac-while-losing/opera-without-queen",
+    "category": "sac-while-losing",
+    "note": "Opera Game before 10.Nxb5 without White's queen and h1 rook (≈ −13): the knight sacrifice cannot rescue a lost position.",
+    "fen": "rn2kb1r/p3qppp/2p2n2/1p2p1B1/2B1P3/2N5/PPP2PPP/R3K3 w Qkq - 0 10",
+    "moves": ["c3b5", "c6b5", "c4b5"],
+    "testedPly": 0
+  },
+  {
+    "id": "hanging-queen/qh3",
+    "category": "hanging-queen",
+    "note": "1.d4 d5 2.Qd3 e5 3.Qh3?? drops the queen to the c8 bishop.",
+    "san": "d4 d5 Qd3 e5 Qh3 Bxh3",
+    "testedPly": 4
+  },
+  {
+    "id": "unsound-sacrifice/qxf7",
+    "category": "unsound-sacrifice",
+    "note": "1.e4 e5 2.Qh5 Nc6 3.Qxf7+?? gives the queen for a pawn with nothing to follow.",
+    "san": "e4 e5 Qh5 Nc6 Qxf7+ Kxf7",
+    "testedPly": 4
+  },
+  {
+    "id": "obvious-recapture/nxd4",
+    "category": "obvious-recapture",
+    "note": "Scotch: 4.Nxd4 recaptures the pawn.",
+    "san": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4",
+    "testedPly": 6
+  },
+  {
+    "id": "obvious-recapture/qxd4",
+    "category": "obvious-recapture",
+    "note": "Scotch: 5.Qxd4 recaptures the knight.",
+    "san": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4",
+    "testedPly": 8
+  },
+  {
+    "id": "temporary-sacrifice/fork-trick",
+    "category": "temporary-sacrifice",
+    "note": "Two Knights fork trick: 4...Nxe4 5.Nxe4 d5 regains the piece at once.",
+    "san": "e4 e5 Nf3 Nc6 Bc4 Nf6 Nc3 Nxe4 Nxe4 d5 Bd3 dxe4",
+    "testedPly": 7
+  },
+  {
+    "id": "forced-queen-sacrifice/qxd4",
+    "category": "forced-queen-sacrifice",
+    "note": "Qg7# is threatened; every defence gives up the queen, and only 1...Qxd4 avoids a quick mate.",
+    "fen": "r5k1/ppp4p/4P1pQ/3q4/3B4/2P5/PP3PPP/6K1 b - - 0 1",
+    "moves": ["d5d4", "c3d4"],
+    "testedPly": 0
+  },
+  {
+    "id": "forced-queen-sacrifice/interposition",
+    "category": "forced-queen-sacrifice",
+    "note": "Back-rank check: the queen must interpose and is lost (mate follows anyway).",
+    "fen": "R6k/6pp/3q4/8/8/8/5PPP/6K1 b - - 0 1",
+    "moves": ["d6d8", "a8d8"],
+    "testedPly": 0
+  },
+  {
+    "id": "declined-sacrifice/opera-nxb5",
+    "category": "declined-sacrifice",
+    "note": "Opera Game 10.Nxb5: Stockfish's best defence is 10...Qb4+ (declining); taking the knight is worse for Black.",
+    "fen": "rn2kb1r/p3qppp/2p2n2/1p2p1B1/2B1P3/1QN5/PPP2PPP/R3K2R w KQkq - 0 10",
+    "moves": ["c3b5", "c6b5", "c4b5"],
+    "testedPly": 0
+  }
+]

@@ -1,7 +1,31 @@
-Stockfish.js 19.0.0 (lite-single WASM build)
+Stockfish.js 19.0.0 – WebAssembly builds of Stockfish 19
+============================================================
 
-Built from official Stockfish 19 (https://github.com/official-stockfish/Stockfish, tag sf_19)
-by the stockfish.js project: https://github.com/nmrugg/stockfish.js/tree/v19.0.0
-npm package: stockfish@19.0.0
+Engine        Stockfish 19 (official-stockfish/Stockfish, tag sf_19), GPLv3
+Port          stockfish.js 19.0.0 by Nathan Rugg / Chess.com, GPLv3
+              npm: stockfish@19.0.0
+              git: https://github.com/nmrugg/stockfish.js tag v19.0.0
+                   = commit 9cb3e5066d48f1a35d792afeda36eff37ae60570
+Changes vs sf_19  Emscripten support only in search/uci/position/thread
+              (cooperative yield, no filesystem, Syzygy compiled out); the Lite
+              flavour additionally uses a reduced NNUE architecture (P_hm features).
+Toolchain     emscripten 3.1.7, -msimd128, --closure 1, INITIAL_MEMORY 128 MB,
+              MAXIMUM_MEMORY 2 GB, MODULARIZE, ENVIRONMENT=web,worker,node
 
-License: GNU General Public License v3. See COPYING.txt in this directory.
+Files
+  stockfish-19-lite-single.{js,wasm}  lite-single (WASM SIMD, single-threaded)
+      network nn-61e7af4bb97d.nnue (Lite net by sscg13)
+      wasm sha256 57ac2d72312aba346760e3f173f687a8c211208e97a87268436f7f0e10bb5387
+  stockfish-19-single.js             loader for the optional full engine
+      network nn-1a298aa575a0.nnue (official Stockfish 19 network)
+      wasm sha256 8725c26572762617fd96b2ea83ff130e6640b85815890d682bf8c49db0820721
+      wasm served from /engine-assets/stockfish-19-single-8725c2657627.wasm (R2), only on user request
+
+Corresponding Source (GPLv3 section 6)
+  source/stockfish.js-19.0.0-source.tar.gz   complete source + build scripts
+      (build: ./build.js --single-threaded --lite --no-split, and ./build.js --single-threaded --no-split)
+  source/nn-61e7af4bb97d.nnue                         network embedded in the Lite binary
+  The official network nn-1a298aa575a0.nnue is embedded in the full binary
+  and is published by the Stockfish project (https://tests.stockfishchess.org/nns).
+
+License: GNU General Public License v3 – see COPYING.txt.

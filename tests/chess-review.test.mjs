@@ -15,7 +15,7 @@ import {
   parseInfoLine,
   stockfishWdl,
 } from "../lib/evaluation.ts";
-import { EXPECTED_SCORE } from "../lib/review-config.ts";
+import { HUMAN_CURVE } from "../lib/review-config.ts";
 
 const SIMPLE_PGN = `[Event "Test"]
 [White "Ada"]
@@ -38,7 +38,7 @@ const MISSED_MATE_PGN = `1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6 4. d3 g6 *`;
 
 /** An evaluation whose grading expected score is exactly `expected`. */
 function withE(expected, pv) {
-  const cp = Math.log(expected / (1 - expected)) / EXPECTED_SCORE.humanSlopePerCp;
+  const cp = Math.log(expected / (1 - expected)) / HUMAN_CURVE.slopePerCp;
   return makeEvaluation({ cp, pv, depth: 20, nodes: 150_000 });
 }
 
@@ -88,8 +88,8 @@ test("UCI parsing ignores aspiration bound lines and normalizes WDL", () => {
   assert.equal(info.multipv, 2);
   assert.equal(info.evaluation.cp, 31);
   assert.equal(info.evaluation.depth, 18);
-  assert.equal(info.evaluation.winProbability, 0.06);
-  assert.equal(info.evaluation.drawProbability, 0.92);
+  assert.equal(info.evaluation.engineWdl.win, 0.06);
+  assert.equal(info.evaluation.engineWdl.draw, 0.92);
   assert.ok(Math.abs(info.evaluation.engineExpectedScore - 0.52) < 1e-9);
   assert.deepEqual(info.evaluation.pv, ["d2d4", "d7d5"]);
   assert.equal(info.evaluation.engineVersion, "Stockfish 19");
@@ -97,23 +97,23 @@ test("UCI parsing ignores aspiration bound lines and normalizes WDL", () => {
 
 test("mate and tablebase scores are decisive, never giant centipawns", () => {
   const mating = makeEvaluation({ mate: 3, pv: [] });
-  assert.equal(mating.expectedScore, 1);
-  assert.equal(makeEvaluation({ mate: -2, pv: [] }).expectedScore, 0);
+  assert.equal(mating.humanExpectedScore, 1);
+  assert.equal(makeEvaluation({ mate: -2, pv: [] }).humanExpectedScore, 0);
   const tb = makeEvaluation({ cp: 19_950, pv: [] });
   assert.deepEqual(tb.tablebase, { win: true, plies: 50 });
   assert.equal(tb.cp, undefined);
-  assert.equal(tb.expectedScore, 1);
+  assert.equal(tb.humanExpectedScore, 1);
   const lostTb = invertEvaluation(tb);
   assert.equal(lostTb.tablebase.win, false);
-  assert.equal(lostTb.expectedScore, 0);
+  assert.equal(lostTb.humanExpectedScore, 0);
 });
 
 test("perspective flips swap win/loss, cp and mate signs", () => {
   const white = makeEvaluation({ cp: 120, wdl: { win: 400, draw: 550, loss: 50 }, pv: ["e2e4"] });
   const black = invertEvaluation(white);
   assert.equal(black.cp, -120);
-  assert.equal(black.winProbability, white.lossProbability);
-  assert.ok(Math.abs(black.expectedScore + white.expectedScore - 1) < 1e-12);
+  assert.equal(black.engineWdl.win, white.engineWdl.loss);
+  assert.ok(Math.abs(black.humanExpectedScore + white.humanExpectedScore - 1) < 1e-12);
   assert.ok(Math.abs(black.engineExpectedScore + white.engineExpectedScore - 1) < 1e-12);
   assert.equal(invertEvaluation(makeEvaluation({ mate: 4, pv: [] })).mate, -4);
 });
@@ -232,20 +232,76 @@ test("ordinary trades and losing sacrifices are never Brilliant", () => {
   assert.equal(blunder.grade, "blunder");
 });
 
-test("Great: only move keeps the position; obvious recaptures are not Great", () => {
+test("Great needs importance, not just uniqueness: two winning moves are not a critical choice", () => {
   const game = parsePgn(OPERA_PGN);
   const index = game.moves.findIndex((move) => move.san === "Rd1");
-  const line = withE(0.94, ["h1d1", "e7e6"]);
-  const great = reviewMove(game, index, topMove(game, index, line, { candidates: [line, withE(0.68, ["b5d7"]), withE(0.6, ["b3b8"])] }));
-  assert.equal(great.grade, "great");
-  assert.match(great.greatReason, /^Only move/);
+  // +8.6 vs +6.5: a large centipawn gap, but both keep a winning position.
+  const line = withE(0.96, ["h1d1", "e7e6"]);
+  const review = reviewMove(game, index, topMove(game, index, line, { candidates: [line, withE(0.915, ["b5d7"])] }));
+  assert.equal(review.grade, "best");
+  assert.equal(review.greatDiagnostics, undefined, "a 4.5-point gap is not even unique enough to be a candidate");
 
+  // Winning vs merely better: unique, but Stockfish's verdict (win) does not
+  // change and the human outcome falls by one band only.
+  const unique = withE(0.95, ["h1d1", "e7e6"]);
+  const better = reviewMove(game, index, topMove(game, index, unique, { candidates: [unique, withE(0.7, ["b5d7"])] }));
+  assert.equal(better.grade, "best");
+  assert.equal(better.greatDiagnostics.decision, "rejected: the alternative keeps the same result class");
+  assert.ok(better.criticality.moveUniqueness > 0.2);
+  assert.ok(better.criticality.outcomeImportance < better.criticality.moveUniqueness);
+  assert.equal(better.criticality.outcomeTransition, "winning vs better");
+});
+
+test("Great: the only move that holds a level position", () => {
+  const game = parsePgn(OPERA_PGN);
+  const index = game.moves.findIndex((move) => move.san === "Rd1");
+  // 0.00 vs −3.00: one move keeps the balance, every other loses.
+  const hold = withE(0.5, ["h1d1", "e7e6"]);
+  const review = reviewMove(game, index, topMove(game, index, hold, { candidates: [hold, withE(0.25, ["b5d7"]), withE(0.2, ["b3b8"])] }));
+  assert.equal(review.grade, "great");
+  assert.match(review.greatReason, /^Only move that holds/);
+  const diagnostics = review.greatDiagnostics;
+  assert.equal(diagnostics.decision, "great");
+  assert.equal(diagnostics.numberOfAcceptableMoves, 1);
+  assert.equal(diagnostics.objectiveTransition, "draw vs loss");
+  assert.equal(diagnostics.secondBestExpectedScore, 0.25);
+  assert.equal(diagnostics.thirdBestExpectedScore, 0.2);
+  assert.ok(Math.abs(diagnostics.outcomeImportance - 0.25) < 1e-3);
+});
+
+test("Great: punishing an error only counts when it changes the result", () => {
+  const game = parsePgn(OPERA_PGN);
+  const index = game.moves.findIndex((move) => move.san === "Rd1");
+  const previous = { uci: game.moves[index - 1].uci, expectedBefore: 0.5, expectedPointsLost: 0.3, grade: "blunder" };
+  const punish = withE(0.9, ["h1d1", "e7e6"]);
+  const review = reviewMove(game, index, topMove(game, index, punish, { candidates: [punish, withE(0.55, ["b5d7"])] }), { previous });
+  assert.equal(review.grade, "great");
+  assert.match(review.greatReason, /^Punishes the opponent's error/);
+  assert.equal(review.greatDiagnostics.positionStateBeforeOpponentMove, "balanced");
+  assert.equal(review.greatDiagnostics.opponentPreviousMoveLoss, 0.3);
+});
+
+test("Great is withheld for recaptures and for the planned follow-up of a Great move", () => {
   const trade = parsePgn(TRADE_PGN);
   const recapture = withE(0.48, ["d7c6", "e1g1"]);
   const review = reviewMove(trade, 7, topMove(trade, 7, recapture, { candidates: [recapture, withE(0.15, ["d8e7"])] }), { useBook: false });
   assert.equal(review.grade, "best", "recapturing a piece is forced, not Great");
   assert.equal(review.forcedReason, "recapture");
+  assert.equal(review.greatDiagnostics.decision, "rejected: recapture");
   assert.ok(review.informativeness < 0.5);
+
+  const game = parsePgn(OPERA_PGN);
+  const index = game.moves.findIndex((move) => move.san === "Rd1");
+  const own = game.moves[index - 2];
+  const reply = game.moves[index - 1];
+  const context = {
+    previousOwn: { ...own, grade: "great", resultingEvaluation: { pv: [own.uci, reply.uci, game.moves[index].uci] } },
+    previous: { ...reply, expectedBefore: 0.5, expectedPointsLost: 0 },
+  };
+  const hold = withE(0.5, ["h1d1", "e7e6"]);
+  const followUp = reviewMove(game, index, topMove(game, index, hold, { candidates: [hold, withE(0.2, ["b5d7"])] }), context);
+  assert.equal(followUp.grade, "best");
+  assert.equal(followUp.greatDiagnostics.plannedFollowUp, true);
 });
 
 test("Miss vs Blunder: failing to cash in vs also losing ground", () => {

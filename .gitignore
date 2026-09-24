@@ -43,3 +43,8 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+.cache/
+
+# Large engine files uploaded to R2 (scripts/vendor-stockfish.mjs)
+.engine-assets/
+tsconfig.tsbuildinfo

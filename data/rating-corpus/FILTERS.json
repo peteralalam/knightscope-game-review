@@ -1,0 +1,76 @@
+{
+  "seed": 20260924,
+  "perStratum": 150,
+  "perPlayerCap": 3,
+  "gamesRead": 71258,
+  "eligible": 53185,
+  "selected": 2140,
+  "filters": {
+    "notRated": {
+      "description": "casual (unrated) game",
+      "dropped": 3904
+    },
+    "variant": {
+      "description": "non-standard variant or custom start position",
+      "dropped": 0
+    },
+    "missingPlayer": {
+      "description": "anonymous player or missing rating",
+      "dropped": 0
+    },
+    "provisional": {
+      "description": "provisional rating (fewer than ~20 rated games in that pool)",
+      "dropped": 5629
+    },
+    "status": {
+      "description": "cheat detection, abandonment ('timeout' = opponent left), aborted or unknown finish",
+      "dropped": 475
+    },
+    "timeClass": {
+      "description": "time class other than blitz / rapid (bullet, classical, correspondence)",
+      "dropped": 7018
+    },
+    "tooShort": {
+      "description": "fewer than 12 plies (no meaningful sample of decisions)",
+      "dropped": 464
+    },
+    "tooLong": {
+      "description": "more than 240 plies (the reviewer's limit)",
+      "dropped": 17
+    },
+    "illegal": {
+      "description": "move list does not replay legally",
+      "dropped": 0
+    },
+    "duplicate": {
+      "description": "same game id (or same players and moves) already seen",
+      "dropped": 558
+    },
+    "ratingRange": {
+      "description": "a player outside 800–3200",
+      "dropped": 8
+    }
+  },
+  "strata": {
+    "blitz|1200–1400": 1,
+    "blitz|1400–1600": 150,
+    "blitz|1600–1800": 150,
+    "blitz|1800–2000": 150,
+    "blitz|2000–2200": 150,
+    "blitz|2200–2400": 150,
+    "blitz|2400+": 150,
+    "rapid|1000–1200": 150,
+    "rapid|1200–1400": 150,
+    "rapid|1400–1600": 150,
+    "rapid|1600–1800": 150,
+    "rapid|1800–2000": 150,
+    "rapid|2000–2200": 150,
+    "rapid|2200–2400": 150,
+    "rapid|2400+": 150,
+    "rapid|800–1000": 39
+  },
+  "bySource": {
+    "lichess-datasnaek": 562,
+    "lichess-puzzle-db": 1578
+  }
+}

@@ -177,22 +177,33 @@ function reviewAll(
   results: EngineMoveResult[],
   options: Pick<AnalyzeOptions, "ratings" | "useBook">,
 ) {
-  const reviews: ReviewedMove[] = [];
-  const context = (index: number, unstable = false) => ({
-    previous: reviews[index - 1],
-    playerRating: options.ratings?.[game.moves[index].color],
-    useBook: options.useBook,
-    unstable,
-  });
-  results.forEach((result, index) => reviews.push(reviewMove(game, index, result, context(index))));
+  const pass = (unstable: Set<number>) => {
+    const reviews: ReviewedMove[] = [];
+    results.forEach((result, index) => {
+      reviews.push(reviewMove(game, index, result, {
+        previous: reviews[index - 1],
+        previousOwn: reviews[index - 2],
+        playerRating: options.ratings?.[game.moves[index].color],
+        useBook: options.useBook,
+        unstable: unstable.has(index),
+      }));
+    });
+    return reviews;
+  };
   // Withhold Brilliant / Great where the opponent's best reply exposed the
-  // evaluation as a horizon artifact. The reply's own review is unaffected:
-  // it depends only on this move's expected scores, which do not change.
-  reviews.forEach((review, index) => {
-    if ((review.grade === "brilliant" || review.grade === "great") && evaluationWasUnstable(review, reviews[index + 1])) {
-      reviews[index] = reviewMove(game, index, results[index], context(index, true));
-    }
-  });
+  // evaluation as a horizon artifact. The check reads only expected scores,
+  // which do not depend on grades, so re-running the sequential pass with the
+  // flags gives every later move (e.g. a planned follow-up) consistent context.
+  const unstable = new Set<number>();
+  let reviews = pass(unstable);
+  for (let round = 0; round < 4; round += 1) {
+    const before = unstable.size;
+    reviews.forEach((review, index) => {
+      if ((review.grade === "brilliant" || review.grade === "great") && evaluationWasUnstable(review, reviews[index + 1])) unstable.add(index);
+    });
+    if (unstable.size === before) break;
+    reviews = pass(unstable);
+  }
   return reviews;
 }
 

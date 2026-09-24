@@ -47,6 +47,25 @@ export function materialBalance(chess: Chess, side: Color) {
 }
 
 /**
+ * Material balance (pawn units, `side`'s view) at the start and after each ply of
+ * `line`. Stops at the first illegal move.
+ */
+export function materialTrajectory(fen: string, line: string[], side: Color) {
+  const board = tryChess(fen);
+  if (!board) return [];
+  const balances = [materialBalance(board, side)];
+  for (const uci of line) {
+    try {
+      board.move(uciParts(uci));
+    } catch {
+      break;
+    }
+    balances.push(materialBalance(board, side));
+  }
+  return balances;
+}
+
+/**
  * Static exchange evaluation: the material the side to move wins by starting a
  * capture sequence on `square`, both sides always recapturing with their least
  * valuable legal capturer and stopping when continuing would lose material.

@@ -24,7 +24,8 @@ import {
   type ReviewedMove,
   type SideSummary,
 } from "../lib/chess-review";
-import { ANALYSIS_PRESETS, ENGINE_BUILD, REVIEW_MODEL_VERSION } from "../lib/review-config";
+import { deleteFullEngine, downloadFullEngine, isFullEngineCached } from "../lib/engine-assets";
+import { ANALYSIS_PRESETS, ENGINE_BUILD, ENGINE_BUILDS, REVIEW_MODEL_VERSION, type EngineBuildKey } from "../lib/review-config";
 import { createEnginePool } from "../lib/stockfish-client";
 import type { UciEngine } from "../lib/uci-engine";
 
@@ -44,6 +45,25 @@ const SAMPLE_PGN = `[Event "A Night at the Opera"]
 const ENGINE_PRESETS = ANALYSIS_PRESETS;
 
 type EnginePreset = keyof typeof ENGINE_PRESETS;
+type EngineMode = "auto" | EngineBuildKey;
+type FullEngineState =
+  | { state: "unknown" | "missing" | "ready" }
+  | { state: "downloading"; progress: number }
+  | { state: "error"; message: string };
+
+interface AnalysisSetup {
+  preset: EnginePreset;
+  build: EngineBuildKey;
+  workers: number;
+  engineVersion: string;
+}
+
+/** Auto: Lite for Quick / Balanced; the full network for Deep once it is downloaded. */
+function resolveBuild(mode: EngineMode, preset: EnginePreset, fullReady: boolean): EngineBuildKey {
+  if (mode === "lite") return "lite";
+  if (mode === "full") return "full";
+  return preset === "deep" && fullReady ? "full" : "lite";
+}
 type AnalysisState = "idle" | "loading" | "analyzing" | "complete" | "cancelled" | "error";
 
 const PIECES: Record<Color, Record<PieceSymbol, string>> = {
@@ -99,7 +119,8 @@ function progressPercent(progress: AnalysisProgress) {
 function ratingDetail(summary: SideSummary) {
   const rating = summary.performance;
   if (!rating) return "too few real decisions";
-  return `≈${rating.estimatedPerformanceRating} · ${rating.confidence} confidence · ${rating.meaningfulMoves} decisions`;
+  const scale = rating.calibrated ? rating.ratingSystem : "uncalibrated prior";
+  return `≈${rating.estimatedPerformanceRating} ${scale}${rating.extrapolated ? " (nearest model)" : ""} · ${rating.meaningfulMoves} decisions`;
 }
 
 function ImportPanel({
@@ -201,7 +222,7 @@ function PlayerStrip({
       </div>
       <div className="player-metrics">
         <div><span>Accuracy</span><strong>{complete ? `${summary.accuracy.toFixed(1)}%` : "—"}</strong></div>
-        <div><span>Game performance</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
+        <div><span title="Lichess-equivalent estimated game performance (80% range)">Est. performance</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
       </div>
     </div>
   );
@@ -305,6 +326,38 @@ function AccuracyRing({ value, color }: { value: number; color: Color }) {
   );
 }
 
+const pct = (value?: number) => (value === undefined ? "—" : `${Math.round(value * 100)}%`);
+
+/** The measured facts behind a Great / Brilliant decision (or its rejection). */
+function GradeEvidence({ review }: { review: ReviewedMove }) {
+  const great = review.greatDiagnostics;
+  const brilliant = review.brilliantDiagnostics;
+  if (!great && !brilliant) return null;
+  return (
+    <details className="grade-evidence">
+      <summary>Why {review.grade === "brilliant" || review.grade === "great" ? "this grade" : "not Great / Brilliant"}</summary>
+      {brilliant && (
+        <dl>
+          <div><dt>Sacrifice</dt><dd>{brilliant.sacrificedPiece} on {brilliant.sacrificeSquare} ({brilliant.sacrificeValue} pawns)</dd></div>
+          <div><dt>Best defence</dt><dd>{brilliant.bestDefense ?? "—"}{brilliant.acceptanceIsBestDefense ? " (takes it)" : " (declines)"}</dd></div>
+          <div><dt>If accepted</dt><dd>{pct(brilliant.expectedScoreAfterAcceptance)} for the mover</dd></div>
+          <div><dt>Best alternative</dt><dd>{pct(brilliant.bestAlternativeExpectedScore)}</dd></div>
+          <div><dt>Decision</dt><dd>{brilliant.decision}</dd></div>
+        </dl>
+      )}
+      {great && (
+        <dl>
+          <div><dt>Played / next best</dt><dd>{pct(great.playedExpectedScore)} vs {pct(great.secondBestExpectedScore)}</dd></div>
+          <div><dt>Viable moves</dt><dd>{great.numberOfAcceptableMoves ?? "—"}{great.acceptableMovesIsLowerBound ? "+" : ""} of {great.legalMoveCount}</dd></div>
+          <div><dt>Uniqueness</dt><dd>{pct(great.moveUniqueness)}</dd></div>
+          <div><dt>Importance</dt><dd>{pct(great.outcomeImportance)} ({great.outcomeTransition}; engine {great.objectiveTransition})</dd></div>
+          <div><dt>Decision</dt><dd>{great.decision}</dd></div>
+        </dl>
+      )}
+    </details>
+  );
+}
+
 function SelectedMoveCard({ review, move }: { review?: ReviewedMove; move?: ParsedGame["moves"][number] }) {
   if (!move) {
     return (
@@ -337,6 +390,7 @@ function SelectedMoveCard({ review, move }: { review?: ReviewedMove; move?: Pars
       {review.miss && review.grade !== "miss" && (
         <p className="miss-note">Missed opportunity: {review.miss.missedMoveSan}</p>
       )}
+      <GradeEvidence review={review} />
       <div className="line-block">
         <span>{review.bestMove === review.uci ? "Engine continuation" : `Better was ${review.bestMoveSan}`}</span>
         <div className="pv-line">
@@ -367,8 +421,8 @@ function SummaryPanel({
         <span className="result-pill">{game.result}</span>
       </div>
       <div className="accuracy-pair">
-        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>{complete ? ratingDetail(white) : "game performance"}</small></div>
-        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>{complete ? ratingDetail(black) : "game performance"}</small></div>
+        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>{complete ? ratingDetail(white) : "estimated game performance"}</small></div>
+        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>{complete ? ratingDetail(black) : "estimated game performance"}</small></div>
       </div>
       <div className="grade-table" aria-label="Move classification counts">
         <div className="grade-table__header"><span>Move quality</span><span>White</span><span>Black</span></div>
@@ -382,9 +436,13 @@ function SummaryPanel({
       </div>
       {complete && reviews.length > 0 && (
         <p className="estimate-note">
-          Ranges are 80% intervals for how strongly each side played in this game, from the size and difficulty of
-          their errors on {white.performance?.calibrated ? "a calibrated" : "an uncalibrated, prior-based"} model—not
-          account ratings. Accuracy measures engine precision and is not an Elo.
+          {white.performance?.calibrated
+            ? <>Lichess-equivalent estimated game performance: the Lichess {white.performance.timeControl === "blitz" || white.performance.timeControl === "bullet" ? "blitz" : "rapid"} rating
+              whose typical games look like this one, with an 80% range that held for about 80% of held-out Lichess players.
+              It is not a Chess.com or FIDE rating, and one game says little: on held-out players the estimate was off by
+              {" "}{Math.round((white.performance.heldOutMae ?? 0) / 10) * 10} points on average.</>
+            : <>Ranges are 80% intervals from an uncalibrated, prior-based model – not account ratings.</>}
+          {" "}Accuracy measures engine precision and is not an Elo.
         </p>
       )}
     </section>
@@ -401,7 +459,9 @@ export function ChessReviewApp() {
   const [analysisPreset, setAnalysisPreset] = useState<EnginePreset>("balanced");
   const [analysisState, setAnalysisState] = useState<AnalysisState>("idle");
   const [progress, setProgress] = useState<AnalysisProgress>({ phase: "primary", done: 0, total: 0 });
-  const [engineVersion, setEngineVersion] = useState<string>(ENGINE_BUILD.label);
+  const [engineMode, setEngineMode] = useState<EngineMode>("auto");
+  const [fullEngine, setFullEngine] = useState<FullEngineState>({ state: "unknown" });
+  const [setup, setSetup] = useState<AnalysisSetup>({ preset: "balanced", build: "lite", workers: 0, engineVersion: ENGINE_BUILD.label });
   const [error, setError] = useState("");
   const [importOpen, setImportOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -451,13 +511,19 @@ export function ChessReviewApp() {
 
     const selectedPreset = preset;
     setAnalysisPreset(selectedPreset);
-    const engines = createEnginePool();
+    const build = resolveBuild(engineMode, selectedPreset, fullEngine.state === "ready");
+    if (build === "full" && fullEngine.state !== "ready") {
+      setError("Download the full engine first, or choose Lite.");
+      setAnalysisState("error");
+      return;
+    }
+    const engines = createEnginePool(undefined, build);
     engineRef.current = engines;
     const ratingOf = (value?: string) => (value && /^\d+$/.test(value) ? Number(value) : undefined);
     try {
       await Promise.all(engines.map((engine) => engine.start()));
       if (runRef.current !== runId) return;
-      setEngineVersion(engines[0].engineVersion);
+      setSetup({ preset: selectedPreset, build, workers: engines.length, engineVersion: engines[0].engineVersion });
       console.info(`[KnightScope] ${REVIEW_MODEL_VERSION} · ${engines[0].engineVersion} · ${engines.length} engine(s)`);
       setAnalysisState("analyzing");
       const budget = ENGINE_PRESETS[selectedPreset];
@@ -490,7 +556,27 @@ export function ChessReviewApp() {
       engines.forEach((engine) => engine.dispose());
       if (engineRef.current === engines) engineRef.current = null;
     }
-  }, [cancelAnalysis, preset]);
+  }, [cancelAnalysis, preset, engineMode, fullEngine.state]);
+
+  useEffect(() => {
+    // Local cache lookup only – nothing is downloaded until the user asks.
+    void isFullEngineCached().then((cached) => setFullEngine({ state: cached ? "ready" : "missing" }));
+  }, []);
+
+  const startFullDownload = useCallback(async () => {
+    setFullEngine({ state: "downloading", progress: 0 });
+    try {
+      await downloadFullEngine((progress) => setFullEngine({ state: "downloading", progress }));
+      setFullEngine({ state: "ready" });
+    } catch (caught) {
+      setFullEngine({ state: "error", message: caught instanceof Error ? caught.message : "Download failed." });
+    }
+  }, []);
+
+  const removeFullEngine = useCallback(async () => {
+    await deleteFullEngine();
+    setFullEngine({ state: "missing" });
+  }, []);
 
   useEffect(() => () => {
     runRef.current += 1;
@@ -576,9 +662,37 @@ export function ChessReviewApp() {
               {Object.entries(ENGINE_PRESETS).map(([key, value]) => <option key={key} value={key}>{value.label}</option>)}
             </select>
           </label>
+          <label className="engine-select">
+            <span>Engine</span>
+            <select value={engineMode} onChange={(event) => setEngineMode(event.target.value as EngineMode)} disabled={analysisActive}>
+              <option value="auto">Auto</option>
+              <option value="lite">Lite (1.8 MB)</option>
+              <option value="full">Full (99 MB)</option>
+            </select>
+          </label>
           {game && <button className="button button--compact" onClick={() => setImportOpen(true)}>＋ New PGN</button>}
         </div>
       </header>
+
+      {engineMode !== "lite" && fullEngine.state !== "ready" && fullEngine.state !== "unknown" && (
+        <div className="engine-download" role="status">
+          {fullEngine.state === "downloading" ? (
+            <>
+              <span>Downloading the full Stockfish 19 network… {Math.round(fullEngine.progress * 100)}%</span>
+              <div className="progress-track"><span style={{ width: `${Math.round(fullEngine.progress * 100)}%` }} /></div>
+            </>
+          ) : (
+            <>
+              <span>
+                {engineMode === "full" ? "The full engine" : "Auto uses the full engine for Deep reviews once it"} is a one-time ≈99 MB download,
+                verified (SHA-256) and cached in this browser. Only the engine file is downloaded; your games never leave the device.
+                {fullEngine.state === "error" && <b> {fullEngine.message}</b>}
+              </span>
+              <button className="button button--compact" onClick={() => void startFullDownload()}>Download full engine</button>
+            </>
+          )}
+        </div>
+      )}
 
       <main id="top">
         {!game ? (
@@ -589,7 +703,7 @@ export function ChessReviewApp() {
             <div className="trust-row" aria-label="Features">
               <span><b>01</b> Engine-backed grades</span>
               <span><b>02</b> Visual move replay</span>
-              <span><b>03</b> Heuristic rating range</span>
+              <span><b>03</b> Lichess-calibrated performance range</span>
             </div>
           </div>
         ) : (
@@ -654,8 +768,19 @@ export function ChessReviewApp() {
                 </div>
                 <SummaryPanel game={game} reviews={reviews} white={whiteSummary} black={blackSummary} complete={isComplete} />
                 <footer className="review-footer">
-                  <span title={engineVersion}>Model {REVIEW_MODEL_VERSION} · {ENGINE_PRESETS[analysisPreset].primaryNodes / 1000}k nodes per position</span>
-                  <a href="https://github.com/nmrugg/stockfish.js" target="_blank" rel="noreferrer">Stockfish 19 · GPL v3</a>
+                  <dl className="engine-diagnostics" aria-label="Analysis setup">
+                    <div><dt>Engine</dt><dd>{ENGINE_BUILDS[setup.build].engine}</dd></div>
+                    <div><dt>Port</dt><dd>{ENGINE_BUILDS[setup.build].port}</dd></div>
+                    <div><dt>Build</dt><dd>{ENGINE_BUILDS[setup.build].build}</dd></div>
+                    <div><dt>Network</dt><dd>{ENGINE_BUILDS[setup.build].network}</dd></div>
+                    <div><dt>Threads</dt><dd>1 per engine × {setup.workers || "—"} engines · Hash {ENGINE_BUILD.hashMb} MB</dd></div>
+                    <div><dt>Nodes</dt><dd>{ENGINE_PRESETS[analysisPreset].primaryNodes / 1000}k primary · {ENGINE_PRESETS[analysisPreset].candidateNodes / 1000}k candidates</dd></div>
+                    <div><dt>Model</dt><dd title={setup.engineVersion}>{REVIEW_MODEL_VERSION}</dd></div>
+                  </dl>
+                  <span>
+                    <a href="/stockfish/19.0.0/SOURCE.txt" target="_blank" rel="noreferrer">Stockfish 19 · GPL v3 · source</a>
+                    {fullEngine.state === "ready" && <> · <button className="link-button" onClick={() => void removeFullEngine()}>remove cached full engine</button></>}
+                  </span>
                 </footer>
               </div>
             </aside>
