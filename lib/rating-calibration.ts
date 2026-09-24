@@ -2,7 +2,7 @@
  * Fit the engine error model to games with known ratings.
  *
  * Input: one record per analyzed decision, produced by the same review
- * pipeline the app uses (see scripts/calibrate-rating.mjs). Each time-control
+ * pipeline the app uses (see scripts/corpus/rating-errormodel.mjs). Each time-control
  * class gets its own parameters – blitz and rapid ratings are different
  * populations and must never share a mapping.
  *

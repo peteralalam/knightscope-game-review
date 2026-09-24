@@ -7,7 +7,7 @@
  *
  * The EP-loss bands start from Chess.com's publicly documented Classification
  * V2 bands. They are a researched starting point, not a specification: tune them
- * with `scripts/calibrate-rating.mjs` output and the metadata stored on every
+ * with the corpus tools in `scripts/corpus/` and the metadata stored on every
  * reviewed move (expectedPointsLost, cpLoss, classificationReason, …).
  */
 

@@ -139,6 +139,21 @@ function main() {
   }
   const leaking = [...splitsByPlayer.values()].filter((splits) => splits.size > 1).length;
   const count = (predicate) => rows.filter(predicate).length;
+  const bands = [...new Set(rows.map((row) => row.band))].sort();
+  const summary = {
+    games: analyses.length,
+    samples: rows.length,
+    players: splitsByPlayer.size,
+    leakingPlayers: leaking,
+    splitMethod: "connected components of the player-game graph, hashed to 60/20/20 train/validation/test",
+    splits: Object.fromEntries(["train", "validation", "test"].map((split) => [split, count((row) => row.split === split)])),
+    byTimeControlAndBand: Object.fromEntries(["blitz", "rapid"].map((tc) => [tc, Object.fromEntries(bands.map((band) => [band, count((row) => row.tc === tc && row.band === band)]))])),
+    bySource: Object.fromEntries([...new Set(rows.map((row) => row.source))].map((source) => [source, count((row) => row.source === source)])),
+    preset: rows[0]?.preset,
+    engine: rows[0]?.engine,
+    model: rows[0]?.model,
+  };
+  if (argument("summary")) writeFileSync(argument("summary"), JSON.stringify(summary, null, 2) + "\n");
   console.log(JSON.stringify({
     games: analyses.length,
     samples: rows.length,

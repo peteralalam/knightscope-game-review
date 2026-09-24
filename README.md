@@ -7,7 +7,7 @@ KnightScope is a private, browser-based chess game review. Paste or upload a PGN
 - label moves as Brilliant, Great, Best, Excellent, Good, Book, Inaccuracy, Mistake, Miss, or Blunder, with a factual reason;
 - show the engine's preferred move and principal variation;
 - calculate per-side accuracy (overall and by game phase); and
-- estimate a **single-game performance rating** with an honest confidence interval.
+- estimate a **Lichess-equivalent game performance** with an 80% range calibrated on held-out rated games.
 
 All engine work runs locally in Web Workers. PGNs are not uploaded or stored.
 
@@ -23,20 +23,63 @@ Open `http://localhost:3000`.
 ## Validate
 
 ```sh
-npm test       # build + unit, rating-model, engine/pipeline (real Stockfish 19), render and smoke tests
+npm test       # build + unit, rating-model, engine/pipeline and Brilliant suite (real Stockfish 19), render and smoke tests
 npm run lint
 ```
 
+Evidence that the classifications and the rating estimate are reliable – corpus statistics, the Brilliant
+adversarial suite, held-out rating accuracy and interval coverage – is in
+[`docs/validation-report.md`](docs/validation-report.md), generated from the committed JSON under `data/`.
+
 ## Engine
 
-| | |
-| --- | --- |
-| Engine | Stockfish 19 (official release `sf_19`, Sept 2026), built to WebAssembly by [stockfish.js 19.0.0](https://github.com/nmrugg/stockfish.js/tree/v19.0.0) (the Chess.com-maintained port; includes Lichess stockfish-web patches) |
-| Build shipped | `lite-single`: single-threaded, 1.8 MB wasm with a 1 MB lite NNUE net |
-| Where | `public/stockfish/19.0.0/`, vendored from the pinned npm package by `npm run vendor:stockfish` |
-| Recorded version | The engine's own `id name` plus build flavour is recorded on every evaluation and in the analysis metadata, logged to the console, and shown in the footer tooltip |
+| | Lite (default) | Full (optional) |
+| --- | --- | --- |
+| Engine | Stockfish 19 search (official tag `sf_19`) | Stockfish 19 (official tag `sf_19`) |
+| Port | [stockfish.js 19.0.0](https://github.com/nmrugg/stockfish.js/tree/v19.0.0) = commit `9cb3e5066d48`, npm `stockfish@19.0.0` (pinned) | same |
+| Build | `lite-single`: WASM + SIMD, single-threaded | `single`: WASM + SIMD, single-threaded |
+| Network | `nn-61e7af4bb97d.nnue`, a 1.1 MB **third-party** Lite net (Chris Bao / sscg13) on a reduced architecture (mirrored piece-square features `P_hm`, L1 = 1024) | `nn-1a298aa575a0.nnue`, the official Stockfish 19 network |
+| wasm | 1.8 MB, SHA-256 `57ac2d72…`, static asset | 99.1 MB, SHA-256 `8725c265…`, downloaded only on request |
+| Tablebases | none (`__NO_SYZYGY__`) | none |
 
-**Why this build.** Official Stockfish publishes native binaries only. Its Makefile has a `wasm32` target, but there is no official browser artifact. stockfish.js builds the official source with Emscripten. Its full-strength single-threaded build (official `nn-1a298aa575a0.nnue`) is a 99 MB wasm, above Cloudflare Workers' 25 MiB per-asset limit, so the lite build is the strongest one this deployment can serve. To switch builds, run `node scripts/vendor-stockfish.mjs single` and change `ENGINE_BUILD.publicPath` in `lib/review-config.ts`.
+**Provenance.** stockfish.js's `src/` is official `sf_19` with Emscripten-only changes: cooperative yielding in the
+single-threaded search, no filesystem, Syzygy compiled out, and non-aborting position checks. Search, move generation
+and evaluation code are unchanged. The Lite flavour also swaps the NNUE feature set and network, so "Stockfish 19 Lite"
+is Stockfish 19's search with a smaller, unofficial evaluation. Toolchain: emscripten 3.1.7, `-msimd128`,
+`--closure 1`, 128 MB initial / 2 GB max memory. `lib/review-config.ts` (`ENGINE_BUILDS`) pins every binary by
+SHA-256, and tests and `scripts/vendor-stockfish.mjs` refuse a mismatch. Every review records:
+- in its metadata: the engine's `id name`, build, network, threads × engines, hash and node budgets;
+- in the UI footer: Engine / Port / Build / Network / Threads / Nodes / Model.
+
+**GPL.** Serving the wasm is distributing object code. `public/stockfish/19.0.0/` therefore ships, next to it:
+- the GPLv3 text;
+- `SOURCE.txt`, recording the exact tag, commit, flags and hashes;
+- `source/stockfish.js-19.0.0-source.tar.gz`, the complete source and build scripts;
+- `source/nn-61e7af4bb97d.nnue`, the network embedded in the Lite binary. It was recovered from the wasm by `scripts/extract-embedded-net.mjs` and verified against the SHA-256 prefix in its name.
+
+Before this, the deployment shipped only a license file and a link to a third-party repository, and no network file.
+
+**Optional Full engine.** Cloudflare's 25 MiB static-asset limit rules out shipping the 99 MB build as a normal asset.
+It is served instead by `worker/index.ts` at `/engine-assets/<name>-<sha12>.wasm` from an R2 bucket bound as `ENGINE_ASSETS`:
+- same origin, so no CORS;
+- `immutable` caching, because the name is content-addressed;
+- only static bytes pass through, never game data.
+
+In the app, **Engine: Auto / Lite / Full**:
+- Nothing is downloaded until the user clicks *Download full engine*.
+- The download shows progress, is SHA-256-verified before it is stored in Cache Storage, and is re-verified on every load. A corrupted file is discarded.
+- Auto uses Lite for Quick and Balanced, and Full for Deep once it is downloaded.
+- Full runs at most 2 parallel engines, because each instantiates a ~230 MB module.
+- Multi-threaded builds are deliberately not used:
+  - they need cross-origin isolation (COOP/COEP) for SharedArrayBuffer;
+  - their parallel search is non-deterministic;
+  - review already parallelizes across positions.
+- If this deployment doesn't host the file, the download reports that and Lite keeps working.
+
+To host it:
+1. Bind an R2 bucket as `ENGINE_ASSETS`. For this template, set `"r2": "ENGINE_ASSETS"` in `.openai/hosting.json`, or add the binding to your Wrangler config.
+2. Run `npm run vendor:stockfish`.
+3. Upload the file: `npx wrangler r2 object put <bucket>/engine-assets/stockfish-19-single-8725c2657627.wasm --file .engine-assets/stockfish-19-single-8725c2657627.wasm --content-type application/wasm --remote`.
 
 **UCI configuration** (`lib/uci-engine.ts`):
 - `Threads 1`, one engine per Web Worker. Parallelism comes from a pool of up to 4 workers (cores − 1, and 1 on low-memory devices).
@@ -55,7 +98,7 @@ npm run lint
 
 **Determinism.** Positions are cut into fixed 12-ply chunks. Each chunk starts with `ucinewgame` and runs sequentially on one engine. A review is therefore a function of (game, node budget, engine build) only, not of how many workers the device runs. This is covered by tests with 1 and 2 real engines.
 
-**Tablebases.** The official `wasm32` target builds with `syzygy=no`, so the browser engine has no Syzygy support. Tablebase scores (`cp ±(20000 − plies)` in SF19) are still decoded explicitly as TB wins or losses for native engines, never treated as giant centipawns. Checkmate, stalemate and insufficient material are resolved without the engine.
+**Tablebases.** Both browser builds compile Syzygy out (`__NO_SYZYGY__`). Tablebase scores (`cp ±(20000 − plies)` in SF19) are still decoded explicitly as TB wins or losses for native engines, never treated as giant centipawns. Checkmate, stalemate and insufficient material are resolved without the engine.
 
 ### Analysis strategy and budgets
 
@@ -79,23 +122,30 @@ Measured on this project's 4-core CI container:
 
 In practice, the candidate pass runs on roughly 60% of moves. Verification runs on the few Brilliant/Great candidates.
 
-## Review model (`ks-review-2.0`)
+## Review model (`ks-review-2.1`)
 
 Every threshold lives in `lib/review-config.ts`. Every reviewed move stores the metadata needed to retune them: `expectedPointsLost`, `cpLoss`, `bestMove`, `playedMove`, `bestEvaluation`, `resultingEvaluation`, `bestPV`, `classificationReason`, `criticality`, `informativeness`, `sacrifice`, `brilliantReason` and `miss`.
 
 ### Evaluation and expected score
 
-Each `Evaluation` (`lib/evaluation.ts`) is always from one side's point of view. It contains:
-- `cp`, `mate`, `tablebase`;
-- Stockfish's WDL (`winProbability`, `drawProbability`, `lossProbability`, `engineExpectedScore`);
-- `expectedScore`, which is used for grading;
-- `depth`, `nodes`, `pv`, `engineVersion`.
+Each `Evaluation` (`lib/evaluation.ts`) is always from one side's point of view. It keeps two scales apart:
 
-Played moves are always graded from the mover's side, including Black. Mates and tablebase results are decisive (1 / 0), never large numbers.
+| Field | Scale | Used for |
+| --- | --- | --- |
+| `engineWdl`, `engineExpectedScore` | Stockfish 19's own WDL (`UCI_ShowWDL`). Fitted by the Stockfish project on engine self-play at fixed material, where +1.00 ≈ 50% wins. | Diagnostics, and the "objective" result class (win / draw / loss) in the Great rule |
+| `humanWinProbability`, `humanExpectedScore` | Lichess's published curve `1 / (1 + e^(−0.00368208·cp))` (lila `WinPercent`), on Stockfish 19's normalized centipawns | **Every user-facing classification** |
 
-Grading uses **expected points lost**, not centipawn loss: `bestExpectedScore − playedExpectedScore`. The default expected-score model is **human-calibrated**. It is Lichess's win-percentage curve `1 / (1 + e^(−0.00368208·cp))`, the constant scalachess/lila use for accuracy, applied to Stockfish 19's material-normalized centipawns.
+`humanExpectedScore` is the curve value, or exactly 1 / 0 for mates and tablebase results. Played moves are always graded
+from the mover's side, including Black.
 
-Why not raw Stockfish WDL? Stockfish's WDL describes **engine-vs-engine** conversion: +1.00 already means ~50% wins, and +2.00 means ~95%+ expected. With Chess.com's bands, that turns a ¾-pawn opening slip into a "blunder". I tried fitting Stockfish's own two-sigmoid WDL form to the human curve, and it degenerates to a plain logistic, because humans have no wide engine-style draw band. Engine WDL is still stored on every evaluation, and `EXPECTED_SCORE.model = "engine-wdl"` switches grading to it.
+**What the human curve is, and isn't.** Lichess fitted it to real rated Lichess games between players rated around 2300,
+as a function of an older, pre-normalization Stockfish's evaluation. Despite the name it counts draws as half, so it
+works as an expected score. It is a population-average conversion for *strong* players. It is **not** an Elo-specific
+model: a 1000-rated player converts +3 far less reliably, and a 2700 more reliably. Applying it to Stockfish 19's
+normalized scale is an approximation. It is still used for grading because the engine scale grades human games far too
+harshly: under Stockfish WDL a ¾-pawn opening slip is a "Blunder". Both are kept; the old `EXPECTED_SCORE.model` switch is gone.
+
+Grading uses **expected points lost** (`bestHumanExpectedScore − playedHumanExpectedScore`), not centipawn loss.
 
 The difference in practice: the same 150 cp loss is a **Mistake** from +0.2 → −1.3, but only **Good** from +9.0 → +7.5.
 
@@ -119,18 +169,43 @@ The EP bands start from Chess.com's public Classification V2 bands, as a baselin
 - Defending an already-mated position: Best/Excellent/Good by how long the defence lasts.
 - Allowing a forced mate: Blunder (Mistake only when already lost and the mate is long).
 
-**Great** is a best or near-best move (≤ 0.01) that is also critical, measured on the candidate or verification lines:
-- an **only move** (every alternative loses ≥ 0.20); or
-- alternatives lose ≥ 0.10 **and** drop the position to a worse outcome band (losing / worse / balanced / better / winning); or
-- it is the clear punishment of an opponent error (≥ 0.10).
+**Great** separates **uniqueness** from **importance**. Both are measured on the candidate (MultiPV 3) or verification lines:
+- `moveUniqueness`: how much better the move is than the best alternative, in human expected score (EP).
+- `outcomeImportance`: the same gap after clamping both scores to the undecided range [0.15, 0.85]. Choosing between two winning continuations therefore has zero importance, however large the centipawn gap. Example: +8.6 vs +6.5 has importance 0; 0.00 vs −3.00 has importance 0.25.
 
-Never awarded for:
-- obvious recaptures;
-- grabbing a piece that is simply hanging (by static exchange evaluation);
-- mate-in-one;
-- answering a check with ≤ 5 legal replies;
-- a move that merely postpones defeat (expected score < 0.25);
-- positions where the evaluation proved unstable.
+A move is Great when all of these hold:
+1. **Quality**: best or within 0.01 EP.
+2. **Uniqueness**: every alternative is ≥ 0.10 EP worse, so exactly one viable move exists.
+3. **Importance**: `outcomeImportance` ≥ 0.10, and the alternative changes the *result class*. That means either Stockfish's WDL verdict flips (win/draw/loss), or the human expected score falls by ≥ 2 outcome bands, e.g. winning → balanced. "Winning vs better" is the same result.
+
+The 0.10 thresholds are the Inaccuracy/Mistake boundary: a move is Great when every alternative would have been at
+least a Mistake, counting only the part of the loss that moves the game between outcome classes.
+
+Never Great:
+- recaptures;
+- taking a hanging piece or pawn (by SEE);
+- mate in one;
+- forced moves (check evasions with ≤ 5 replies, or ≤ 2 legal moves);
+- moves that only postpone defeat (< 25%);
+- unstable evaluations;
+- the **planned follow-up** of the mover's previous Great/Brilliant move (its line predicted the reply and this move), because the credit belongs to the earlier decision.
+
+Reasons are typed:
+- *only move that holds*;
+- *only move that keeps the win*;
+- *punishes the opponent's error*: a balanced-or-worse position turned into a better or winning one after an opponent error of ≥ 0.10;
+- *critical move*.
+
+Every Great **candidate** (near-best and unique) stores `greatDiagnostics`, whether promoted or not:
+- `evaluationBefore`, `bestMove`, `playedMove`;
+- best / played / 2nd / 3rd expected scores and `gapBestToSecond`;
+- `numberOfAcceptableMoves`, `legalMoveCount`;
+- position state before and after, and before the opponent's move;
+- `onlyMove`, `outcomeTransition`, `objectiveTransition`;
+- `tacticalOpportunity`, `forcedMove`, `obviousRecapture`, `opponentPreviousMoveLoss`;
+- `greatReason`, and the `decision`, meaning the first rule that rejected it.
+
+The UI shows them under *Why this grade*.
 
 **Brilliant** requires all of:
 1. The best or near-best move (≤ 0.01), confirmed by the candidate and verification passes.
@@ -139,9 +214,25 @@ Never awarded for:
    - **Along the engine line**: a capture within the opponent's first two replies that isn't repaid by an immediate recapture. "Piece for two pawns" still counts; a material deficit that is later recovered is reported as a temporary sacrifice.
 3. Accepting doesn't refute it. Either the engine's best defence takes the material and the position holds, or a targeted `searchmoves` search forces the acceptance and the mover keeps ≥ 45% and within 0.05 of the main line.
 4. The position after the move is still acceptable (≥ 45%).
-5. It is not unnecessary. It is rejected if the best non-sacrificing alternative also keeps ≥ 95%, unless only the sacrifice forces mate.
+5. It is not unnecessary: rejected if the best alternative also keeps ≥ 95%. That includes a faster forced mate when a quiet move already wins.
+   Also rejected:
+   - **pseudo-sacrifices**: the material comes back by force within 4 plies;
+   - **forced sacrifices**: every alternative is mated;
+   - the **planned follow-up** of a previous Great/Brilliant move.
 6. For rated players, a modest non-obviousness edge over the alternative (0 / 0.01 / 0.03 EP below 1200 / below 2000 / above). Soundness never depends on rating.
 7. Stability. The deeper verification search must agree, and after the opponent's best reply the mover must still stand within 0.15 EP of the promised evaluation. This hindsight check catches horizon artifacts.
+
+Declining is allowed. When Stockfish's best defence declines the offer, the forced-acceptance search only has to show
+that taking is not a refutation, so a sacrifice whose point is the threat can still be Brilliant.
+
+Every Brilliant **candidate** stores `brilliantDiagnostics`:
+- material before the move, after it, after the best defence, and at the end of the PV;
+- the sacrificed piece and its value;
+- expected score before, after, and after forced acceptance;
+- the best defence, and `acceptanceIsBestDefense`;
+- `forcedMate`, `bestMoveRank`;
+- the best alternative's score, and the deeper verification score;
+- the `decision`.
 
 `brilliantReason` states only established facts, e.g. *"Best move. Sacrifices the queen. Stockfish's best defence takes it, and the move leads to a forced mate in 2."* or *"Best move. Sacrifices the knight on b5. Taking it leaves the opponent worse off (13% for them after the capture), and the move keeps the position better (83% expected score)."*
 
@@ -168,44 +259,45 @@ If the move also dropped below the baseline, it stays a Mistake/Blunder, and the
 
 Accuracy measures engine precision. It is not presented as, or converted to, Elo.
 
-### Single-game performance rating
+### Lichess-equivalent game performance
 
-This does **not** map accuracy to Elo. A 95%-accuracy game can happen at almost any rating, depending on how hard the positions were.
+The estimate answers: *which Lichess rating's typical games look like this one?* It is calibrated on real rated
+Lichess games, so it is a **Lichess blitz / rapid** number. It is not Chess.com, FIDE, or anyone's account rating.
+It does not map accuracy to Elo.
 
-`lib/rating-model.ts` treats each meaningful decision as evidence. An ordered-logit **engine error model** gives P(error category | rating R, position difficulty, time control). The categories are top move, excellent, good, inaccuracy, mistake and blunder. Difficulty covers stakes 4·E·(1−E) and the number of legal moves. Time control follows Lichess's base + 40 × increment classes.
-
-Over a 400–3000 grid:
-- the log-likelihoods, weighted by informativeness and tempered for within-game correlation, are summed;
-- the sum is multiplied by a population prior;
-- the posterior median is reported, rounded to 50, with its 10th–90th percentile as the interval.
-
-A 20-move game with 8 real decisions therefore gets a much wider interval than an 80-move game with 40. The output includes `estimatedPerformanceRating`, `confidenceLow`/`High`, `confidence`, `meaningfulMoves`, `timeControl`, `ratingSystem`, `model` and `calibrated`.
-
-Reported features also include:
-- median / p90 loss;
+**Model.** A ridge regression, one per time control (blitz, rapid), from 19 interpretable per-game features
+(`lib/rating-model.ts`, `RATING_FEATURES`):
+- mean / median / p75 / p90 expected-points loss, and a stakes-weighted loss (all log-scaled);
 - blunder, mistake and inaccuracy rates;
-- top-1 and top-N agreement;
+- top-1 and top-3 agreement;
 - critical-position accuracy and only-move success;
-- conversion and defensive accuracy;
-- opportunity conversion.
+- opportunity conversion;
+- defensive and conversion accuracy;
+- middlegame and endgame accuracy;
+- meaningful decisions and game length.
 
-**Current status: uncalibrated priors.** The shipped parameters encode rough public error rates and are labelled `calibrated: false` in the UI. The pipeline to replace them with fitted, per-time-control parameters is included and tested (see below). Until then, treat the number as a structured, honest-uncertainty estimate, not a calibrated one.
+Features a game cannot measure (no endgame, no critical positions) are imputed with the training mean plus a missing flag.
+Neither player's rating is ever a feature, and neither is the opponent's. Bullet uses the blitz model, and classical or
+unknown time controls use the rapid model; both are flagged as extrapolated.
 
-#### Calibration
+**Interval.** The 80% range comes from held-out residuals, not a formula. Residual spread is modelled as
+`s(n) = sqrt(a + b/n)` in the number of meaningful decisions `n`, fitted on the validation split. The 10th and 90th
+percentiles of the standardized validation residuals set the bounds. A 12-move miniature gets a wider range than a
+60-move game because such games measurably are harder to place.
 
-```sh
-# Lichess monthly dumps are CC0: https://database.lichess.org/ (decompress the .zst first)
-npm run calibrate -- extract lichess_db_standard_rated_2026-08.pgn --out features.jsonl --limit 5000 --nodes 60000 --workers 4
-npm run calibrate -- fit features.jsonl --out rating-params.json --write-lib
-```
+**Data and protocol** (`scripts/corpus/`):
+1. `prepare-rating-corpus.mjs`: public rated Lichess games from two sources, the Lichess puzzle/game database sample (2013–2022) and the Kaggle "datasnaek" set (2016–17). Every filter is documented and counted in `data/rating-corpus/FILTERS.json`. Games are stratified by time control × rating band, with at most 3 games per player.
+2. `analyze-corpus.mjs`: runs the app's own pipeline (Quick preset) on every game. Searches are cached.
+3. `rating-dataset.mjs`: one row per game-side. Players are linked when they meet, and each connected component of that graph goes to exactly one of train / validation / test (60/20/20). No player, and no game, appears in two splits.
+4. `rating-errormodel.mjs`: fits the previous ordered-logit error model on the same split, as a baseline.
+5. `rating_benchmark.py`: benchmarks six models and writes `lib/rating-params.ts` (`--write-lib`). The models are constant, the old prior, the fitted error model, isotonic on mean loss, ridge, and gradient boosting (sklearn, offline only).
 
-`extract` runs the app's own review pipeline on rated games and writes one feature record per decision. `fit` does the following for each time control with ≥ 100 game-sides:
-- maximum-likelihood fitting of the 12 model parameters;
-- setting the prior from the population;
-- choosing the likelihood temper so the holdout 80% interval covers about 80% of true ratings;
-- reporting holdout MAE, correlation, coverage and interval width.
+A test checks that the TypeScript model reproduces the Python predictions.
 
-With `--write-lib`, the parameters go to `lib/rating-params.ts`, and the estimator picks them up automatically. Parameter recovery and interval coverage are tested on synthetic rated games. Rating pools are never mixed: parameters fit on Lichess blitz describe Lichess blitz ratings, not Chess.com or FIDE.
+Results are in [`docs/validation-report.md`](docs/validation-report.md) §4–7:
+- MAE, median AE, RMSE and R² on test players;
+- MAE by rating band, time control, decision count, result, phase composition and source;
+- 80% coverage and width, by decisions and by band.
 
 #### Human move models (Maia)
 

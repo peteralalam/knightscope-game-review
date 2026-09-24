@@ -42,20 +42,22 @@ async function serveEngineAsset(request: Request, env: Env, pathname: string) {
   const key = pathname.slice(1);
   if (!/^engine-assets\/[\w.-]+\.wasm$/.test(key)) return new Response("Not found", { status: 404 });
   if (request.method !== "GET" && request.method !== "HEAD") return new Response("Method not allowed", { status: 405 });
-  if (!env.ENGINE_ASSETS) return new Response("The full engine is not hosted on this deployment.", { status: 404 });
+  // `env` is absent under the Node preview server (vinext start); treat it as "not hosted".
+  const bucket = env?.ENGINE_ASSETS;
+  if (!bucket) return new Response("The full engine is not hosted on this deployment.", { status: 404 });
   const headers = new Headers({
     "content-type": "application/wasm",
     "cache-control": "public, max-age=31536000, immutable",
     "cross-origin-resource-policy": "same-origin",
   });
   if (request.method === "HEAD") {
-    const object = await env.ENGINE_ASSETS.head(key);
+    const object = await bucket.head(key);
     if (!object) return new Response(null, { status: 404 });
     headers.set("content-length", String(object.size));
     headers.set("etag", object.httpEtag);
     return new Response(null, { headers });
   }
-  const object = await env.ENGINE_ASSETS.get(key);
+  const object = await bucket.get(key);
   if (!object) return new Response("Not found", { status: 404 });
   headers.set("content-length", String(object.size));
   headers.set("etag", object.httpEtag);

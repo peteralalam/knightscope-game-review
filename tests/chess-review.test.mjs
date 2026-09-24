@@ -212,6 +212,20 @@ test("Brilliant is withheld without candidate verification or when any move wins
     topMove(game, index, crushing, { candidates: [crushing, withE(0.99, ["g5e7"])] }),
   );
   assert.notEqual(review.grade, "brilliant", "a non-mating sac when the alternative also wins is cleanup");
+
+  // Even a faster forced mate is a flourish when a quiet move already wins.
+  const mating = mate(2, ["b3b8", "d7b8", "d1d8"]);
+  const flourish = reviewMove(game, index, topMove(game, index, mating, { candidates: [mating, withE(0.97, ["g5e7"])] }));
+  assert.equal(flourish.grade, "best");
+  const evidence = flourish.brilliantDiagnostics;
+  assert.equal(evidence.decision, "rejected: a simpler move was already winning");
+  assert.equal(evidence.sacrificedPiece, "queen");
+  assert.equal(evidence.sacrificeValue, 9);
+  assert.equal(evidence.detectedBy, "board");
+  assert.equal(evidence.acceptanceIsBestDefense, true);
+  assert.equal(evidence.bestDefense, "Nxb8");
+  assert.equal(evidence.forcedMate, 2);
+  assert.equal(evidence.materialAfterBestDefense - evidence.materialBefore, -9);
 });
 
 test("ordinary trades and losing sacrifices are never Brilliant", () => {

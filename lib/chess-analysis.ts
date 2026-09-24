@@ -133,7 +133,8 @@ function acceptingCaptures(chess: Chess, square: Square) {
 
 function sacrificeKind(piece: PieceSymbol, material: number, movedPiece: boolean): SacrificeKind {
   if (piece === "q") return "queen";
-  if (piece === "r" && material <= 3) return "exchange";
+  // The exchange: a rook for a minor piece (net 2), possibly with a pawn thrown in.
+  if (piece === "r" && material <= 2) return "exchange";
   return movedPiece ? "piece" : "en-prise";
 }
 
@@ -287,7 +288,11 @@ export function isObviousRecapture(
   }
 }
 
-/** Capturing a piece that SEE says is simply free (no tactic needed). */
+/**
+ * Capturing a piece or pawn that SEE says is simply free (no tactic needed):
+ * the exchange on that square wins at least the target's value less a pawn,
+ * and never less than a pawn.
+ */
 export function isFreeCapture(beforeFen: string, moveUci: string) {
   const board = tryChess(beforeFen);
   if (!board) return false;
@@ -295,7 +300,7 @@ export function isFreeCapture(beforeFen: string, moveUci: string) {
   const target = board.get(to);
   if (!target || target.color === board.turn()) return false;
   const gain = staticExchange(board, to);
-  return gain >= Math.max(2, PIECE_VALUE[target.type] - 1);
+  return gain >= Math.max(1, PIECE_VALUE[target.type] - 1);
 }
 
 export function givesMateInOne(beforeFen: string, moveUci: string) {

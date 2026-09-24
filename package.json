@@ -9,12 +9,13 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/chess-review.test.mjs tests/rating-model.test.mjs tests/engine-pipeline.test.mjs tests/rendered-html.test.mjs tests/stockfish-smoke.test.mjs",
+    "test": "npm run build && node --test tests/chess-review.test.mjs tests/rating-model.test.mjs tests/engine-pipeline.test.mjs tests/brilliant-suite.test.mjs tests/rendered-html.test.mjs tests/stockfish-smoke.test.mjs",
     "vendor:stockfish": "node scripts/vendor-stockfish.mjs",
     "build:opening-book": "node scripts/build-opening-book.mjs",
-    "calibrate": "node scripts/calibrate-rating.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern public/stockfish",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "corpus:report": "node scripts/corpus/write-report.mjs",
+    "corpus:suite": "node scripts/corpus/brilliant-suite.mjs --preset balanced --json data/brilliant-suite/report.json"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

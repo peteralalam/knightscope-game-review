@@ -1,21 +1,20 @@
 /**
  * Single-game performance estimation.
  *
- * This does NOT map accuracy to Elo. Every meaningful decision contributes a
- * likelihood term  P(error category | rating R, position difficulty, time
- * control)  from an ordered-logit "engine error model". Summing the (weighted,
- * tempered) log-likelihoods over a rating grid and multiplying by a population
- * prior gives a posterior over R; the estimate is its median and the interval
- * its 10th–90th percentile. A short game with few real decisions therefore gets
- * a wide interval automatically.
+ * Default path (when REGRESSION_MODELS has parameters for the time control):
+ * a ridge regression on interpretable per-game features, calibrated on public
+ * rated Lichess games with player-disjoint splits, and an 80 % interval derived
+ * from held-out residuals. The output is a *Lichess-equivalent* blitz / rapid
+ * game performance – see scripts/corpus/rating_benchmark.py and
+ * docs/validation-report.md for how it was fitted and how well it generalizes.
  *
- * The same grid can absorb log-likelihoods from a human move-prediction model
- * (Maia-style P(played move | position, R)) via `HumanMovePredictor`.
- *
- * DEFAULT PARAMETERS ARE PRIORS, NOT A FIT. They encode rough, publicly
- * observable error rates and are clearly flagged `calibrated: false`. Fit them
- * on rated games with `scripts/calibrate-rating.mjs` and replace
- * `DEFAULT_ENGINE_ERROR_MODEL` (per time control) with the output.
+ * Fallback / research path: an ordered-logit "engine error model",
+ * P(error category | rating R, position difficulty, time control), summed over a
+ * rating grid with a population prior. Its default parameters are priors
+ * (`calibrated: false`); the benchmark fits it too and shows the regression
+ * generalizes better. The same grid can absorb log-likelihoods from a human
+ * move-prediction model (Maia-style P(played move | position, R)) via
+ * `HumanMovePredictor`.
  */
 import type { PerformanceEstimate, PerformanceFeatures, ReviewedMove, TimeControlClass } from "./chess-review.ts";
 import { CALIBRATED_MODELS, REGRESSION_MODELS } from "./rating-params.ts";

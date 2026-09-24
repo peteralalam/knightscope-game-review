@@ -153,6 +153,8 @@ export interface BrilliantDiagnostics {
   sacrificeSquare: string;
   sacrificeKind: string;
   sacrificeValue: number;
+  /** "board": left en prise now (SEE); "line": only lost along Stockfish's main line. */
+  detectedBy: "board" | "line";
   expectedScoreBefore: number;
   expectedScoreAfter: number;
   /** Mover's expected score when the opponent takes the material (forced-capture search when declined). */
@@ -750,6 +752,8 @@ export function reviewMove(
     } else if (realized && realized.piece !== "p") {
       candidate = realized;
     }
+    // Offered on the board (SEE) vs only arising along the engine line.
+    const detectedBy = statics.length > 0 ? "board" : "line";
 
     if (candidate) {
       const alternativeScore = bestAlternative?.humanExpectedScore;
@@ -764,6 +768,10 @@ export function reviewMove(
         candidate.accepted === true &&
         candidate.recoveredAfterPlies !== undefined &&
         candidate.recoveredAfterPlies <= BRILLIANT.pseudoRecoveryPlies;
+      // Material that only goes missing along the engine line (nothing was
+      // offered on the board) and comes back within that line is move-order
+      // noise – an intermezzo or exchange sequence – not an investment.
+      const lineOnlyRegained = detectedBy === "line" && candidate.recoveredAfterPlies !== undefined;
       // Giving up material because every other move is mated is not a choice.
       const forcedByMate =
         bestAlternative !== undefined && matedIn(bestAlternative) !== undefined && outcomeBand(playedE) <= 2;
@@ -778,6 +786,7 @@ export function reviewMove(
       else if (playedE < BRILLIANT.minExpectedAfter) decision = "rejected: position after the sacrifice is not good enough";
       else if (!acceptanceOk) decision = "rejected: accepting the sacrifice refutes it";
       else if (pseudo) decision = `rejected: material regained within ${candidate.recoveredAfterPlies} plies (pseudo-sacrifice)`;
+      else if (lineOnlyRegained) decision = "rejected: nothing offered on the board, and the line regains the material";
       else if (forcedByMate) decision = "rejected: forced – every alternative is mated";
       else if (unnecessary) decision = "rejected: a simpler move was already winning";
       else if (!edgeOk) decision = "rejected: not clearly better than the alternatives for this rating";
@@ -795,6 +804,7 @@ export function reviewMove(
         sacrificeSquare: candidate.square,
         sacrificeKind: candidate.kind,
         sacrificeValue: candidate.material,
+        detectedBy,
         expectedScoreBefore: round4(bestE)!,
         expectedScoreAfter: round4(playedE)!,
         expectedScoreAfterAcceptance: round4(
