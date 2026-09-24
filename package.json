@@ -9,7 +9,10 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/chess-review.test.mjs tests/rendered-html.test.mjs tests/stockfish-smoke.test.mjs",
+    "test": "npm run build && node --test tests/chess-review.test.mjs tests/rating-model.test.mjs tests/engine-pipeline.test.mjs tests/rendered-html.test.mjs tests/stockfish-smoke.test.mjs",
+    "vendor:stockfish": "node scripts/vendor-stockfish.mjs",
+    "build:opening-book": "node scripts/build-opening-book.mjs",
+    "calibrate": "node scripts/calibrate-rating.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern public/stockfish",
     "db:generate": "drizzle-kit generate"
   },
@@ -19,7 +22,7 @@
     "next": "16.2.6",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "stockfish": "^18.0.8"
+    "stockfish": "19.0.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",

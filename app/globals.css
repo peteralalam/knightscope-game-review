@@ -12,9 +12,12 @@
   --brilliant: #28b9d9;
   --great: #6a55d7;
   --best: #55a96f;
+  --excellent: #7fb069;
   --good: #77958b;
+  --book: #a88865;
   --inaccuracy: #e6bb45;
   --mistake: #e7833e;
+  --miss: #d8645e;
   --blunder: #d95353;
 }
 
@@ -1292,6 +1295,9 @@ a:focus-visible {
 .grade-good { background: var(--good); }
 .grade-inaccuracy { background: var(--inaccuracy); }
 .grade-mistake { background: var(--mistake); }
+.grade-excellent { background: var(--excellent); }
+.grade-book { background: var(--book); }
+.grade-miss { background: var(--miss); }
 .grade-blunder { background: var(--blunder); }
 
 .modal-backdrop {
@@ -1580,4 +1586,11 @@ a:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.miss-note {
+  margin: -4px 0 12px;
+  color: var(--miss);
+  font-size: 0.86rem;
+  font-weight: 600;
 }

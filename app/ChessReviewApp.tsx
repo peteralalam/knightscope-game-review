@@ -11,19 +11,22 @@ import {
   useRef,
   useState,
 } from "react";
+import { analyzeGame as runAnalysis, type AnalysisProgress } from "../lib/analysis-pipeline";
 import {
   formatEvaluation,
+  formatReviewEvaluation,
   GRADE_META,
   GRADE_ORDER,
   parsePgn,
   positionFenAt,
-  reviewMove,
   summarizeSide,
   type ParsedGame,
   type ReviewedMove,
   type SideSummary,
 } from "../lib/chess-review";
-import { StockfishClient } from "../lib/stockfish-client";
+import { ANALYSIS_PRESETS, ENGINE_BUILD, REVIEW_MODEL_VERSION } from "../lib/review-config";
+import { createEnginePool } from "../lib/stockfish-client";
+import type { UciEngine } from "../lib/uci-engine";
 
 const SAMPLE_PGN = `[Event "A Night at the Opera"]
 [Site "Paris, France"]
@@ -38,11 +41,7 @@ const SAMPLE_PGN = `[Event "A Night at the Opera"]
 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6
 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0`;
 
-const ENGINE_PRESETS = {
-  quick: { label: "Quick", nodes: 35_000 },
-  balanced: { label: "Balanced", nodes: 90_000 },
-  deep: { label: "Deep", nodes: 220_000 },
-} as const;
+const ENGINE_PRESETS = ANALYSIS_PRESETS;
 
 type EnginePreset = keyof typeof ENGINE_PRESETS;
 type AnalysisState = "idle" | "loading" | "analyzing" | "complete" | "cancelled" | "error";
@@ -82,8 +81,25 @@ function displayResult(result: string) {
 }
 
 function ratingRange(summary: SideSummary) {
-  const rating = summary.estimatedRating;
-  return rating ? `${rating.low}–${rating.high}` : "More moves needed";
+  const rating = summary.performance;
+  return rating ? `${rating.confidenceLow}–${rating.confidenceHigh}` : "More moves needed";
+}
+
+const PHASE_SPAN: Record<AnalysisProgress["phase"], [number, number]> = {
+  primary: [0, 65],
+  candidates: [65, 92],
+  verification: [92, 100],
+};
+
+function progressPercent(progress: AnalysisProgress) {
+  const [start, end] = PHASE_SPAN[progress.phase];
+  return progress.total ? start + (progress.done / progress.total) * (end - start) : Math.max(2, start);
+}
+
+function ratingDetail(summary: SideSummary) {
+  const rating = summary.performance;
+  if (!rating) return "too few real decisions";
+  return `≈${rating.estimatedPerformanceRating} · ${rating.confidence} confidence · ${rating.meaningfulMoves} decisions`;
 }
 
 function ImportPanel({
@@ -185,7 +201,7 @@ function PlayerStrip({
       </div>
       <div className="player-metrics">
         <div><span>Accuracy</span><strong>{complete ? `${summary.accuracy.toFixed(1)}%` : "—"}</strong></div>
-        <div><span>Est. range</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
+        <div><span>Game performance</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
       </div>
     </div>
   );
@@ -315,9 +331,12 @@ function SelectedMoveCard({ review, move }: { review?: ReviewedMove; move?: Pars
           <span className="eyebrow">Move {review.moveNumber}{review.color === "b" ? "…" : "."}</span>
           <h2>{review.san} <small>{meta.label}</small></h2>
         </div>
-        <strong className="selected-eval">{formatEvaluation(review.cpWhiteAfter, review.mateWhiteAfter)}</strong>
+        <strong className="selected-eval">{formatReviewEvaluation(review)}</strong>
       </div>
       <p>{review.explanation}</p>
+      {review.miss && review.grade !== "miss" && (
+        <p className="miss-note">Missed opportunity: {review.miss.missedMoveSan}</p>
+      )}
       <div className="line-block">
         <span>{review.bestMove === review.uci ? "Engine continuation" : `Better was ${review.bestMoveSan}`}</span>
         <div className="pv-line">
@@ -348,8 +367,8 @@ function SummaryPanel({
         <span className="result-pill">{game.result}</span>
       </div>
       <div className="accuracy-pair">
-        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>single-game range</small></div>
-        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>single-game range</small></div>
+        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>{complete ? ratingDetail(white) : "game performance"}</small></div>
+        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>{complete ? ratingDetail(black) : "game performance"}</small></div>
       </div>
       <div className="grade-table" aria-label="Move classification counts">
         <div className="grade-table__header"><span>Move quality</span><span>White</span><span>Black</span></div>
@@ -362,7 +381,11 @@ function SummaryPanel({
         ))}
       </div>
       {complete && reviews.length > 0 && (
-        <p className="estimate-note">Rating ranges are broad performance estimates from this game—not account ratings.</p>
+        <p className="estimate-note">
+          Ranges are 80% intervals for how strongly each side played in this game, from the size and difficulty of
+          their errors on {white.performance?.calibrated ? "a calibrated" : "an uncalibrated, prior-based"} model—not
+          account ratings. Accuracy measures engine precision and is not an Elo.
+        </p>
       )}
     </section>
   );
@@ -377,16 +400,18 @@ export function ChessReviewApp() {
   const [preset, setPreset] = useState<EnginePreset>("balanced");
   const [analysisPreset, setAnalysisPreset] = useState<EnginePreset>("balanced");
   const [analysisState, setAnalysisState] = useState<AnalysisState>("idle");
-  const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [progress, setProgress] = useState<AnalysisProgress>({ phase: "primary", done: 0, total: 0 });
+  const [engineVersion, setEngineVersion] = useState<string>(ENGINE_BUILD.label);
   const [error, setError] = useState("");
   const [importOpen, setImportOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const engineRef = useRef<StockfishClient | null>(null);
+  const engineRef = useRef<UciEngine[] | null>(null);
   const runRef = useRef(0);
 
   const isComplete = analysisState === "complete" && Boolean(game) && reviews.length === game?.moves.length;
-  const whiteSummary = useMemo(() => summarizeSide(reviews, "w", game?.headers ?? {}), [reviews, game]);
-  const blackSummary = useMemo(() => summarizeSide(reviews, "b", game?.headers ?? {}), [reviews, game]);
+  const headers = game?.headers;
+  const whiteSummary = useMemo(() => summarizeSide(reviews, "w", headers ?? {}), [reviews, headers]);
+  const blackSummary = useMemo(() => summarizeSide(reviews, "b", headers ?? {}), [reviews, headers]);
   const currentMove = game && cursor > 0 ? game.moves[cursor - 1] : undefined;
   const currentReview = cursor > 0 ? reviews[cursor - 1] : undefined;
   const currentFen = game ? positionFenAt(game, cursor) : "";
@@ -401,12 +426,12 @@ export function ChessReviewApp() {
     if (!reviews.length) return "0.00";
     if (cursor <= 0) return formatEvaluation(reviews[0].cpWhiteBefore, reviews[0].mateWhiteBefore);
     const review = reviews[Math.min(cursor, reviews.length) - 1];
-    return review ? formatEvaluation(review.cpWhiteAfter, review.mateWhiteAfter) : "0.00";
+    return review ? formatReviewEvaluation(review) : "0.00";
   }, [cursor, reviews]);
 
   const cancelAnalysis = useCallback(() => {
     runRef.current += 1;
-    engineRef.current?.dispose();
+    engineRef.current?.forEach((engine) => engine.dispose());
     engineRef.current = null;
     setAnalysisState((state) => state === "analyzing" || state === "loading" ? "cancelled" : state);
   }, []);
@@ -421,32 +446,38 @@ export function ChessReviewApp() {
     setPlaying(false);
     setError("");
     setImportOpen(false);
-    setProgress({ current: 0, total: parsed.moves.length });
+    setProgress({ phase: "primary", done: 0, total: parsed.moves.length + 1 });
     setAnalysisState("loading");
 
     const selectedPreset = preset;
     setAnalysisPreset(selectedPreset);
-    let engine: StockfishClient | null = null;
-    const completed: ReviewedMove[] = [];
+    const engines = createEnginePool();
+    engineRef.current = engines;
+    const ratingOf = (value?: string) => (value && /^\d+$/.test(value) ? Number(value) : undefined);
     try {
-      engine = new StockfishClient();
-      engineRef.current = engine;
-      await engine.initialize();
+      await Promise.all(engines.map((engine) => engine.start()));
       if (runRef.current !== runId) return;
+      setEngineVersion(engines[0].engineVersion);
+      console.info(`[KnightScope] ${REVIEW_MODEL_VERSION} · ${engines[0].engineVersion} · ${engines.length} engine(s)`);
       setAnalysisState("analyzing");
-      for (let index = 0; index < parsed.moves.length; index += 1) {
-        const move = parsed.moves[index];
-        const result = await engine.analyzeMove(move.before, move.uci, ENGINE_PRESETS[selectedPreset].nodes);
-        if (runRef.current !== runId) return;
-        const reviewed = reviewMove(parsed, index, result);
-        completed.push(reviewed);
-        setReviews([...completed]);
-        setProgress({ current: index + 1, total: parsed.moves.length });
-        setCursor(index + 1);
-      }
+      const budget = ENGINE_PRESETS[selectedPreset];
+      const analysis = await runAnalysis(parsed, engines, {
+        primaryNodes: budget.primaryNodes,
+        candidateNodes: budget.candidateNodes,
+        ratings: { w: ratingOf(parsed.headers.WhiteElo), b: ratingOf(parsed.headers.BlackElo) },
+        onProgress: (next) => {
+          if (runRef.current === runId) setProgress(next);
+        },
+        onReviews: (next) => {
+          if (runRef.current === runId) setReviews(next);
+        },
+      });
       if (runRef.current !== runId) return;
-      const interesting = completed.findIndex((move) => move.index >= 8 && !["best", "good"].includes(move.grade));
-      setCursor(interesting >= 0 ? interesting + 1 : Math.min(1, completed.length));
+      console.info("[KnightScope] analysis", analysis.meta);
+      const interesting = analysis.reviews.findIndex(
+        (move) => !["best", "excellent", "good", "book"].includes(move.grade),
+      );
+      setCursor(interesting >= 0 ? interesting + 1 : Math.min(1, analysis.reviews.length));
       setAnalysisState("complete");
     } catch (caught) {
       if (runRef.current !== runId) return;
@@ -456,16 +487,14 @@ export function ChessReviewApp() {
         setAnalysisState("error");
       }
     } finally {
-      if (engine && engineRef.current === engine) {
-        engine.dispose();
-        engineRef.current = null;
-      }
+      engines.forEach((engine) => engine.dispose());
+      if (engineRef.current === engines) engineRef.current = null;
     }
   }, [cancelAnalysis, preset]);
 
   useEffect(() => () => {
     runRef.current += 1;
-    engineRef.current?.dispose();
+    engineRef.current?.forEach((engine) => engine.dispose());
   }, []);
 
   useEffect(() => {
@@ -540,7 +569,7 @@ export function ChessReviewApp() {
           <span><strong>KnightScope</strong><small>GAME REVIEW</small></span>
         </a>
         <div className="topbar-actions">
-          <span className="local-badge"><i /> Stockfish 18 · on-device</span>
+          <span className="local-badge"><i /> Stockfish 19 · on-device</span>
           <label className="engine-select">
             <span>Engine effort</span>
             <select value={preset} onChange={(event) => setPreset(event.target.value as EnginePreset)} disabled={analysisActive}>
@@ -589,12 +618,18 @@ export function ChessReviewApp() {
             <aside className="review-column">
               {analysisActive && (
                 <div className="analysis-progress" role="status" aria-live="polite">
-                  <div><span className="engine-pulse" /><strong>{analysisState === "loading" ? "Loading Stockfish…" : `Reviewing move ${progress.current + 1} of ${progress.total}`}</strong><button onClick={cancelAnalysis}>Cancel</button></div>
-                  <div className="progress-track"><span style={{ width: `${progress.total ? (progress.current / progress.total) * 100 : 2}%` }} /></div>
+                  <div><span className="engine-pulse" /><strong>{analysisState === "loading"
+                    ? "Loading Stockfish 19…"
+                    : progress.phase === "primary"
+                      ? `Evaluating position ${Math.min(progress.done + 1, progress.total)} of ${progress.total}`
+                      : progress.phase === "candidates"
+                        ? `Checking critical moves ${Math.min(progress.done + 1, progress.total)} of ${progress.total}`
+                        : `Verifying standout moves ${Math.min(progress.done + 1, progress.total)} of ${progress.total}`}</strong><button onClick={cancelAnalysis}>Cancel</button></div>
+                  <div className="progress-track"><span style={{ width: `${progressPercent(progress)}%` }} /></div>
                 </div>
               )}
               {analysisState === "cancelled" && (
-                <div className="analysis-message"><span>Review paused at move {progress.current}.</span><button onClick={() => void analyzeGame(game)}>Start again</button></div>
+                <div className="analysis-message"><span>Review cancelled.</span><button onClick={() => void analyzeGame(game)}>Start again</button></div>
               )}
               {analysisState === "error" && (
                 <div className="analysis-message analysis-message--error" role="alert"><span>{error}</span><button onClick={() => void analyzeGame(game)}>Retry</button></div>
@@ -619,8 +654,8 @@ export function ChessReviewApp() {
                 </div>
                 <SummaryPanel game={game} reviews={reviews} white={whiteSummary} black={blackSummary} complete={isComplete} />
                 <footer className="review-footer">
-                  <span>Model KS-1 · {ENGINE_PRESETS[analysisPreset].nodes / 1000}k nodes per search</span>
-                  <a href="https://github.com/nmrugg/stockfish.js" target="_blank" rel="noreferrer">Stockfish 18 · GPL v3</a>
+                  <span title={engineVersion}>Model {REVIEW_MODEL_VERSION} · {ENGINE_PRESETS[analysisPreset].primaryNodes / 1000}k nodes per position</span>
+                  <a href="https://github.com/nmrugg/stockfish.js" target="_blank" rel="noreferrer">Stockfish 19 · GPL v3</a>
                 </footer>
               </div>
             </aside>

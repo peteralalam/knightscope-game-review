@@ -1,0 +1,7 @@
+Stockfish.js 19.0.0 (lite-single WASM build)
+
+Built from official Stockfish 19 (https://github.com/official-stockfish/Stockfish, tag sf_19)
+by the stockfish.js project: https://github.com/nmrugg/stockfish.js/tree/v19.0.0
+npm package: stockfish@19.0.0
+
+License: GNU General Public License v3. See COPYING.txt in this directory.

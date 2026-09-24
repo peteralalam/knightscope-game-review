@@ -35,21 +35,22 @@ test("server-renders the KnightScope PGN review shell", async () => {
   assert.match(html, /KnightScope/);
   assert.match(html, /Review this game/);
   assert.match(html, /PGN notation/);
-  assert.match(html, /Stockfish 18/);
+  assert.match(html, /Stockfish 19/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
 test("ships the same-origin Stockfish lite worker and license", async () => {
-  const engineRoot = new URL("../public/stockfish/18.0.8/", import.meta.url);
+  const engineRoot = new URL("../public/stockfish/19.0.0/", import.meta.url);
   const [worker, wasm, license, packageJson] = await Promise.all([
-    readFile(new URL("stockfish.js", engineRoot), "utf8"),
-    stat(new URL("stockfish.wasm", engineRoot)),
+    readFile(new URL("stockfish-19-lite-single.js", engineRoot), "utf8"),
+    stat(new URL("stockfish-19-lite-single.wasm", engineRoot)),
     readFile(new URL("COPYING.txt", engineRoot), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(worker, /Stockfish\.js 18/);
-  assert.ok(wasm.size > 7_000_000 && wasm.size < 8_000_000);
+  assert.match(worker, /Stockfish\.js 19/);
+  // Well under Cloudflare Workers' 25 MiB per-asset limit.
+  assert.ok(wasm.size > 1_000_000 && wasm.size < 25 * 1024 * 1024);
   assert.match(license, /GNU GENERAL PUBLIC LICENSE/);
   assert.match(packageJson, /"chess\.js"/);
   assert.match(packageJson, /"stockfish"/);
