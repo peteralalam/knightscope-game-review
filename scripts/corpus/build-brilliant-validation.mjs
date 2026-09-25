@@ -3,6 +3,12 @@
 //   node scripts/corpus/build-brilliant-validation.mjs .cache/sources/combined_puzzle_db_first_50k.ndjson \
 //     --out data/brilliant-suite/validation.json
 //
+// Sharded (parallel across cores; scans, then merges with the SAME seeded
+// pick() so the result is identical to the single-process run, just faster):
+//   for i in 0 1 2 3; do node scripts/corpus/build-brilliant-validation.mjs \
+//     .cache/sources/combined_puzzle_db_first_50k.ndjson --shard $i --shards 4 & done; wait
+//   node scripts/corpus/build-brilliant-validation.mjs --merge --out data/brilliant-suite/validation.json
+//
 // Source: mcognetta/lichess-combined-puzzle-game-db, 50k sample (CC0): Lichess
 // puzzles joined with their full games, INCLUDING Lichess's own server analysis
 // (per-ply eval and Inaccuracy / Mistake / Blunder judgments from fishnet).
@@ -119,10 +125,17 @@ function hangingCaptures(puzzles) {
   return out;
 }
 
-/** Walk every analyzed game once and collect real-game negatives. */
-function realGameNegatives(puzzles) {
+/** Walk the given games once and collect real-game negatives. Logs progress. */
+function realGameNegatives(puzzles, label = "") {
   const out = Object.fromEntries(Object.keys(TARGETS).filter((key) => key.endsWith("-real") || key.startsWith("desperation") || key.startsWith("sac-while")).map((key) => [key, []]));
+  const started = Date.now();
+  let done = 0;
   for (const { game } of puzzles) {
+    done += 1;
+    if (done % 2000 === 0) {
+      const rate = (Date.now() - started) / done / 1000;
+      console.error(`[${label}] ${done}/${puzzles.length} games scanned, ${rate.toFixed(3)} s/game, found so far: ${JSON.stringify(Object.fromEntries(Object.entries(out).map(([k, v]) => [k, v.length])))}`);
+    }
     if (!game?.analysis?.length || game.variant !== "standard" || !game.moves) continue;
     const sans = game.moves.split(" ");
     const chess = new Chess();
@@ -195,18 +208,69 @@ function pick(items, count, stratify) {
 }
 
 const file = process.argv[2];
-const puzzles = readFileSync(file, "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
-const positiveStratum = (item) => {
+const shard = argument("shard") !== undefined ? Number(argument("shard")) : null;
+const shards = Number(argument("shards", "1"));
+const merge = process.argv.includes("--merge");
+
+function positiveStratum(item) {
   const themes = new Set(item.themes.split(" "));
   const kind = themes.has("mate") ? "mate" : themes.has("crushing") ? "crushing" : "advantage";
   const rating = item.puzzleRating < 1400 ? "low" : item.puzzleRating < 2000 ? "mid" : "high";
   return `${kind}|${rating}`;
-};
+}
+
+if (shard !== null) {
+  // Shard mode: scan this shard's slice of games, write RAW (unpicked) candidates.
+  const puzzles = readFileSync(file, "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
+  const mine = puzzles.filter((_, index) => index % shards === shard);
+  const shardOut = {
+    positive: positives(mine),
+    "hanging-piece-capture": hangingCaptures(mine),
+    ...realGameNegatives(mine, `shard ${shard}`),
+  };
+  const path = argument("shard-out", `.cache/corpus/brilliant-val-scan.${shard}.json`);
+  writeFileSync(path, JSON.stringify(shardOut));
+  console.log(`[shard ${shard}] wrote ${path}: ${Object.fromEntries(Object.entries(shardOut).map(([k, v]) => [k, v.length]))}`);
+  process.exit(0);
+}
+
+if (merge) {
+  // Merge mode: combine every shard's raw candidates, then apply the same
+  // seeded pick() as the single-process path (identical result, just parallel).
+  const pattern = argument("shard-glob", ".cache/corpus/brilliant-val-scan.*.json");
+  const { readdirSync } = await import("node:fs");
+  const { dirname, basename, join } = await import("node:path");
+  const directory = dirname(pattern);
+  const regex = new RegExp(`^${basename(pattern).replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`);
+  const files = readdirSync(directory).filter((name) => regex.test(name)).sort().map((name) => join(directory, name));
+  if (!files.length) throw new Error(`no shard files matched ${pattern}`);
+  const merged = {};
+  for (const path of files) {
+    const shardOut = JSON.parse(readFileSync(path, "utf8"));
+    for (const [key, items] of Object.entries(shardOut)) (merged[key] ??= []).push(...items);
+  }
+  const cases = [
+    ...pick(merged.positive, TARGETS.positive, positiveStratum),
+    ...pick(merged["hanging-piece-capture"], TARGETS["hanging-piece-capture"]),
+  ];
+  for (const category of Object.keys(TARGETS)) {
+    if (category === "positive" || category === "hanging-piece-capture") continue;
+    cases.push(...pick(merged[category] ?? [], TARGETS[category]));
+  }
+  const counts = {};
+  for (const item of cases) counts[item.category] = (counts[item.category] ?? 0) + 1;
+  writeFileSync(argument("out", "data/brilliant-suite/validation.json"), `${JSON.stringify({ seed: SEED, source: "mcognetta/lichess-combined-puzzle-game-db first-50k sample (CC0)", counts, cases }, null, 1)}\n`);
+  console.log(counts);
+  process.exit(0);
+}
+
+// Single-process fallback (small inputs, or explicit non-sharded run).
+const puzzles = readFileSync(file, "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
 const cases = [
   ...pick(positives(puzzles), TARGETS.positive, positiveStratum),
   ...pick(hangingCaptures(puzzles), TARGETS["hanging-piece-capture"]),
 ];
-for (const [category, items] of Object.entries(realGameNegatives(puzzles))) cases.push(...pick(items, TARGETS[category]));
+for (const [category, items] of Object.entries(realGameNegatives(puzzles, "single"))) cases.push(...pick(items, TARGETS[category]));
 const counts = {};
 for (const item of cases) counts[item.category] = (counts[item.category] ?? 0) + 1;
 writeFileSync(argument("out", "data/brilliant-suite/validation.json"), `${JSON.stringify({ seed: SEED, source: "mcognetta/lichess-combined-puzzle-game-db first-50k sample (CC0)", counts, cases }, null, 1)}\n`);
