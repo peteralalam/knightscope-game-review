@@ -7,7 +7,7 @@ KnightScope is a private, browser-based chess game review. Paste or upload a PGN
 - label moves as Brilliant, Great, Best, Excellent, Good, Book, Inaccuracy, Mistake, Miss, or Blunder, with a factual reason;
 - show the engine's preferred move and principal variation;
 - calculate per-side accuracy (overall and by game phase); and
-- estimate a **Lichess-equivalent game performance** with an 80% range calibrated on held-out rated games.
+- report an **estimated Lichess-equivalent playing level, based on this game only**, with an approximate range calibrated on held-out rated games.
 
 **Privacy: chess analysis runs locally in your browser; game data is not uploaded.** Precisely: no PGN, move, FEN,
 engine line, classification, accuracy, rating estimate or anything else derived from a game leaves the device. The page
@@ -287,11 +287,21 @@ If the move also dropped below the baseline, it stays a Mistake/Blunder, and the
 
 Accuracy measures engine precision. It is not presented as, or converted to, Elo.
 
-### Lichess-equivalent game performance
+### Estimated Lichess-equivalent playing level (based on this game only)
 
 The estimate answers: *which Lichess rating's typical games look like this one?* It is calibrated on real rated
 Lichess games, so it is a **Lichess blitz / rapid** number. It is not Chess.com, FIDE, or anyone's account rating.
 It does not map accuracy to Elo.
+
+**What the model is actually trained on, and why that matters.** The supervised target is a player's long-term Lichess
+rating at the time of the game; the input is one game's worth of decisions. The model therefore does not observe a
+player's hypothetical "true performance Elo" for that individual game – it only ever sees (one game's features, that
+player's long-term rating) pairs. One game is a genuinely noisy sample of how someone plays: the same player can
+produce meaningfully different single-game estimates from one game to the next, purely from normal game-to-game
+variation in decision quality, opponent, opening, and how sharp the position got. That variance is real, not a model
+defect, and is quantified directly (not inferred) by comparing repeated estimates for the same player across their
+sampled games – see "single-game noise" in `docs/validation-report.md`. Because of this label noise, the number is
+reported as an *estimated* level "based on this game only", never as a measurement of the player's actual rating.
 
 **Model.** A ridge regression, one per time control (blitz, rapid), from 19 interpretable per-game features
 (`lib/rating-model.ts`, `RATING_FEATURES`):

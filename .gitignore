@@ -48,3 +48,5 @@ next-env.d.ts
 # Large engine files uploaded to R2 (scripts/vendor-stockfish.mjs)
 .engine-assets/
 tsconfig.tsbuildinfo
+__pycache__/
+*.pyc

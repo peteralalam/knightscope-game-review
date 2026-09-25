@@ -171,6 +171,13 @@ if (summary && bench?.timeControls?.blitz?.cv) {
       out("Test MAE (bias) by true rating band:");
       out();
       table(["Band", "n", ...models], Object.keys(report.testByTrueBand.shipped).map((band) => [band, String(report.testByTrueBand.shipped[band].n), ...models.map((model) => { const v = report.testByTrueBand[model][band]; return v ? `${v.mae} (${v.bias > 0 ? "+" : ""}${v.bias})` : ""; })]));
+      if (report.testByDecisions) {
+        out("Test MAE (bias) by meaningful-decision count:");
+        out();
+        const decModels = Object.keys(report.testByDecisions);
+        const decKeys = Object.keys(report.testByDecisions.shipped ?? {});
+        table(["Decisions", "n", ...decModels], decKeys.map((key) => [key, String(report.testByDecisions.shipped[key].n), ...decModels.map((model) => { const v = report.testByDecisions[model][key]; return v ? `${v.mae} (${v.bias > 0 ? "+" : ""}${v.bias})` : ""; })]));
+      }
     }
     out("Why the extremes are biased (out-of-fold, chosen model): bias by true band × meaningful decisions. If more decisions shrink the bias, the cause is missing information in one game rather than model form.");
     out();
@@ -209,6 +216,12 @@ if (outcome) {
     out(`Test: chosen ${JSON.stringify(outcome.test.chosen)}, baseline ${JSON.stringify(outcome.test.baseline)}.`);
     out();
   }
+  if (outcome.representativeCurves) {
+    out("Expected score at representative evaluations (chosen model vs the fixed baseline curve):");
+    out();
+    const rcps = Object.keys(outcome.representativeCurves.baseline);
+    table(["tc | band", ...rcps.map((cp) => (Number(cp) >= 0 ? `+${cp}` : cp))], Object.entries(outcome.representativeCurves).map(([key, v]) => [key, ...rcps.map((cp) => String(v[cp]))]));
+  }
   out("Expected score at fixed cp by rating band (chosen model):");
   out();
   const cps = Object.keys(outcome.curves.baseline);
@@ -221,12 +234,29 @@ const regrade = read(`${CORPUS}/regrade.json`);
 if (regrade) {
   out("### Would the rating-conditioned curve change displayed grades? (test players)");
   out();
+  out("Not enabled automatically; shown as evidence. \"true\" grades at the player's real rating (oracle); \"est\" grades at this session's single-game estimate (what the app could actually do, step 2 → step 3, no feedback).");
+  out();
+  const byBand = regrade.byBand ?? regrade.bands;
+  out("By rating band:");
+  out();
   table(["Band", "Moves", "Blunder base → true / est", "Mistake base → true / est", "Inaccuracy base → true / est", "Grades changed (true / est)"],
-    Object.entries(regrade.bands).map(([band, v]) => [band, String(v.moves),
+    Object.entries(byBand).map(([band, v]) => [band, String(v.moves),
       `${v.baseline.blunder} → ${v.ratedAtTrueRating.blunder} / ${v.ratedAtEstimate.blunder}`,
       `${v.baseline.mistake} → ${v.ratedAtTrueRating.mistake} / ${v.ratedAtEstimate.mistake}`,
       `${v.baseline.inaccuracy} → ${v.ratedAtTrueRating.inaccuracy} / ${v.ratedAtEstimate.inaccuracy}`,
       `${Math.round(v.changedShare.trueRating * 100)}% / ${Math.round(v.changedShare.estimate * 100)}%`]));
+  if (regrade.byTimeControl) {
+    out("By time control:");
+    out();
+    table(["Time control", "Moves", "Grades changed (true / est)"],
+      Object.entries(regrade.byTimeControl).map(([tc, v]) => [tc, String(v.moves), `${Math.round(v.changedShare.trueRating * 100)}% / ${Math.round(v.changedShare.estimate * 100)}%`]));
+  }
+  if (regrade.byCurrentGrade) {
+    out("By CURRENT (baseline) classification — how often does a move shown as each grade today change under the rating-conditioned curve:");
+    out();
+    table(["Current grade", "Moves", "Grades changed (true / est)"],
+      Object.entries(regrade.byCurrentGrade).map(([grade, v]) => [LABEL[grade] ?? grade, String(v.moves), `${Math.round(v.changedShare.trueRating * 100)}% / ${Math.round(v.changedShare.estimate * 100)}%`]));
+  }
 }
 const scale = read("data/golden/engine-scale.json");
 if (scale) {
@@ -239,35 +269,39 @@ if (scale) {
 // Brilliant validation.
 const brilliantVal = read("data/brilliant-suite/validation-report.json");
 if (brilliantVal) {
-  out("## 8. Brilliant validation (expanded)");
+  out("## 8. Brilliant validation");
   out();
-  const a = brilliantVal.all;
-  out(`Labels come from Lichess's puzzle generator (positives) and Lichess's own game analysis / the actual game (negatives), never from KnightScope's rule. ${a.positives} positives, ${a.negatives} negatives.`);
+  out("Reported separately per the validation protocol: the automatically constructed corpus (labels from Lichess's puzzle generator and Lichess's own game analysis / the actual game, never from KnightScope's rule) and a smaller, hand-audited gold subset (individually selected/constructed positions, including borderline sacrifices scored qualitatively rather than pass/fail). The Brilliant algorithm itself was not modified in response to this validation pass.");
   out();
-  table(["Metric", "Value", "95% CI (Wilson)"], [
-    ["Precision", String(a.precision), JSON.stringify(a.precisionCI95)],
-    ["Recall", String(a.recall), JSON.stringify(a.recallCI95)],
-    ["False-positive rate", String(a.falsePositiveRate), JSON.stringify(a.falsePositiveRateCI95)],
-  ]);
-  table(["Category", "Label", "Brilliant / n", "Grades"], Object.entries(a.byCategory).map(([category, v]) => [category, v.label, `${v.brilliant}/${v.n}`, Object.entries(v.grades).map(([g, n]) => `${g} ${n}`).join(", ")]));
-  out("Why positives were not Brilliant:");
-  out();
-  table(["Decision", "Count"], Object.entries(a.positiveRejections).sort((x, y) => y[1] - x[1]).map(([k, v]) => [k, String(v)]));
-  if (a.falsePositiveCases.length) {
-    out("False positives:");
+  const writeMetrics = (title, r) => {
+    out(`### ${title}`);
     out();
-    table(["Case", "Move", "Source"], a.falsePositiveCases.map((c) => [c.id, c.move, c.source ?? ""]));
-  }
-}
-
-// 8. Engine.
-const liteFull = read("data/golden/lite-vs-full.json");
-if (liteFull) {
-  out("## 9. Lite vs Full engine");
-  out();
-  out(liteFull.note);
-  out();
-  table(["", "Lite", "Full"], liteFull.rows);
+    out(`${r.positives} positives, ${r.negatives} negatives${r.ambiguousCases?.length ? `, ${r.ambiguousCases.length} ambiguous (unscored)` : ""}.`);
+    out();
+    table(["Metric", "Value", "95% CI (Wilson)"], [
+      ["Precision", String(r.precision), JSON.stringify(r.precisionCI95)],
+      ["Recall", String(r.recall), JSON.stringify(r.recallCI95)],
+      ["False-positive rate", String(r.falsePositiveRate), JSON.stringify(r.falsePositiveRateCI95)],
+    ]);
+    table(["Category", "Label", "Brilliant / n", "Grades"], Object.entries(r.byCategory).map(([category, v]) => [category, v.label, `${v.brilliant}/${v.n}`, Object.entries(v.grades).map(([g, n]) => `${g} ${n}`).join(", ")]));
+    if (Object.keys(r.positiveRejections).length) {
+      out("Why positives were not Brilliant:");
+      out();
+      table(["Decision", "Count"], Object.entries(r.positiveRejections).sort((x, y) => y[1] - x[1]).map(([k, v]) => [k, String(v)]));
+    }
+    if (r.falsePositiveCases.length) {
+      out("False positives:");
+      out();
+      table(["Case", "Move", "Source"], r.falsePositiveCases.map((c) => [c.id, c.move, c.source ?? ""]));
+    }
+    if (r.ambiguousCases?.length) {
+      out("Ambiguous / borderline cases (not scored; shown for qualitative review):");
+      out();
+      table(["Case", "Move", "Grade", "Reason"], r.ambiguousCases.map((c) => [c.id, c.move, c.grade, (c.reason ?? "").toString().slice(0, 120)]));
+    }
+  };
+  writeMetrics("Automatically constructed validation corpus", brilliantVal.automaticOnly);
+  writeMetrics("Human-audited gold subset", brilliantVal.goldSubset);
 }
 
 writeFileSync("docs/validation-report.md", lines.join("\n"));

@@ -1,12 +1,25 @@
 /**
- * Single-game performance estimation.
+ * Single-game playing-level estimation.
+ *
+ * WHAT THIS ACTUALLY ESTIMATES: the supervised target is a player's long-term
+ * Lichess rating at the time of the game, but the input is one game's worth of
+ * decisions. The output is therefore an "estimated Lichess-equivalent playing
+ * level, based on this game only" – the rating whose typical games look like
+ * this one – NOT a direct read of that individual game's hypothetical
+ * performance Elo, and NOT a claim about the player's actual account rating.
+ * A single game is a genuinely noisy sample of how someone plays (see
+ * "single-game noise" / within-player game-to-game variance in
+ * docs/validation-report.md): the long-term rating label used for training
+ * carries real label noise relative to any one game, which is part of why the
+ * estimate has an irreducible error floor no amount of feature engineering
+ * removes.
  *
  * Default path (when REGRESSION_MODELS has parameters for the time control):
  * a ridge regression on interpretable, rating-independent per-game features,
  * calibrated on rated Lichess games with player-disjoint splits, and an
- * approximate range from Mondrian split-conformal out-of-fold residuals. The output is a *Lichess-equivalent* blitz / rapid
- * game performance – see scripts/corpus/rating_benchmark.py and
- * docs/validation-report.md for how it was fitted and how well it generalizes.
+ * approximate range from Mondrian split-conformal out-of-fold residuals. See
+ * scripts/corpus/rating_benchmark.py and docs/validation-report.md for how it
+ * was fitted and how well it generalizes.
  *
  * Fallback / research path: an ordered-logit "engine error model",
  * P(error category | rating R, position difficulty, time control), summed over a

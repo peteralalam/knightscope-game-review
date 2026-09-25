@@ -1,0 +1,818 @@
+{
+ "model": "rating",
+ "split": "test",
+ "byBand": {
+  "800–999": {
+   "moves": 355,
+   "baseline": {
+    "best": 439.4,
+    "excellent": 76.1,
+    "good": 115.5,
+    "inaccuracy": 166.2,
+    "mistake": 98.6,
+    "blunder": 104.2
+   },
+   "ratedAtTrueRating": {
+    "best": 408.5,
+    "excellent": 143.7,
+    "good": 177.5,
+    "inaccuracy": 140.8,
+    "mistake": 84.5,
+    "blunder": 45.1
+   },
+   "ratedAtEstimate": {
+    "best": 408.5,
+    "excellent": 152.1,
+    "good": 180.3,
+    "inaccuracy": 135.2,
+    "mistake": 78.9,
+    "blunder": 45.1
+   },
+   "changedShare": {
+    "trueRating": 0.451,
+    "estimate": 0.456
+   }
+  },
+  "1000–1199": {
+   "moves": 803,
+   "baseline": {
+    "best": 413.4,
+    "excellent": 142,
+    "good": 134.5,
+    "inaccuracy": 154.4,
+    "mistake": 82.2,
+    "blunder": 73.5
+   },
+   "ratedAtTrueRating": {
+    "best": 417.2,
+    "excellent": 203,
+    "good": 198,
+    "inaccuracy": 93.4,
+    "mistake": 61,
+    "blunder": 27.4
+   },
+   "ratedAtEstimate": {
+    "best": 417.2,
+    "excellent": 206.7,
+    "good": 198,
+    "inaccuracy": 89.7,
+    "mistake": 61,
+    "blunder": 27.4
+   },
+   "changedShare": {
+    "trueRating": 0.415,
+    "estimate": 0.412
+   }
+  },
+  "1200–1399": {
+   "moves": 934,
+   "baseline": {
+    "best": 410.1,
+    "excellent": 127.4,
+    "good": 172.4,
+    "inaccuracy": 145.6,
+    "mistake": 78.2,
+    "blunder": 66.4
+   },
+   "ratedAtTrueRating": {
+    "best": 418.6,
+    "excellent": 203.4,
+    "good": 205.6,
+    "inaccuracy": 92.1,
+    "mistake": 49.3,
+    "blunder": 31
+   },
+   "ratedAtEstimate": {
+    "best": 418.6,
+    "excellent": 208.8,
+    "good": 201.3,
+    "inaccuracy": 92.1,
+    "mistake": 49.3,
+    "blunder": 30
+   },
+   "changedShare": {
+    "trueRating": 0.408,
+    "estimate": 0.412
+   }
+  },
+  "1400–1599": {
+   "moves": 3446,
+   "baseline": {
+    "best": 491,
+    "excellent": 121.9,
+    "good": 150,
+    "inaccuracy": 114,
+    "mistake": 67.3,
+    "blunder": 55.7
+   },
+   "ratedAtTrueRating": {
+    "best": 569.1,
+    "excellent": 236.8,
+    "good": 119,
+    "inaccuracy": 52.5,
+    "mistake": 18.3,
+    "blunder": 4.4
+   },
+   "ratedAtEstimate": {
+    "best": 560.1,
+    "excellent": 237.4,
+    "good": 124.2,
+    "inaccuracy": 54.3,
+    "mistake": 18.9,
+    "blunder": 5.2
+   },
+   "changedShare": {
+    "trueRating": 0.423,
+    "estimate": 0.418
+   }
+  },
+  "1600–1799": {
+   "moves": 4356,
+   "baseline": {
+    "best": 498.4,
+    "excellent": 117.8,
+    "good": 148.1,
+    "inaccuracy": 115.9,
+    "mistake": 60.6,
+    "blunder": 59.2
+   },
+   "ratedAtTrueRating": {
+    "best": 573.5,
+    "excellent": 216.7,
+    "good": 125.1,
+    "inaccuracy": 50.5,
+    "mistake": 28.2,
+    "blunder": 6
+   },
+   "ratedAtEstimate": {
+    "best": 566.1,
+    "excellent": 218.5,
+    "good": 127.6,
+    "inaccuracy": 51.7,
+    "mistake": 29.6,
+    "blunder": 6.4
+   },
+   "changedShare": {
+    "trueRating": 0.408,
+    "estimate": 0.406
+   }
+  },
+  "1800–1999": {
+   "moves": 4432,
+   "baseline": {
+    "best": 537.5,
+    "excellent": 114.6,
+    "good": 144.2,
+    "inaccuracy": 106.3,
+    "mistake": 51.2,
+    "blunder": 46.3
+   },
+   "ratedAtTrueRating": {
+    "best": 606.7,
+    "excellent": 220.9,
+    "good": 100,
+    "inaccuracy": 43.3,
+    "mistake": 22.3,
+    "blunder": 6.8
+   },
+   "ratedAtEstimate": {
+    "best": 603.8,
+    "excellent": 221.1,
+    "good": 102.4,
+    "inaccuracy": 43.5,
+    "mistake": 22.1,
+    "blunder": 7
+   },
+   "changedShare": {
+    "trueRating": 0.381,
+    "estimate": 0.38
+   }
+  },
+  "2000–2199": {
+   "moves": 3591,
+   "baseline": {
+    "best": 548.3,
+    "excellent": 104.7,
+    "good": 145.4,
+    "inaccuracy": 103.6,
+    "mistake": 57.6,
+    "blunder": 40.4
+   },
+   "ratedAtTrueRating": {
+    "best": 604.8,
+    "excellent": 222.2,
+    "good": 106.7,
+    "inaccuracy": 41.2,
+    "mistake": 18.1,
+    "blunder": 7
+   },
+   "ratedAtEstimate": {
+    "best": 608.2,
+    "excellent": 223.1,
+    "good": 103.6,
+    "inaccuracy": 41.2,
+    "mistake": 17.5,
+    "blunder": 6.4
+   },
+   "changedShare": {
+    "trueRating": 0.376,
+    "estimate": 0.378
+   }
+  },
+  "2200–2399": {
+   "moves": 4722,
+   "baseline": {
+    "best": 571.8,
+    "excellent": 101.4,
+    "good": 142.3,
+    "inaccuracy": 96.4,
+    "mistake": 50.4,
+    "blunder": 37.7
+   },
+   "ratedAtTrueRating": {
+    "best": 633,
+    "excellent": 210.3,
+    "good": 94.9,
+    "inaccuracy": 39.8,
+    "mistake": 18.2,
+    "blunder": 3.8
+   },
+   "ratedAtEstimate": {
+    "best": 646.3,
+    "excellent": 213.3,
+    "good": 87.9,
+    "inaccuracy": 33.9,
+    "mistake": 15.2,
+    "blunder": 3.4
+   },
+   "changedShare": {
+    "trueRating": 0.367,
+    "estimate": 0.375
+   }
+  },
+  "2400+": {
+   "moves": 3495,
+   "baseline": {
+    "best": 602.3,
+    "excellent": 113,
+    "good": 128.2,
+    "inaccuracy": 77.5,
+    "mistake": 44.1,
+    "blunder": 34.9
+   },
+   "ratedAtTrueRating": {
+    "best": 659.5,
+    "excellent": 188.8,
+    "good": 89.8,
+    "inaccuracy": 37.5,
+    "mistake": 20,
+    "blunder": 4.3
+   },
+   "ratedAtEstimate": {
+    "best": 687.8,
+    "excellent": 184.8,
+    "good": 78.4,
+    "inaccuracy": 32.6,
+    "mistake": 13.2,
+    "blunder": 3.1
+   },
+   "changedShare": {
+    "trueRating": 0.33,
+    "estimate": 0.354
+   }
+  }
+ },
+ "byTimeControl": {
+  "blitz": {
+   "moves": 12039,
+   "baseline": {
+    "best": 538.3,
+    "excellent": 110.9,
+    "good": 147.2,
+    "inaccuracy": 100.2,
+    "mistake": 55.5,
+    "blunder": 48
+   },
+   "ratedAtTrueRating": {
+    "best": 647.8,
+    "excellent": 239.1,
+    "good": 73,
+    "inaccuracy": 29.1,
+    "mistake": 10.3,
+    "blunder": 0.7
+   },
+   "ratedAtEstimate": {
+    "best": 655.2,
+    "excellent": 239.4,
+    "good": 69.9,
+    "inaccuracy": 27.1,
+    "mistake": 8,
+    "blunder": 0.4
+   },
+   "changedShare": {
+    "trueRating": 0.43,
+    "estimate": 0.437
+   }
+  },
+  "rapid": {
+   "moves": 14095,
+   "baseline": {
+    "best": 525.7,
+    "excellent": 114.7,
+    "good": 140.5,
+    "inaccuracy": 112.1,
+    "mistake": 58.7,
+    "blunder": 48.2
+   },
+   "ratedAtTrueRating": {
+    "best": 545.3,
+    "excellent": 192.6,
+    "good": 147.4,
+    "inaccuracy": 65.3,
+    "mistake": 36,
+    "blunder": 13.3
+   },
+   "ratedAtEstimate": {
+    "best": 545.9,
+    "excellent": 194.2,
+    "good": 146.7,
+    "inaccuracy": 64.3,
+    "mistake": 35.5,
+    "blunder": 13.3
+   },
+   "changedShare": {
+    "trueRating": 0.344,
+    "estimate": 0.346
+   }
+  }
+ },
+ "byCurrentGrade": {
+  "best": {
+   "moves": 13526,
+   "baseline": {
+    "best": 994.8,
+    "excellent": 5.2,
+    "good": 0,
+    "inaccuracy": 0,
+    "mistake": 0,
+    "blunder": 0
+   },
+   "ratedAtTrueRating": {
+    "best": 993.6,
+    "excellent": 5.5,
+    "good": 0.8,
+    "inaccuracy": 0,
+    "mistake": 0,
+    "blunder": 0
+   },
+   "ratedAtEstimate": {
+    "best": 993.6,
+    "excellent": 5.5,
+    "good": 0.9,
+    "inaccuracy": 0,
+    "mistake": 0,
+    "blunder": 0
+   },
+   "changedShare": {
+    "trueRating": 0.01,
+    "estimate": 0.01
+   }
+  },
+  "excellent": {
+   "moves": 3491,
+   "baseline": {
+    "best": 117.7,
+    "excellent": 777.1,
+    "good": 105.1,
+    "inaccuracy": 0,
+    "mistake": 0,
+    "blunder": 0
+   },
+   "ratedAtTrueRating": {
+    "best": 495.6,
+    "excellent": 456.9,
+    "good": 38.7,
+    "inaccuracy": 7.4,
+    "mistake": 1.4,
+    "blunder": 0
+   },
+   "ratedAtEstimate": {
+    "best": 512.7,
+    "excellent": 440.8,
+    "good": 37.2,
+    "inaccuracy": 7.7,
+    "mistake": 1.4,
+    "blunder": 0
+   },
+   "changedShare": {
+    "trueRating": 0.5,
+    "estimate": 0.517
+   }
+  },
+  "good": {
+   "moves": 3680,
+   "baseline": {
+    "best": 5.7,
+    "excellent": 44,
+    "good": 898.4,
+    "inaccuracy": 51.9,
+    "mistake": 0,
+    "blunder": 0
+   },
+   "ratedAtTrueRating": {
+    "best": 84,
+    "excellent": 745.1,
+    "good": 144,
+    "inaccuracy": 23.1,
+    "mistake": 3.8,
+    "blunder": 0
+   },
+   "ratedAtEstimate": {
+    "best": 94.3,
+    "excellent": 742.9,
+    "good": 135.9,
+    "inaccuracy": 23.1,
+    "mistake": 3.8,
+    "blunder": 0
+   },
+   "changedShare": {
+    "trueRating": 0.854,
+    "estimate": 0.861
+   }
+  },
+  "inaccuracy": {
+   "moves": 2728,
+   "baseline": {
+    "best": 1.1,
+    "excellent": 1.8,
+    "good": 29.3,
+    "inaccuracy": 941.7,
+    "mistake": 26,
+    "blunder": 0
+   },
+   "ratedAtTrueRating": {
+    "best": 2.2,
+    "excellent": 369.1,
+    "good": 548,
+    "inaccuracy": 63,
+    "mistake": 16.5,
+    "blunder": 1.1
+   },
+   "ratedAtEstimate": {
+    "best": 2.2,
+    "excellent": 401,
+    "good": 518.7,
+    "inaccuracy": 61.2,
+    "mistake": 15.8,
+    "blunder": 1.1
+   },
+   "changedShare": {
+    "trueRating": 0.931,
+    "estimate": 0.934
+   }
+  },
+  "mistake": {
+   "moves": 1462,
+   "baseline": {
+    "best": 0,
+    "excellent": 0,
+    "good": 0,
+    "inaccuracy": 17.8,
+    "mistake": 970.6,
+    "blunder": 11.6
+   },
+   "ratedAtTrueRating": {
+    "best": 0,
+    "excellent": 119,
+    "good": 422,
+    "inaccuracy": 418.6,
+    "mistake": 34.9,
+    "blunder": 5.5
+   },
+   "ratedAtEstimate": {
+    "best": 0,
+    "excellent": 121.8,
+    "good": 450.1,
+    "inaccuracy": 390.6,
+    "mistake": 32.1,
+    "blunder": 5.5
+   },
+   "changedShare": {
+    "trueRating": 0.965,
+    "estimate": 0.968
+   }
+  },
+  "blunder": {
+   "moves": 1247,
+   "baseline": {
+    "best": 0,
+    "excellent": 0,
+    "good": 0,
+    "inaccuracy": 0,
+    "mistake": 4.8,
+    "blunder": 995.2
+   },
+   "ratedAtTrueRating": {
+    "best": 0,
+    "excellent": 0.8,
+    "good": 135.5,
+    "inaccuracy": 301.5,
+    "mistake": 413.8,
+    "blunder": 148.4
+   },
+   "ratedAtEstimate": {
+    "best": 0,
+    "excellent": 0,
+    "good": 156.4,
+    "inaccuracy": 307.1,
+    "mistake": 390.5,
+    "blunder": 146
+   },
+   "changedShare": {
+    "trueRating": 0.85,
+    "estimate": 0.852
+   }
+  }
+ },
+ "bands": {
+  "800–999": {
+   "moves": 355,
+   "baseline": {
+    "best": 439.4,
+    "excellent": 76.1,
+    "good": 115.5,
+    "inaccuracy": 166.2,
+    "mistake": 98.6,
+    "blunder": 104.2
+   },
+   "ratedAtTrueRating": {
+    "best": 408.5,
+    "excellent": 143.7,
+    "good": 177.5,
+    "inaccuracy": 140.8,
+    "mistake": 84.5,
+    "blunder": 45.1
+   },
+   "ratedAtEstimate": {
+    "best": 408.5,
+    "excellent": 152.1,
+    "good": 180.3,
+    "inaccuracy": 135.2,
+    "mistake": 78.9,
+    "blunder": 45.1
+   },
+   "changedShare": {
+    "trueRating": 0.451,
+    "estimate": 0.456
+   }
+  },
+  "1000–1199": {
+   "moves": 803,
+   "baseline": {
+    "best": 413.4,
+    "excellent": 142,
+    "good": 134.5,
+    "inaccuracy": 154.4,
+    "mistake": 82.2,
+    "blunder": 73.5
+   },
+   "ratedAtTrueRating": {
+    "best": 417.2,
+    "excellent": 203,
+    "good": 198,
+    "inaccuracy": 93.4,
+    "mistake": 61,
+    "blunder": 27.4
+   },
+   "ratedAtEstimate": {
+    "best": 417.2,
+    "excellent": 206.7,
+    "good": 198,
+    "inaccuracy": 89.7,
+    "mistake": 61,
+    "blunder": 27.4
+   },
+   "changedShare": {
+    "trueRating": 0.415,
+    "estimate": 0.412
+   }
+  },
+  "1200–1399": {
+   "moves": 934,
+   "baseline": {
+    "best": 410.1,
+    "excellent": 127.4,
+    "good": 172.4,
+    "inaccuracy": 145.6,
+    "mistake": 78.2,
+    "blunder": 66.4
+   },
+   "ratedAtTrueRating": {
+    "best": 418.6,
+    "excellent": 203.4,
+    "good": 205.6,
+    "inaccuracy": 92.1,
+    "mistake": 49.3,
+    "blunder": 31
+   },
+   "ratedAtEstimate": {
+    "best": 418.6,
+    "excellent": 208.8,
+    "good": 201.3,
+    "inaccuracy": 92.1,
+    "mistake": 49.3,
+    "blunder": 30
+   },
+   "changedShare": {
+    "trueRating": 0.408,
+    "estimate": 0.412
+   }
+  },
+  "1400–1599": {
+   "moves": 3446,
+   "baseline": {
+    "best": 491,
+    "excellent": 121.9,
+    "good": 150,
+    "inaccuracy": 114,
+    "mistake": 67.3,
+    "blunder": 55.7
+   },
+   "ratedAtTrueRating": {
+    "best": 569.1,
+    "excellent": 236.8,
+    "good": 119,
+    "inaccuracy": 52.5,
+    "mistake": 18.3,
+    "blunder": 4.4
+   },
+   "ratedAtEstimate": {
+    "best": 560.1,
+    "excellent": 237.4,
+    "good": 124.2,
+    "inaccuracy": 54.3,
+    "mistake": 18.9,
+    "blunder": 5.2
+   },
+   "changedShare": {
+    "trueRating": 0.423,
+    "estimate": 0.418
+   }
+  },
+  "1600–1799": {
+   "moves": 4356,
+   "baseline": {
+    "best": 498.4,
+    "excellent": 117.8,
+    "good": 148.1,
+    "inaccuracy": 115.9,
+    "mistake": 60.6,
+    "blunder": 59.2
+   },
+   "ratedAtTrueRating": {
+    "best": 573.5,
+    "excellent": 216.7,
+    "good": 125.1,
+    "inaccuracy": 50.5,
+    "mistake": 28.2,
+    "blunder": 6
+   },
+   "ratedAtEstimate": {
+    "best": 566.1,
+    "excellent": 218.5,
+    "good": 127.6,
+    "inaccuracy": 51.7,
+    "mistake": 29.6,
+    "blunder": 6.4
+   },
+   "changedShare": {
+    "trueRating": 0.408,
+    "estimate": 0.406
+   }
+  },
+  "1800–1999": {
+   "moves": 4432,
+   "baseline": {
+    "best": 537.5,
+    "excellent": 114.6,
+    "good": 144.2,
+    "inaccuracy": 106.3,
+    "mistake": 51.2,
+    "blunder": 46.3
+   },
+   "ratedAtTrueRating": {
+    "best": 606.7,
+    "excellent": 220.9,
+    "good": 100,
+    "inaccuracy": 43.3,
+    "mistake": 22.3,
+    "blunder": 6.8
+   },
+   "ratedAtEstimate": {
+    "best": 603.8,
+    "excellent": 221.1,
+    "good": 102.4,
+    "inaccuracy": 43.5,
+    "mistake": 22.1,
+    "blunder": 7
+   },
+   "changedShare": {
+    "trueRating": 0.381,
+    "estimate": 0.38
+   }
+  },
+  "2000–2199": {
+   "moves": 3591,
+   "baseline": {
+    "best": 548.3,
+    "excellent": 104.7,
+    "good": 145.4,
+    "inaccuracy": 103.6,
+    "mistake": 57.6,
+    "blunder": 40.4
+   },
+   "ratedAtTrueRating": {
+    "best": 604.8,
+    "excellent": 222.2,
+    "good": 106.7,
+    "inaccuracy": 41.2,
+    "mistake": 18.1,
+    "blunder": 7
+   },
+   "ratedAtEstimate": {
+    "best": 608.2,
+    "excellent": 223.1,
+    "good": 103.6,
+    "inaccuracy": 41.2,
+    "mistake": 17.5,
+    "blunder": 6.4
+   },
+   "changedShare": {
+    "trueRating": 0.376,
+    "estimate": 0.378
+   }
+  },
+  "2200–2399": {
+   "moves": 4722,
+   "baseline": {
+    "best": 571.8,
+    "excellent": 101.4,
+    "good": 142.3,
+    "inaccuracy": 96.4,
+    "mistake": 50.4,
+    "blunder": 37.7
+   },
+   "ratedAtTrueRating": {
+    "best": 633,
+    "excellent": 210.3,
+    "good": 94.9,
+    "inaccuracy": 39.8,
+    "mistake": 18.2,
+    "blunder": 3.8
+   },
+   "ratedAtEstimate": {
+    "best": 646.3,
+    "excellent": 213.3,
+    "good": 87.9,
+    "inaccuracy": 33.9,
+    "mistake": 15.2,
+    "blunder": 3.4
+   },
+   "changedShare": {
+    "trueRating": 0.367,
+    "estimate": 0.375
+   }
+  },
+  "2400+": {
+   "moves": 3495,
+   "baseline": {
+    "best": 602.3,
+    "excellent": 113,
+    "good": 128.2,
+    "inaccuracy": 77.5,
+    "mistake": 44.1,
+    "blunder": 34.9
+   },
+   "ratedAtTrueRating": {
+    "best": 659.5,
+    "excellent": 188.8,
+    "good": 89.8,
+    "inaccuracy": 37.5,
+    "mistake": 20,
+    "blunder": 4.3
+   },
+   "ratedAtEstimate": {
+    "best": 687.8,
+    "excellent": 184.8,
+    "good": 78.4,
+    "inaccuracy": 32.6,
+    "mistake": 13.2,
+    "blunder": 3.1
+   },
+   "changedShare": {
+    "trueRating": 0.33,
+    "estimate": 0.354
+   }
+  }
+ }
+}

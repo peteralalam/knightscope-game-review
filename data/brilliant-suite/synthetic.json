@@ -2,17 +2,25 @@
   {
     "id": "sac-while-winning/opera-extra-queen",
     "category": "sac-while-winning",
-    "note": "Opera Game before 16.Qb8+ with an extra White queen on h1: the queen sacrifice still mates in 2, but quiet moves already win (Rxd7 ≈ +41).",
+    "note": "Opera Game before 16.Qb8+ with an extra White queen on h1: the queen sacrifice still mates in 2, but quiet moves already win (Rxd7 \u2248 +41).",
     "fen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR3Q w k - 0 16",
-    "moves": ["b3b8", "d7b8", "d1d8"],
+    "moves": [
+      "b3b8",
+      "d7b8",
+      "d1d8"
+    ],
     "testedPly": 0
   },
   {
     "id": "sac-while-losing/opera-without-queen",
     "category": "sac-while-losing",
-    "note": "Opera Game before 10.Nxb5 without White's queen and h1 rook (≈ −13): the knight sacrifice cannot rescue a lost position.",
+    "note": "Opera Game before 10.Nxb5 without White's queen and h1 rook (\u2248 \u221213): the knight sacrifice cannot rescue a lost position.",
     "fen": "rn2kb1r/p3qppp/2p2n2/1p2p1B1/2B1P3/2N5/PPP2PPP/R3K3 w Qkq - 0 10",
-    "moves": ["c3b5", "c6b5", "c4b5"],
+    "moves": [
+      "c3b5",
+      "c6b5",
+      "c4b5"
+    ],
     "testedPly": 0
   },
   {
@@ -55,7 +63,10 @@
     "category": "forced-queen-sacrifice",
     "note": "Qg7# is threatened; every defence gives up the queen, and only 1...Qxd4 avoids a quick mate.",
     "fen": "r5k1/ppp4p/4P1pQ/3q4/3B4/2P5/PP3PPP/6K1 b - - 0 1",
-    "moves": ["d5d4", "c3d4"],
+    "moves": [
+      "d5d4",
+      "c3d4"
+    ],
     "testedPly": 0
   },
   {
@@ -63,7 +74,10 @@
     "category": "forced-queen-sacrifice",
     "note": "Back-rank check: the queen must interpose and is lost (mate follows anyway).",
     "fen": "R6k/6pp/3q4/8/8/8/5PPP/6K1 b - - 0 1",
-    "moves": ["d6d8", "a8d8"],
+    "moves": [
+      "d6d8",
+      "a8d8"
+    ],
     "testedPly": 0
   },
   {
@@ -71,7 +85,25 @@
     "category": "declined-sacrifice",
     "note": "Opera Game 10.Nxb5: Stockfish's best defence is 10...Qb4+ (declining); taking the knight is worse for Black.",
     "fen": "rn2kb1r/p3qppp/2p2n2/1p2p1B1/2B1P3/1QN5/PPP2PPP/R3K2R w KQkq - 0 10",
-    "moves": ["c3b5", "c6b5", "c4b5"],
+    "moves": [
+      "c3b5",
+      "c6b5",
+      "c4b5"
+    ],
     "testedPly": 0
+  },
+  {
+    "id": "borderline-sacrifice/marshall-d5",
+    "category": "borderline-sacrifice",
+    "note": "Marshall Attack, 8...d5!?: a well-established sound pawn sacrifice for long-term piece activity, not a clear engine-verified win (roughly balanced by modern theory).",
+    "san": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5",
+    "testedPly": 15
+  },
+  {
+    "id": "borderline-sacrifice/benko-b5",
+    "category": "borderline-sacrifice",
+    "note": "Benko Gambit, 3...b5!?: a well-established sound pawn sacrifice for long-term queenside pressure, not a clear engine-verified win.",
+    "san": "d4 Nf6 c4 c5 d5 b5",
+    "testedPly": 5
   }
 ]

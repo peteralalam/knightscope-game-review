@@ -1,0 +1,7818 @@
+{
+ "summary": {
+  "positions": 300,
+  "nodes": 60000,
+  "multiPv": 3,
+  "engineVersionWasm": "Stockfish 19 Lite WASM [stockfish.js npm lite-single]",
+  "engineVersionNative": "Stockfish 19 [native lite (corpus)]",
+  "byPhase": {
+   "opening": 75,
+   "middlegame": 150,
+   "endgame": 75
+  },
+  "bestMoveMismatchCount": 0,
+  "bestMoveMismatchRate": 0,
+  "candidateOrderMismatchCount": 0,
+  "candidateOrderMismatchRate": 0,
+  "cpDiff": {
+   "max": 0,
+   "mean": 0,
+   "nonZeroCount": 0
+  },
+  "baselineExpectedScoreDiff": {
+   "max": 0,
+   "mean": 0,
+   "nonZeroCount": 0
+  },
+  "mateFieldMismatches": 0
+ },
+ "mismatches": [],
+ "rows": [
+  {
+   "id": "J88NRCdi#22",
+   "phase": "opening",
+   "bestMoveA": "e5c6",
+   "bestMoveB": "e5c6",
+   "bestMoveMatch": true,
+   "cpA": 635,
+   "cpB": 635,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e5c6",
+    "d3h7",
+    "d2e2"
+   ],
+   "orderB": [
+    "e5c6",
+    "d3h7",
+    "d2e2"
+   ],
+   "baselineExpectedScoreA": 0.911985,
+   "baselineExpectedScoreB": 0.911985,
+   "baselineDiff": 0
+  },
+  {
+   "id": "J88NRCdi#58",
+   "phase": "middlegame",
+   "bestMoveA": "f6g7",
+   "bestMoveB": "f6g7",
+   "bestMoveMatch": true,
+   "cpA": 576,
+   "cpB": 576,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f6g7",
+    "h5f3",
+    "g2g4"
+   ],
+   "orderB": [
+    "f6g7",
+    "h5f3",
+    "g2g4"
+   ],
+   "baselineExpectedScoreA": 0.892916,
+   "baselineExpectedScoreB": 0.892916,
+   "baselineDiff": 0
+  },
+  {
+   "id": "J88NRCdi#95",
+   "phase": "middlegame",
+   "bestMoveA": "c4c3",
+   "bestMoveB": "c4c3",
+   "bestMoveMatch": true,
+   "cpA": 306,
+   "cpB": 306,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c4c3",
+    "a4a3",
+    "c4e4"
+   ],
+   "orderB": [
+    "c4c3",
+    "a4a3",
+    "c4e4"
+   ],
+   "baselineExpectedScoreA": 0.755232,
+   "baselineExpectedScoreB": 0.755232,
+   "baselineDiff": 0
+  },
+  {
+   "id": "J88NRCdi#124",
+   "phase": "endgame",
+   "bestMoveA": "c6a6",
+   "bestMoveB": "c6a6",
+   "bestMoveMatch": true,
+   "cpA": 247,
+   "cpB": 247,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6a6",
+    "c6c8",
+    "c6b6"
+   ],
+   "orderB": [
+    "c6a6",
+    "c6c8",
+    "c6b6"
+   ],
+   "baselineExpectedScoreA": 0.712892,
+   "baselineExpectedScoreB": 0.712892,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CAPcuCX2#10",
+   "phase": "opening",
+   "bestMoveA": "e1g1",
+   "bestMoveB": "e1g1",
+   "bestMoveMatch": true,
+   "cpA": 19,
+   "cpB": 19,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e1g1",
+    "d2d3",
+    "d2d4"
+   ],
+   "orderB": [
+    "e1g1",
+    "d2d3",
+    "d2d4"
+   ],
+   "baselineExpectedScoreA": 0.517483,
+   "baselineExpectedScoreB": 0.517483,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CAPcuCX2#26",
+   "phase": "middlegame",
+   "bestMoveA": "e2g4",
+   "bestMoveB": "e2g4",
+   "bestMoveMatch": true,
+   "cpA": -2,
+   "cpB": -2,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2g4",
+    "g2g4",
+    "e2f3"
+   ],
+   "orderB": [
+    "e2g4",
+    "g2g4",
+    "e2f3"
+   ],
+   "baselineExpectedScoreA": 0.498159,
+   "baselineExpectedScoreB": 0.498159,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CAPcuCX2#42",
+   "phase": "middlegame",
+   "bestMoveA": "a4b2",
+   "bestMoveB": "a4b2",
+   "bestMoveMatch": true,
+   "cpA": -244,
+   "cpB": -244,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a4b2",
+    "a1c1",
+    "e2f3"
+   ],
+   "orderB": [
+    "a4b2",
+    "a1c1",
+    "e2f3"
+   ],
+   "baselineExpectedScoreA": 0.289374,
+   "baselineExpectedScoreB": 0.289374,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CAPcuCX2#54",
+   "phase": "endgame",
+   "bestMoveA": "g4g5",
+   "bestMoveB": "g4g5",
+   "bestMoveMatch": true,
+   "cpA": -354,
+   "cpB": -354,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4g5",
+    "h1g2",
+    "c4c5"
+   ],
+   "orderB": [
+    "g4g5",
+    "h1g2",
+    "c4c5"
+   ],
+   "baselineExpectedScoreA": 0.213584,
+   "baselineExpectedScoreB": 0.213584,
+   "baselineDiff": 0
+  },
+  {
+   "id": "1lbY0vKG#20",
+   "phase": "opening",
+   "bestMoveA": "e4e5",
+   "bestMoveB": "e4e5",
+   "bestMoveMatch": true,
+   "cpA": -25,
+   "cpB": -25,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e4e5",
+    "d1e2",
+    "d1e2"
+   ],
+   "orderB": [
+    "e4e5",
+    "d1e2",
+    "d1e2"
+   ],
+   "baselineExpectedScoreA": 0.477003,
+   "baselineExpectedScoreB": 0.477003,
+   "baselineDiff": 0
+  },
+  {
+   "id": "1lbY0vKG#54",
+   "phase": "middlegame",
+   "bestMoveA": "h5e8",
+   "bestMoveB": "h5e8",
+   "bestMoveMatch": true,
+   "cpA": 467,
+   "cpB": 467,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5e8",
+    "f1g3",
+    "a1b1"
+   ],
+   "orderB": [
+    "h5e8",
+    "f1g3",
+    "a1b1"
+   ],
+   "baselineExpectedScoreA": 0.848068,
+   "baselineExpectedScoreB": 0.848068,
+   "baselineDiff": 0
+  },
+  {
+   "id": "1lbY0vKG#88",
+   "phase": "middlegame",
+   "bestMoveA": "f4g6",
+   "bestMoveB": "f4g6",
+   "bestMoveMatch": true,
+   "cpA": 617,
+   "cpB": 617,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f4g6",
+    "h5h6",
+    "f4e2"
+   ],
+   "orderB": [
+    "f4g6",
+    "h5h6",
+    "f4e2"
+   ],
+   "baselineExpectedScoreA": 0.906518,
+   "baselineExpectedScoreB": 0.906518,
+   "baselineDiff": 0
+  },
+  {
+   "id": "1lbY0vKG#115",
+   "phase": "endgame",
+   "bestMoveA": "f8e7",
+   "bestMoveB": "f8e7",
+   "bestMoveMatch": true,
+   "cpA": -747,
+   "cpB": -747,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f8e7",
+    "f8e8",
+    "f8f7"
+   ],
+   "orderB": [
+    "f8e7",
+    "f8e8",
+    "f8f7"
+   ],
+   "baselineExpectedScoreA": 0.060058,
+   "baselineExpectedScoreB": 0.060058,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pjyr4Y6d#25",
+   "phase": "opening",
+   "bestMoveA": "c5e4",
+   "bestMoveB": "c5e4",
+   "bestMoveMatch": true,
+   "cpA": 1,
+   "cpB": 1,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c5e4",
+    "c5a6",
+    "b7e4"
+   ],
+   "orderB": [
+    "c5e4",
+    "c5a6",
+    "b7e4"
+   ],
+   "baselineExpectedScoreA": 0.500921,
+   "baselineExpectedScoreB": 0.500921,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pjyr4Y6d#66",
+   "phase": "middlegame",
+   "bestMoveA": "h3f1",
+   "bestMoveB": "h3f1",
+   "bestMoveMatch": true,
+   "cpA": -125,
+   "cpB": -125,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h3f1",
+    "h3f5",
+    "h3f5"
+   ],
+   "orderB": [
+    "h3f1",
+    "h3f5",
+    "h3f5"
+   ],
+   "baselineExpectedScoreA": 0.386924,
+   "baselineExpectedScoreB": 0.386924,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pjyr4Y6d#107",
+   "phase": "middlegame",
+   "bestMoveA": "f4f3",
+   "bestMoveB": "f4f3",
+   "bestMoveMatch": true,
+   "cpA": 541,
+   "cpB": 541,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f4f3",
+    "f6e6",
+    "b6b5"
+   ],
+   "orderB": [
+    "f4f3",
+    "f6e6",
+    "b6b5"
+   ],
+   "baselineExpectedScoreA": 0.879955,
+   "baselineExpectedScoreB": 0.879955,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pjyr4Y6d#139",
+   "phase": "endgame",
+   "bestMoveA": "h7g8",
+   "bestMoveB": "h7g8",
+   "bestMoveMatch": true,
+   "cpA": 856,
+   "cpB": 856,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h7g8",
+    "a7a6",
+    "h7h8"
+   ],
+   "orderB": [
+    "h7g8",
+    "a7a6",
+    "h7h8"
+   ],
+   "baselineExpectedScoreA": 0.958982,
+   "baselineExpectedScoreB": 0.958982,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VFqabHdq#15",
+   "phase": "opening",
+   "bestMoveA": "c6b4",
+   "bestMoveB": "c6b4",
+   "bestMoveMatch": true,
+   "cpA": -210,
+   "cpB": -210,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6b4",
+    "e8g8",
+    "c6e7"
+   ],
+   "orderB": [
+    "c6b4",
+    "e8g8",
+    "c6e7"
+   ],
+   "baselineExpectedScoreA": 0.315779,
+   "baselineExpectedScoreB": 0.315779,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VFqabHdq#40",
+   "phase": "middlegame",
+   "bestMoveA": "a6a5",
+   "bestMoveB": "a6a5",
+   "bestMoveMatch": true,
+   "cpA": 95,
+   "cpB": 95,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a6a5",
+    "a1b1",
+    "g1g2"
+   ],
+   "orderB": [
+    "a6a5",
+    "a1b1",
+    "g1g2"
+   ],
+   "baselineExpectedScoreA": 0.586568,
+   "baselineExpectedScoreB": 0.586568,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VFqabHdq#65",
+   "phase": "middlegame",
+   "bestMoveA": "h6h5",
+   "bestMoveB": "h6h5",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h6h5",
+    "e1g1",
+    "f6f5"
+   ],
+   "orderB": [
+    "h6h5",
+    "e1g1",
+    "f6f5"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VFqabHdq#85",
+   "phase": "endgame",
+   "bestMoveA": "e1e2",
+   "bestMoveB": "e1e2",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e1e2",
+    "e1d2",
+    "f6f5"
+   ],
+   "orderB": [
+    "e1e2",
+    "e1d2",
+    "f6f5"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "WXBlQkXz#10",
+   "phase": "opening",
+   "bestMoveA": "e4g3",
+   "bestMoveB": "e4g3",
+   "bestMoveMatch": true,
+   "cpA": 47,
+   "cpB": 47,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e4g3",
+    "e4c3",
+    "e4f6"
+   ],
+   "orderB": [
+    "e4g3",
+    "e4c3",
+    "e4f6"
+   ],
+   "baselineExpectedScoreA": 0.543157,
+   "baselineExpectedScoreB": 0.543157,
+   "baselineDiff": 0
+  },
+  {
+   "id": "WXBlQkXz#28",
+   "phase": "middlegame",
+   "bestMoveA": "g5e4",
+   "bestMoveB": "g5e4",
+   "bestMoveMatch": true,
+   "cpA": -16,
+   "cpB": -16,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g5e4",
+    "g5h7",
+    "g5f3"
+   ],
+   "orderB": [
+    "g5e4",
+    "g5h7",
+    "g5f3"
+   ],
+   "baselineExpectedScoreA": 0.485276,
+   "baselineExpectedScoreB": 0.485276,
+   "baselineDiff": 0
+  },
+  {
+   "id": "WXBlQkXz#45",
+   "phase": "middlegame",
+   "bestMoveA": "a8b8",
+   "bestMoveB": "a8b8",
+   "bestMoveMatch": true,
+   "cpA": -1,
+   "cpB": -1,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a8b8",
+    "a8c8",
+    "a6a5"
+   ],
+   "orderB": [
+    "a8b8",
+    "a8c8",
+    "a6a5"
+   ],
+   "baselineExpectedScoreA": 0.499079,
+   "baselineExpectedScoreB": 0.499079,
+   "baselineDiff": 0
+  },
+  {
+   "id": "WXBlQkXz#59",
+   "phase": "endgame",
+   "bestMoveA": "a2a1",
+   "bestMoveB": "a2a1",
+   "bestMoveMatch": true,
+   "cpA": -1377,
+   "cpB": -1377,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a2a1",
+    "a2a5",
+    "a2a3"
+   ],
+   "orderB": [
+    "a2a1",
+    "a2a5",
+    "a2a3"
+   ],
+   "baselineExpectedScoreA": 0.006242,
+   "baselineExpectedScoreB": 0.006242,
+   "baselineDiff": 0
+  },
+  {
+   "id": "i5dXI4bT#12",
+   "phase": "opening",
+   "bestMoveA": "c3a4",
+   "bestMoveB": "c3a4",
+   "bestMoveMatch": true,
+   "cpA": 60,
+   "cpB": 60,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3a4",
+    "c3e2",
+    "c3b1"
+   ],
+   "orderB": [
+    "c3a4",
+    "c3e2",
+    "c3b1"
+   ],
+   "baselineExpectedScoreA": 0.555008,
+   "baselineExpectedScoreB": 0.555008,
+   "baselineDiff": 0
+  },
+  {
+   "id": "i5dXI4bT#32",
+   "phase": "middlegame",
+   "bestMoveA": "g4g5",
+   "bestMoveB": "g4g5",
+   "bestMoveMatch": true,
+   "cpA": 125,
+   "cpB": 125,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4g5",
+    "g4h5",
+    "g4h5"
+   ],
+   "orderB": [
+    "g4g5",
+    "g4h5",
+    "g4h5"
+   ],
+   "baselineExpectedScoreA": 0.613076,
+   "baselineExpectedScoreB": 0.613076,
+   "baselineDiff": 0
+  },
+  {
+   "id": "i5dXI4bT#53",
+   "phase": "middlegame",
+   "bestMoveA": "c5c4",
+   "bestMoveB": "c5c4",
+   "bestMoveMatch": true,
+   "cpA": -306,
+   "cpB": -306,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c5c4",
+    "e7g8",
+    "h8h7"
+   ],
+   "orderB": [
+    "c5c4",
+    "e7g8",
+    "h8h7"
+   ],
+   "baselineExpectedScoreA": 0.244768,
+   "baselineExpectedScoreB": 0.244768,
+   "baselineDiff": 0
+  },
+  {
+   "id": "i5dXI4bT#69",
+   "phase": "endgame",
+   "bestMoveA": "d6e5",
+   "bestMoveB": "d6e5",
+   "bestMoveMatch": true,
+   "cpA": -887,
+   "cpB": -887,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d6e5",
+    "g8f6"
+   ],
+   "orderB": [
+    "d6e5",
+    "g8f6"
+   ],
+   "baselineExpectedScoreA": 0.036756,
+   "baselineExpectedScoreB": 0.036756,
+   "baselineDiff": 0
+  },
+  {
+   "id": "473r66l5#7",
+   "phase": "opening",
+   "bestMoveA": "c8b7",
+   "bestMoveB": "c8b7",
+   "bestMoveMatch": true,
+   "cpA": -14,
+   "cpB": -14,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8b7",
+    "f8e7",
+    "f8b4"
+   ],
+   "orderB": [
+    "c8b7",
+    "f8e7",
+    "f8b4"
+   ],
+   "baselineExpectedScoreA": 0.487116,
+   "baselineExpectedScoreB": 0.487116,
+   "baselineDiff": 0
+  },
+  {
+   "id": "473r66l5#18",
+   "phase": "middlegame",
+   "bestMoveA": "b2b3",
+   "bestMoveB": "b2b3",
+   "bestMoveMatch": true,
+   "cpA": 22,
+   "cpB": 22,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b2b3",
+    "d1e2",
+    "e3e4"
+   ],
+   "orderB": [
+    "b2b3",
+    "d1e2",
+    "e3e4"
+   ],
+   "baselineExpectedScoreA": 0.52024,
+   "baselineExpectedScoreB": 0.52024,
+   "baselineDiff": 0
+  },
+  {
+   "id": "473r66l5#29",
+   "phase": "middlegame",
+   "bestMoveA": "e8c8",
+   "bestMoveB": "e8c8",
+   "bestMoveMatch": true,
+   "cpA": 237,
+   "cpB": 237,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e8c8",
+    "a8d8",
+    "c7d7"
+   ],
+   "orderB": [
+    "e8c8",
+    "a8d8",
+    "c7d7"
+   ],
+   "baselineExpectedScoreA": 0.705297,
+   "baselineExpectedScoreB": 0.705297,
+   "baselineDiff": 0
+  },
+  {
+   "id": "473r66l5#37",
+   "phase": "endgame",
+   "bestMoveA": "h5h4",
+   "bestMoveB": "h5h4",
+   "bestMoveMatch": true,
+   "cpA": 326,
+   "cpB": 326,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5h4",
+    "f6g4",
+    "d8d3"
+   ],
+   "orderB": [
+    "h5h4",
+    "f6g4",
+    "d8d3"
+   ],
+   "baselineExpectedScoreA": 0.768588,
+   "baselineExpectedScoreB": 0.768588,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BJ5nAtK4#7",
+   "phase": "opening",
+   "bestMoveA": "d7d6",
+   "bestMoveB": "d7d6",
+   "bestMoveMatch": true,
+   "cpA": -46,
+   "cpB": -46,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7d6",
+    "d7d6",
+    "h7h5"
+   ],
+   "orderB": [
+    "d7d6",
+    "d7d6",
+    "h7h5"
+   ],
+   "baselineExpectedScoreA": 0.457757,
+   "baselineExpectedScoreB": 0.457757,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BJ5nAtK4#20",
+   "phase": "middlegame",
+   "bestMoveA": "c1d2",
+   "bestMoveB": "c1d2",
+   "bestMoveMatch": true,
+   "cpA": 162,
+   "cpB": 162,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c1d2",
+    "d1d2",
+    "d1d2"
+   ],
+   "orderB": [
+    "c1d2",
+    "d1d2",
+    "d1d2"
+   ],
+   "baselineExpectedScoreA": 0.644854,
+   "baselineExpectedScoreB": 0.644854,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BJ5nAtK4#32",
+   "phase": "middlegame",
+   "bestMoveA": "d2h6",
+   "bestMoveB": "d2h6",
+   "bestMoveMatch": true,
+   "cpA": 419,
+   "cpB": 419,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2h6",
+    "h2h4",
+    "d2g5"
+   ],
+   "orderB": [
+    "d2h6",
+    "h2h4",
+    "d2g5"
+   ],
+   "baselineExpectedScoreA": 0.82387,
+   "baselineExpectedScoreB": 0.82387,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BJ5nAtK4#42",
+   "phase": "endgame",
+   "bestMoveA": "h5h7",
+   "bestMoveB": "h5h7",
+   "bestMoveMatch": true,
+   "cpA": 522,
+   "cpB": 522,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5h7",
+    "h5h8",
+    "h5e5"
+   ],
+   "orderB": [
+    "h5h7",
+    "h5h8",
+    "h5e5"
+   ],
+   "baselineExpectedScoreA": 0.872366,
+   "baselineExpectedScoreB": 0.872366,
+   "baselineDiff": 0
+  },
+  {
+   "id": "GYwYzBnd#12",
+   "phase": "opening",
+   "bestMoveA": "b1d2",
+   "bestMoveB": "b1d2",
+   "bestMoveMatch": true,
+   "cpA": 79,
+   "cpB": 79,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1d2",
+    "d1d2",
+    "e1d2"
+   ],
+   "orderB": [
+    "b1d2",
+    "d1d2",
+    "e1d2"
+   ],
+   "baselineExpectedScoreA": 0.572213,
+   "baselineExpectedScoreB": 0.572213,
+   "baselineDiff": 0
+  },
+  {
+   "id": "GYwYzBnd#32",
+   "phase": "middlegame",
+   "bestMoveA": "h2h3",
+   "bestMoveB": "h2h3",
+   "bestMoveMatch": true,
+   "cpA": 20,
+   "cpB": 20,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h2h3",
+    "a1d1",
+    "f1d1"
+   ],
+   "orderB": [
+    "h2h3",
+    "a1d1",
+    "f1d1"
+   ],
+   "baselineExpectedScoreA": 0.518402,
+   "baselineExpectedScoreB": 0.518402,
+   "baselineDiff": 0
+  },
+  {
+   "id": "GYwYzBnd#52",
+   "phase": "middlegame",
+   "bestMoveA": "g3f4",
+   "bestMoveB": "g3f4",
+   "bestMoveMatch": true,
+   "cpA": 6,
+   "cpB": 6,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g3f4",
+    "g1f2",
+    "g1f1"
+   ],
+   "orderB": [
+    "g3f4",
+    "g1f2",
+    "g1f1"
+   ],
+   "baselineExpectedScoreA": 0.505523,
+   "baselineExpectedScoreB": 0.505523,
+   "baselineDiff": 0
+  },
+  {
+   "id": "GYwYzBnd#68",
+   "phase": "endgame",
+   "bestMoveA": "f4f5",
+   "bestMoveB": "f4f5",
+   "bestMoveMatch": true,
+   "cpA": -26,
+   "cpB": -26,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f4f5",
+    "g3f2",
+    "f3e1"
+   ],
+   "orderB": [
+    "f4f5",
+    "g3f2",
+    "f3e1"
+   ],
+   "baselineExpectedScoreA": 0.476085,
+   "baselineExpectedScoreB": 0.476085,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pz4tNCJB#8",
+   "phase": "opening",
+   "bestMoveA": "d1b3",
+   "bestMoveB": "d1b3",
+   "bestMoveMatch": true,
+   "cpA": 45,
+   "cpB": 45,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1b3",
+    "c1f4",
+    "c1d2"
+   ],
+   "orderB": [
+    "d1b3",
+    "c1f4",
+    "c1d2"
+   ],
+   "baselineExpectedScoreA": 0.541329,
+   "baselineExpectedScoreB": 0.541329,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pz4tNCJB#22",
+   "phase": "middlegame",
+   "bestMoveA": "f4d6",
+   "bestMoveB": "f4d6",
+   "bestMoveMatch": true,
+   "cpA": -169,
+   "cpB": -169,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f4d6",
+    "f1d3",
+    "g2g4"
+   ],
+   "orderB": [
+    "f4d6",
+    "f1d3",
+    "g2g4"
+   ],
+   "baselineExpectedScoreA": 0.349265,
+   "baselineExpectedScoreB": 0.349265,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pz4tNCJB#36",
+   "phase": "middlegame",
+   "bestMoveA": "b3b7",
+   "bestMoveB": "b3b7",
+   "bestMoveMatch": true,
+   "cpA": 514,
+   "cpB": 514,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b3b7",
+    "a2a4",
+    "c3c4"
+   ],
+   "orderB": [
+    "b3b7",
+    "a2a4",
+    "c3c4"
+   ],
+   "baselineExpectedScoreA": 0.86905,
+   "baselineExpectedScoreB": 0.86905,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Pz4tNCJB#48",
+   "phase": "endgame",
+   "bestMoveA": "f7f3",
+   "bestMoveB": "f7f3",
+   "bestMoveMatch": true,
+   "cpA": 836,
+   "cpB": 836,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f7f3",
+    "f7f4",
+    "f7d7"
+   ],
+   "orderB": [
+    "f7f3",
+    "f7f4",
+    "f7d7"
+   ],
+   "baselineExpectedScoreA": 0.955985,
+   "baselineExpectedScoreB": 0.955985,
+   "baselineDiff": 0
+  },
+  {
+   "id": "qIn8fg1t#22",
+   "phase": "opening",
+   "bestMoveA": "e3d2",
+   "bestMoveB": "e3d2",
+   "bestMoveMatch": true,
+   "cpA": -261,
+   "cpB": -261,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e3d2",
+    "d1d3",
+    "d1d3"
+   ],
+   "orderB": [
+    "e3d2",
+    "d1d3",
+    "d1d3"
+   ],
+   "baselineExpectedScoreA": 0.276673,
+   "baselineExpectedScoreB": 0.276673,
+   "baselineDiff": 0
+  },
+  {
+   "id": "qIn8fg1t#60",
+   "phase": "middlegame",
+   "bestMoveA": "e3e1",
+   "bestMoveB": "e3e1",
+   "bestMoveMatch": true,
+   "cpA": 20,
+   "cpB": 20,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e3e1",
+    "c3c5",
+    "c3c5"
+   ],
+   "orderB": [
+    "e3e1",
+    "c3c5",
+    "c3c5"
+   ],
+   "baselineExpectedScoreA": 0.518402,
+   "baselineExpectedScoreB": 0.518402,
+   "baselineDiff": 0
+  },
+  {
+   "id": "qIn8fg1t#97",
+   "phase": "middlegame",
+   "bestMoveA": "b1h1",
+   "bestMoveB": "b1h1",
+   "bestMoveMatch": true,
+   "cpA": -11,
+   "cpB": -11,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1h1",
+    "b1f1",
+    "f7f6"
+   ],
+   "orderB": [
+    "b1h1",
+    "b1f1",
+    "f7f6"
+   ],
+   "baselineExpectedScoreA": 0.489876,
+   "baselineExpectedScoreB": 0.489876,
+   "baselineDiff": 0
+  },
+  {
+   "id": "qIn8fg1t#127",
+   "phase": "endgame",
+   "bestMoveA": "d8d7",
+   "bestMoveB": "d8d7",
+   "bestMoveMatch": true,
+   "cpA": -296,
+   "cpB": -296,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8d7",
+    "d8d5",
+    "d8h8"
+   ],
+   "orderB": [
+    "d8d7",
+    "d8d5",
+    "d8h8"
+   ],
+   "baselineExpectedScoreA": 0.251638,
+   "baselineExpectedScoreB": 0.251638,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HE33gdt4#8",
+   "phase": "opening",
+   "bestMoveA": "d1a4",
+   "bestMoveB": "d1a4",
+   "bestMoveMatch": true,
+   "cpA": 30,
+   "cpB": 30,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1a4",
+    "f1g2",
+    "b1c3"
+   ],
+   "orderB": [
+    "d1a4",
+    "f1g2",
+    "b1c3"
+   ],
+   "baselineExpectedScoreA": 0.527588,
+   "baselineExpectedScoreB": 0.527588,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HE33gdt4#22",
+   "phase": "middlegame",
+   "bestMoveA": "d4c5",
+   "bestMoveB": "d4c5",
+   "bestMoveMatch": true,
+   "cpA": -157,
+   "cpB": -157,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d4c5",
+    "c1b2",
+    "c1a3"
+   ],
+   "orderB": [
+    "d4c5",
+    "c1b2",
+    "c1a3"
+   ],
+   "baselineExpectedScoreA": 0.359373,
+   "baselineExpectedScoreB": 0.359373,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HE33gdt4#36",
+   "phase": "middlegame",
+   "bestMoveA": "h2h4",
+   "bestMoveB": "h2h4",
+   "bestMoveMatch": true,
+   "cpA": 84,
+   "cpB": 84,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h2h4",
+    "g5f3",
+    "a6a7"
+   ],
+   "orderB": [
+    "h2h4",
+    "g5f3",
+    "a6a7"
+   ],
+   "baselineExpectedScoreA": 0.576713,
+   "baselineExpectedScoreB": 0.576713,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HE33gdt4#47",
+   "phase": "endgame",
+   "bestMoveA": "e6e5",
+   "bestMoveB": "e6e5",
+   "bestMoveMatch": true,
+   "cpA": -39,
+   "cpB": -39,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e6e5",
+    "f7f6",
+    "d5c3"
+   ],
+   "orderB": [
+    "e6e5",
+    "f7f6",
+    "d5c3"
+   ],
+   "baselineExpectedScoreA": 0.464161,
+   "baselineExpectedScoreB": 0.464161,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UwypIcbX#12",
+   "phase": "opening",
+   "bestMoveA": "d1b3",
+   "bestMoveB": "d1b3",
+   "bestMoveMatch": true,
+   "cpA": 76,
+   "cpB": 76,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1b3",
+    "d1b3",
+    "h2h4"
+   ],
+   "orderB": [
+    "d1b3",
+    "d1b3",
+    "h2h4"
+   ],
+   "baselineExpectedScoreA": 0.569507,
+   "baselineExpectedScoreB": 0.569507,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UwypIcbX#32",
+   "phase": "middlegame",
+   "bestMoveA": "e2f3",
+   "bestMoveB": "e2f3",
+   "bestMoveMatch": true,
+   "cpA": 176,
+   "cpB": 176,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2f3",
+    "e2d2",
+    "e2e1"
+   ],
+   "orderB": [
+    "e2f3",
+    "e2d2",
+    "e2e1"
+   ],
+   "baselineExpectedScoreA": 0.65657,
+   "baselineExpectedScoreB": 0.65657,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UwypIcbX#52",
+   "phase": "middlegame",
+   "bestMoveA": "a3b2",
+   "bestMoveB": "a3b2",
+   "bestMoveMatch": true,
+   "cpA": 527,
+   "cpB": 527,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a3b2",
+    "c2c3",
+    "a3c1"
+   ],
+   "orderB": [
+    "a3b2",
+    "c2c3",
+    "a3c1"
+   ],
+   "baselineExpectedScoreA": 0.874402,
+   "baselineExpectedScoreB": 0.874402,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UwypIcbX#68",
+   "phase": "endgame",
+   "bestMoveA": "d7f5",
+   "bestMoveB": "d7f5",
+   "bestMoveMatch": true,
+   "cpA": 296,
+   "cpB": 296,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7f5",
+    "d7g4",
+    "h3h4"
+   ],
+   "orderB": [
+    "d7f5",
+    "d7g4",
+    "h3h4"
+   ],
+   "baselineExpectedScoreA": 0.748362,
+   "baselineExpectedScoreB": 0.748362,
+   "baselineDiff": 0
+  },
+  {
+   "id": "JudQeBSs#12",
+   "phase": "opening",
+   "bestMoveA": "b1c3",
+   "bestMoveB": "b1c3",
+   "bestMoveMatch": true,
+   "cpA": -24,
+   "cpB": -24,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1c3",
+    "f2f3",
+    "g1h3"
+   ],
+   "orderB": [
+    "b1c3",
+    "f2f3",
+    "g1h3"
+   ],
+   "baselineExpectedScoreA": 0.477922,
+   "baselineExpectedScoreB": 0.477922,
+   "baselineDiff": 0
+  },
+  {
+   "id": "JudQeBSs#32",
+   "phase": "middlegame",
+   "bestMoveA": "b4a5",
+   "bestMoveB": "b4a5",
+   "bestMoveMatch": true,
+   "cpA": -370,
+   "cpB": -370,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b4a5",
+    "a1b1",
+    "e1g1"
+   ],
+   "orderB": [
+    "b4a5",
+    "a1b1",
+    "e1g1"
+   ],
+   "baselineExpectedScoreA": 0.203855,
+   "baselineExpectedScoreB": 0.203855,
+   "baselineDiff": 0
+  },
+  {
+   "id": "JudQeBSs#52",
+   "phase": "middlegame",
+   "bestMoveA": "c7e7",
+   "bestMoveB": "c7e7",
+   "bestMoveMatch": true,
+   "cpA": 26,
+   "cpB": 26,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c7e7",
+    "g2f1",
+    "c7c1"
+   ],
+   "orderB": [
+    "c7e7",
+    "g2f1",
+    "c7c1"
+   ],
+   "baselineExpectedScoreA": 0.523915,
+   "baselineExpectedScoreB": 0.523915,
+   "baselineDiff": 0
+  },
+  {
+   "id": "JudQeBSs#68",
+   "phase": "endgame",
+   "bestMoveA": "f7b7",
+   "bestMoveB": "f7b7",
+   "bestMoveMatch": true,
+   "cpA": 247,
+   "cpB": 247,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f7b7",
+    "f7g7",
+    "c4b3"
+   ],
+   "orderB": [
+    "f7b7",
+    "f7g7",
+    "c4b3"
+   ],
+   "baselineExpectedScoreA": 0.712892,
+   "baselineExpectedScoreB": 0.712892,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8XPSwKKs#6",
+   "phase": "opening",
+   "bestMoveA": "b1c3",
+   "bestMoveB": "b1c3",
+   "bestMoveMatch": true,
+   "cpA": 62,
+   "cpB": 62,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1c3",
+    "c2c3",
+    "e1g1"
+   ],
+   "orderB": [
+    "b1c3",
+    "c2c3",
+    "e1g1"
+   ],
+   "baselineExpectedScoreA": 0.556826,
+   "baselineExpectedScoreB": 0.556826,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8XPSwKKs#13",
+   "phase": "middlegame",
+   "bestMoveA": "e5f3",
+   "bestMoveB": "e5f3",
+   "bestMoveMatch": true,
+   "cpA": -56,
+   "cpB": -56,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e5f3",
+    "e5f3",
+    "c7c6"
+   ],
+   "orderB": [
+    "e5f3",
+    "e5f3",
+    "c7c6"
+   ],
+   "baselineExpectedScoreA": 0.448633,
+   "baselineExpectedScoreB": 0.448633,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8XPSwKKs#21",
+   "phase": "middlegame",
+   "bestMoveA": "b5b4",
+   "bestMoveB": "b5b4",
+   "bestMoveMatch": true,
+   "cpA": -88,
+   "cpB": -88,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b5b4",
+    "e8g8",
+    "c8e6"
+   ],
+   "orderB": [
+    "b5b4",
+    "e8g8",
+    "c8e6"
+   ],
+   "baselineExpectedScoreA": 0.419696,
+   "baselineExpectedScoreB": 0.419696,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8XPSwKKs#27",
+   "phase": "endgame",
+   "bestMoveA": "g8g7",
+   "bestMoveB": "g8g7",
+   "bestMoveMatch": true,
+   "cpA": -1067,
+   "cpB": -1067,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g8g7",
+    "f8f7",
+    "e7d5"
+   ],
+   "orderB": [
+    "g8g7",
+    "f8f7",
+    "e7d5"
+   ],
+   "baselineExpectedScoreA": 0.019288,
+   "baselineExpectedScoreB": 0.019288,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yV59eD5j#9",
+   "phase": "opening",
+   "bestMoveA": "c8d7",
+   "bestMoveB": "c8d7",
+   "bestMoveMatch": true,
+   "cpA": -41,
+   "cpB": -41,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8d7",
+    "c8d7",
+    "f8e7"
+   ],
+   "orderB": [
+    "c8d7",
+    "c8d7",
+    "f8e7"
+   ],
+   "baselineExpectedScoreA": 0.46233,
+   "baselineExpectedScoreB": 0.46233,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yV59eD5j#23",
+   "phase": "middlegame",
+   "bestMoveA": "f5f4",
+   "bestMoveB": "f5f4",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f5f4",
+    "g8f6",
+    "g8f6"
+   ],
+   "orderB": [
+    "f5f4",
+    "g8f6",
+    "g8f6"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yV59eD5j#38",
+   "phase": "middlegame",
+   "bestMoveA": "a1a5",
+   "bestMoveB": "a1a5",
+   "bestMoveMatch": true,
+   "cpA": 312,
+   "cpB": 312,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a1a5",
+    "b3b4",
+    "d2a2"
+   ],
+   "orderB": [
+    "a1a5",
+    "b3b4",
+    "d2a2"
+   ],
+   "baselineExpectedScoreA": 0.759293,
+   "baselineExpectedScoreB": 0.759293,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yV59eD5j#49",
+   "phase": "endgame",
+   "bestMoveA": "b8c7",
+   "bestMoveB": "b8c7",
+   "bestMoveMatch": true,
+   "cpA": -619,
+   "cpB": -619,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b8c7"
+   ],
+   "orderB": [
+    "b8c7"
+   ],
+   "baselineExpectedScoreA": 0.09286,
+   "baselineExpectedScoreB": 0.09286,
+   "baselineDiff": 0
+  },
+  {
+   "id": "z01utMUz#8",
+   "phase": "opening",
+   "bestMoveA": "b1c3",
+   "bestMoveB": "b1c3",
+   "bestMoveMatch": true,
+   "cpA": 67,
+   "cpB": 67,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1c3",
+    "e4e5",
+    "c1g5"
+   ],
+   "orderB": [
+    "b1c3",
+    "e4e5",
+    "c1g5"
+   ],
+   "baselineExpectedScoreA": 0.561364,
+   "baselineExpectedScoreB": 0.561364,
+   "baselineDiff": 0
+  },
+  {
+   "id": "z01utMUz#21",
+   "phase": "middlegame",
+   "bestMoveA": "c3d1",
+   "bestMoveB": "c3d1",
+   "bestMoveMatch": true,
+   "cpA": 576,
+   "cpB": 576,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3d1",
+    "d7e5",
+    "c3e4"
+   ],
+   "orderB": [
+    "c3d1",
+    "d7e5",
+    "c3e4"
+   ],
+   "baselineExpectedScoreA": 0.892916,
+   "baselineExpectedScoreB": 0.892916,
+   "baselineDiff": 0
+  },
+  {
+   "id": "z01utMUz#34",
+   "phase": "middlegame",
+   "bestMoveA": "h2h4",
+   "bestMoveB": "h2h4",
+   "bestMoveMatch": true,
+   "cpA": -501,
+   "cpB": -501,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h2h4",
+    "d1e1",
+    "f3g5"
+   ],
+   "orderB": [
+    "h2h4",
+    "d1e1",
+    "f3g5"
+   ],
+   "baselineExpectedScoreA": 0.136494,
+   "baselineExpectedScoreB": 0.136494,
+   "baselineDiff": 0
+  },
+  {
+   "id": "z01utMUz#45",
+   "phase": "endgame",
+   "bestMoveA": "h7g7",
+   "bestMoveB": "h7g7",
+   "bestMoveMatch": true,
+   "cpA": 581,
+   "cpB": 581,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h7g7",
+    "h7g8",
+    "h7g6"
+   ],
+   "orderB": [
+    "h7g7",
+    "h7g8",
+    "h7g6"
+   ],
+   "baselineExpectedScoreA": 0.894664,
+   "baselineExpectedScoreB": 0.894664,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SwJlMsWu#6",
+   "phase": "opening",
+   "bestMoveA": "g1f3",
+   "bestMoveB": "g1f3",
+   "bestMoveMatch": true,
+   "cpA": 30,
+   "cpB": 30,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1f3",
+    "b1c3",
+    "e2e4"
+   ],
+   "orderB": [
+    "g1f3",
+    "b1c3",
+    "e2e4"
+   ],
+   "baselineExpectedScoreA": 0.527588,
+   "baselineExpectedScoreB": 0.527588,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SwJlMsWu#16",
+   "phase": "middlegame",
+   "bestMoveA": "e4b7",
+   "bestMoveB": "e4b7",
+   "bestMoveMatch": true,
+   "cpA": -14,
+   "cpB": -14,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e4b7",
+    "g1f3",
+    "f2f4"
+   ],
+   "orderB": [
+    "e4b7",
+    "g1f3",
+    "f2f4"
+   ],
+   "baselineExpectedScoreA": 0.487116,
+   "baselineExpectedScoreB": 0.487116,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SwJlMsWu#26",
+   "phase": "middlegame",
+   "bestMoveA": "c4a6",
+   "bestMoveB": "c4a6",
+   "bestMoveMatch": true,
+   "cpA": 35,
+   "cpB": 35,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c4a6",
+    "e3e4",
+    "c3d5"
+   ],
+   "orderB": [
+    "c4a6",
+    "e3e4",
+    "c3d5"
+   ],
+   "baselineExpectedScoreA": 0.532174,
+   "baselineExpectedScoreB": 0.532174,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SwJlMsWu#34",
+   "phase": "endgame",
+   "bestMoveA": "g1h1",
+   "bestMoveB": "g1h1",
+   "bestMoveMatch": true,
+   "cpA": -37,
+   "cpB": -37,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1h1",
+    "e2f2",
+    "c4f7"
+   ],
+   "orderB": [
+    "g1h1",
+    "e2f2",
+    "c4f7"
+   ],
+   "baselineExpectedScoreA": 0.465993,
+   "baselineExpectedScoreB": 0.465993,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UsjY0HRz#6",
+   "phase": "opening",
+   "bestMoveA": "f1b5",
+   "bestMoveB": "f1b5",
+   "bestMoveMatch": true,
+   "cpA": -74,
+   "cpB": -74,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f1b5",
+    "d2d4",
+    "d2d3"
+   ],
+   "orderB": [
+    "f1b5",
+    "d2d4",
+    "d2d3"
+   ],
+   "baselineExpectedScoreA": 0.4323,
+   "baselineExpectedScoreB": 0.4323,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UsjY0HRz#14",
+   "phase": "middlegame",
+   "bestMoveA": "d4d5",
+   "bestMoveB": "d4d5",
+   "bestMoveMatch": true,
+   "cpA": 22,
+   "cpB": 22,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d4d5",
+    "b5a4",
+    "f3e4"
+   ],
+   "orderB": [
+    "d4d5",
+    "b5a4",
+    "f3e4"
+   ],
+   "baselineExpectedScoreA": 0.52024,
+   "baselineExpectedScoreB": 0.52024,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UsjY0HRz#22",
+   "phase": "middlegame",
+   "bestMoveA": "a4c6",
+   "bestMoveB": "a4c6",
+   "bestMoveMatch": true,
+   "cpA": -283,
+   "cpB": -283,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a4c6",
+    "a4c2",
+    "a4b3"
+   ],
+   "orderB": [
+    "a4c6",
+    "a4c2",
+    "a4b3"
+   ],
+   "baselineExpectedScoreA": 0.260759,
+   "baselineExpectedScoreB": 0.260759,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UsjY0HRz#29",
+   "phase": "endgame",
+   "bestMoveA": "e8c8",
+   "bestMoveB": "e8c8",
+   "bestMoveMatch": true,
+   "cpA": 567,
+   "cpB": 567,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e8c8",
+    "e8g8",
+    "c5d6"
+   ],
+   "orderB": [
+    "e8c8",
+    "e8g8",
+    "c5d6"
+   ],
+   "baselineExpectedScoreA": 0.889706,
+   "baselineExpectedScoreB": 0.889706,
+   "baselineDiff": 0
+  },
+  {
+   "id": "gHnmBYFW#9",
+   "phase": "opening",
+   "bestMoveA": "a7a6",
+   "bestMoveB": "a7a6",
+   "bestMoveMatch": true,
+   "cpA": -49,
+   "cpB": -49,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a7a6",
+    "b8c6",
+    "e7e6"
+   ],
+   "orderB": [
+    "a7a6",
+    "b8c6",
+    "e7e6"
+   ],
+   "baselineExpectedScoreA": 0.455016,
+   "baselineExpectedScoreB": 0.455016,
+   "baselineDiff": 0
+  },
+  {
+   "id": "gHnmBYFW#23",
+   "phase": "middlegame",
+   "bestMoveA": "d7f8",
+   "bestMoveB": "d7f8",
+   "bestMoveMatch": true,
+   "cpA": -57,
+   "cpB": -57,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7f8",
+    "e8g8",
+    "d7f8"
+   ],
+   "orderB": [
+    "d7f8",
+    "e8g8",
+    "d7f8"
+   ],
+   "baselineExpectedScoreA": 0.447722,
+   "baselineExpectedScoreB": 0.447722,
+   "baselineDiff": 0
+  },
+  {
+   "id": "gHnmBYFW#37",
+   "phase": "middlegame",
+   "bestMoveA": "b7b5",
+   "bestMoveB": "b7b5",
+   "bestMoveMatch": true,
+   "cpA": 57,
+   "cpB": 57,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b7b5",
+    "f6d7",
+    "f6h7"
+   ],
+   "orderB": [
+    "b7b5",
+    "f6d7",
+    "f6h7"
+   ],
+   "baselineExpectedScoreA": 0.552278,
+   "baselineExpectedScoreB": 0.552278,
+   "baselineDiff": 0
+  },
+  {
+   "id": "gHnmBYFW#48",
+   "phase": "endgame",
+   "bestMoveA": "e3e7",
+   "bestMoveB": "e3e7",
+   "bestMoveMatch": true,
+   "cpA": -258,
+   "cpB": -258,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e3e7",
+    "e2c3",
+    "e2d4"
+   ],
+   "orderB": [
+    "e3e7",
+    "e2c3",
+    "e2d4"
+   ],
+   "baselineExpectedScoreA": 0.27889,
+   "baselineExpectedScoreB": 0.27889,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BxqtkIbL#7",
+   "phase": "opening",
+   "bestMoveA": "g8f6",
+   "bestMoveB": "g8f6",
+   "bestMoveMatch": true,
+   "cpA": -64,
+   "cpB": -64,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g8f6",
+    "g7g6",
+    "b8c6"
+   ],
+   "orderB": [
+    "g8f6",
+    "g7g6",
+    "b8c6"
+   ],
+   "baselineExpectedScoreA": 0.441358,
+   "baselineExpectedScoreB": 0.441358,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BxqtkIbL#19",
+   "phase": "middlegame",
+   "bestMoveA": "c8e6",
+   "bestMoveB": "c8e6",
+   "bestMoveMatch": true,
+   "cpA": -57,
+   "cpB": -57,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8e6",
+    "a7a6",
+    "d8a5"
+   ],
+   "orderB": [
+    "c8e6",
+    "a7a6",
+    "d8a5"
+   ],
+   "baselineExpectedScoreA": 0.447722,
+   "baselineExpectedScoreB": 0.447722,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BxqtkIbL#31",
+   "phase": "middlegame",
+   "bestMoveA": "a3b2",
+   "bestMoveB": "a3b2",
+   "bestMoveMatch": true,
+   "cpA": -6,
+   "cpB": -6,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a3b2",
+    "a3a2",
+    "a3c5"
+   ],
+   "orderB": [
+    "a3b2",
+    "a3a2",
+    "a3c5"
+   ],
+   "baselineExpectedScoreA": 0.494477,
+   "baselineExpectedScoreB": 0.494477,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BxqtkIbL#40",
+   "phase": "endgame",
+   "bestMoveA": "d2d5",
+   "bestMoveB": "d2d5",
+   "bestMoveMatch": true,
+   "cpA": -77,
+   "cpB": -77,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2d5",
+    "d2d4",
+    "d2d3"
+   ],
+   "orderB": [
+    "d2d5",
+    "d2d4",
+    "d2d3"
+   ],
+   "baselineExpectedScoreA": 0.429591,
+   "baselineExpectedScoreB": 0.429591,
+   "baselineDiff": 0
+  },
+  {
+   "id": "oPvDBkpv#14",
+   "phase": "opening",
+   "bestMoveA": "c2c3",
+   "bestMoveB": "c2c3",
+   "bestMoveMatch": true,
+   "cpA": 11,
+   "cpB": 11,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c2c3",
+    "f1b5",
+    "f1c4"
+   ],
+   "orderB": [
+    "c2c3",
+    "f1b5",
+    "f1c4"
+   ],
+   "baselineExpectedScoreA": 0.510124,
+   "baselineExpectedScoreB": 0.510124,
+   "baselineDiff": 0
+  },
+  {
+   "id": "oPvDBkpv#38",
+   "phase": "middlegame",
+   "bestMoveA": "e2f4",
+   "bestMoveB": "e2f4",
+   "bestMoveMatch": true,
+   "cpA": -103,
+   "cpB": -103,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2f4",
+    "a1f1",
+    "a1c1"
+   ],
+   "orderB": [
+    "e2f4",
+    "a1f1",
+    "a1c1"
+   ],
+   "baselineExpectedScoreA": 0.406307,
+   "baselineExpectedScoreB": 0.406307,
+   "baselineDiff": 0
+  },
+  {
+   "id": "oPvDBkpv#62",
+   "phase": "middlegame",
+   "bestMoveA": "d4d5",
+   "bestMoveB": "d4d5",
+   "bestMoveMatch": true,
+   "cpA": 29,
+   "cpB": 29,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d4d5",
+    "c1c5",
+    "d4e5"
+   ],
+   "orderB": [
+    "d4d5",
+    "c1c5",
+    "d4e5"
+   ],
+   "baselineExpectedScoreA": 0.52667,
+   "baselineExpectedScoreB": 0.52667,
+   "baselineDiff": 0
+  },
+  {
+   "id": "oPvDBkpv#81",
+   "phase": "endgame",
+   "bestMoveA": "h5g4",
+   "bestMoveB": "h5g4",
+   "bestMoveMatch": true,
+   "cpA": -43,
+   "cpB": -43,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5g4",
+    "b1d3",
+    "b1e4"
+   ],
+   "orderB": [
+    "h5g4",
+    "b1d3",
+    "b1e4"
+   ],
+   "baselineExpectedScoreA": 0.4605,
+   "baselineExpectedScoreB": 0.4605,
+   "baselineDiff": 0
+  },
+  {
+   "id": "maAJS66Q#7",
+   "phase": "opening",
+   "bestMoveA": "e7e6",
+   "bestMoveB": "e7e6",
+   "bestMoveMatch": true,
+   "cpA": -72,
+   "cpB": -72,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7e6",
+    "d5c3",
+    "d5c7"
+   ],
+   "orderB": [
+    "e7e6",
+    "d5c3",
+    "d5c7"
+   ],
+   "baselineExpectedScoreA": 0.434108,
+   "baselineExpectedScoreB": 0.434108,
+   "baselineDiff": 0
+  },
+  {
+   "id": "maAJS66Q#18",
+   "phase": "middlegame",
+   "bestMoveA": "e1e2",
+   "bestMoveB": "e1e2",
+   "bestMoveMatch": true,
+   "cpA": 69,
+   "cpB": 69,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e1e2",
+    "e1d1",
+    "e1d1"
+   ],
+   "orderB": [
+    "e1e2",
+    "e1d1",
+    "e1d1"
+   ],
+   "baselineExpectedScoreA": 0.563176,
+   "baselineExpectedScoreB": 0.563176,
+   "baselineDiff": 0
+  },
+  {
+   "id": "maAJS66Q#29",
+   "phase": "middlegame",
+   "bestMoveA": "c5d6",
+   "bestMoveB": "c5d6",
+   "bestMoveMatch": true,
+   "cpA": -43,
+   "cpB": -43,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c5d6",
+    "c8d7",
+    "f8d8"
+   ],
+   "orderB": [
+    "c5d6",
+    "c8d7",
+    "f8d8"
+   ],
+   "baselineExpectedScoreA": 0.4605,
+   "baselineExpectedScoreB": 0.4605,
+   "baselineDiff": 0
+  },
+  {
+   "id": "maAJS66Q#38",
+   "phase": "endgame",
+   "bestMoveA": "c1e3",
+   "bestMoveB": "c1e3",
+   "bestMoveMatch": true,
+   "cpA": 97,
+   "cpB": 97,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c1e3",
+    "f5f7",
+    "c1d2"
+   ],
+   "orderB": [
+    "c1e3",
+    "f5f7",
+    "c1d2"
+   ],
+   "baselineExpectedScoreA": 0.588353,
+   "baselineExpectedScoreB": 0.588353,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RBszfxvB#12",
+   "phase": "opening",
+   "bestMoveA": "d5e4",
+   "bestMoveB": "d5e4",
+   "bestMoveMatch": true,
+   "cpA": 122,
+   "cpB": 122,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d5e4",
+    "d5c5",
+    "d5d3"
+   ],
+   "orderB": [
+    "d5e4",
+    "d5c5",
+    "d5d3"
+   ],
+   "baselineExpectedScoreA": 0.610452,
+   "baselineExpectedScoreB": 0.610452,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RBszfxvB#31",
+   "phase": "middlegame",
+   "bestMoveA": "g7g5",
+   "bestMoveB": "g7g5",
+   "bestMoveMatch": true,
+   "cpA": 143,
+   "cpB": 143,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g7g5",
+    "e8c8",
+    "g7g5"
+   ],
+   "orderB": [
+    "g7g5",
+    "e8c8",
+    "g7g5"
+   ],
+   "baselineExpectedScoreA": 0.628675,
+   "baselineExpectedScoreB": 0.628675,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RBszfxvB#51",
+   "phase": "middlegame",
+   "bestMoveA": "a3c4",
+   "bestMoveB": "a3c4",
+   "bestMoveMatch": true,
+   "cpA": 519,
+   "cpB": 519,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a3c4",
+    "c7d7",
+    "c7a5"
+   ],
+   "orderB": [
+    "a3c4",
+    "c7d7",
+    "c7a5"
+   ],
+   "baselineExpectedScoreA": 0.871131,
+   "baselineExpectedScoreB": 0.871131,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RBszfxvB#66",
+   "phase": "endgame",
+   "bestMoveA": "h3g4",
+   "bestMoveB": "h3g4",
+   "bestMoveMatch": true,
+   "cpA": -965,
+   "cpB": -965,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h3g4",
+    "e2c2",
+    "g2g1"
+   ],
+   "orderB": [
+    "h3g4",
+    "e2c2",
+    "g2g1"
+   ],
+   "baselineExpectedScoreA": 0.027836,
+   "baselineExpectedScoreB": 0.027836,
+   "baselineDiff": 0
+  },
+  {
+   "id": "QSnfGfZK#11",
+   "phase": "opening",
+   "bestMoveA": "b5c4",
+   "bestMoveB": "b5c4",
+   "bestMoveMatch": true,
+   "cpA": -29,
+   "cpB": -29,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b5c4",
+    "b5b4",
+    "d8a5"
+   ],
+   "orderB": [
+    "b5c4",
+    "b5b4",
+    "d8a5"
+   ],
+   "baselineExpectedScoreA": 0.47333,
+   "baselineExpectedScoreB": 0.47333,
+   "baselineDiff": 0
+  },
+  {
+   "id": "QSnfGfZK#29",
+   "phase": "middlegame",
+   "bestMoveA": "c8f5",
+   "bestMoveB": "c8f5",
+   "bestMoveMatch": true,
+   "cpA": 130,
+   "cpB": 130,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8f5",
+    "f6d7",
+    "d6e5"
+   ],
+   "orderB": [
+    "c8f5",
+    "f6d7",
+    "d6e5"
+   ],
+   "baselineExpectedScoreA": 0.617434,
+   "baselineExpectedScoreB": 0.617434,
+   "baselineDiff": 0
+  },
+  {
+   "id": "QSnfGfZK#47",
+   "phase": "middlegame",
+   "bestMoveA": "c3b2",
+   "bestMoveB": "c3b2",
+   "bestMoveMatch": true,
+   "cpA": 347,
+   "cpB": 347,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3b2",
+    "c3d4",
+    "d7e6"
+   ],
+   "orderB": [
+    "c3b2",
+    "c3d4",
+    "d7e6"
+   ],
+   "baselineExpectedScoreA": 0.782055,
+   "baselineExpectedScoreB": 0.782055,
+   "baselineDiff": 0
+  },
+  {
+   "id": "QSnfGfZK#62",
+   "phase": "endgame",
+   "bestMoveA": "b6h6",
+   "bestMoveB": "b6h6",
+   "bestMoveMatch": true,
+   "cpA": -394,
+   "cpB": -394,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b6h6",
+    "h3h4",
+    "f2f3"
+   ],
+   "orderB": [
+    "b6h6",
+    "h3h4",
+    "f2f3"
+   ],
+   "baselineExpectedScoreA": 0.189888,
+   "baselineExpectedScoreB": 0.189888,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SBgUtUer#12",
+   "phase": "opening",
+   "bestMoveA": "d1c2",
+   "bestMoveB": "d1c2",
+   "bestMoveMatch": true,
+   "cpA": 92,
+   "cpB": 92,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1c2",
+    "d1c2",
+    "c1d2"
+   ],
+   "orderB": [
+    "d1c2",
+    "d1c2",
+    "c1d2"
+   ],
+   "baselineExpectedScoreA": 0.583887,
+   "baselineExpectedScoreB": 0.583887,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SBgUtUer#33",
+   "phase": "middlegame",
+   "bestMoveA": "g2f2",
+   "bestMoveB": "g2f2",
+   "bestMoveMatch": true,
+   "cpA": 544,
+   "cpB": 544,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g2f2",
+    "b8c6",
+    "g2c6"
+   ],
+   "orderB": [
+    "g2f2",
+    "b8c6",
+    "g2c6"
+   ],
+   "baselineExpectedScoreA": 0.881117,
+   "baselineExpectedScoreB": 0.881117,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SBgUtUer#53",
+   "phase": "middlegame",
+   "bestMoveA": "h8h7",
+   "bestMoveB": "h8h7",
+   "bestMoveMatch": true,
+   "cpA": 247,
+   "cpB": 247,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h8h7",
+    "c6d8"
+   ],
+   "orderB": [
+    "h8h7",
+    "c6d8"
+   ],
+   "baselineExpectedScoreA": 0.712892,
+   "baselineExpectedScoreB": 0.712892,
+   "baselineDiff": 0
+  },
+  {
+   "id": "SBgUtUer#70",
+   "phase": "endgame",
+   "bestMoveA": "g4e6",
+   "bestMoveB": "g4e6",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4e6",
+    "g4e2",
+    "g4g2"
+   ],
+   "orderB": [
+    "g4e6",
+    "g4e2",
+    "g4g2"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VWXkbtAK#6",
+   "phase": "opening",
+   "bestMoveA": "g1f3",
+   "bestMoveB": "g1f3",
+   "bestMoveMatch": true,
+   "cpA": 90,
+   "cpB": 90,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1f3",
+    "e4e5",
+    "c1e3"
+   ],
+   "orderB": [
+    "g1f3",
+    "e4e5",
+    "c1e3"
+   ],
+   "baselineExpectedScoreA": 0.582097,
+   "baselineExpectedScoreB": 0.582097,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VWXkbtAK#16",
+   "phase": "middlegame",
+   "bestMoveA": "g1f3",
+   "bestMoveB": "g1f3",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1f3",
+    "a2a3",
+    "c1e3"
+   ],
+   "orderB": [
+    "g1f3",
+    "a2a3",
+    "c1e3"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VWXkbtAK#26",
+   "phase": "middlegame",
+   "bestMoveA": "c4e6",
+   "bestMoveB": "c4e6",
+   "bestMoveMatch": true,
+   "cpA": -15,
+   "cpB": -15,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c4e6",
+    "c4b3",
+    "c4f1"
+   ],
+   "orderB": [
+    "c4e6",
+    "c4b3",
+    "c4f1"
+   ],
+   "baselineExpectedScoreA": 0.486196,
+   "baselineExpectedScoreB": 0.486196,
+   "baselineDiff": 0
+  },
+  {
+   "id": "VWXkbtAK#34",
+   "phase": "endgame",
+   "bestMoveA": "e1f2",
+   "bestMoveB": "e1f2",
+   "bestMoveMatch": true,
+   "cpA": -247,
+   "cpB": -247,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e1f2",
+    "c1d2",
+    "e1d1"
+   ],
+   "orderB": [
+    "e1f2",
+    "c1d2",
+    "e1d1"
+   ],
+   "baselineExpectedScoreA": 0.287108,
+   "baselineExpectedScoreB": 0.287108,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8ocnkRSJ#11",
+   "phase": "opening",
+   "bestMoveA": "b8d7",
+   "bestMoveB": "b8d7",
+   "bestMoveMatch": true,
+   "cpA": -45,
+   "cpB": -45,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b8d7",
+    "e7e6",
+    "d8c7"
+   ],
+   "orderB": [
+    "b8d7",
+    "e7e6",
+    "d8c7"
+   ],
+   "baselineExpectedScoreA": 0.458671,
+   "baselineExpectedScoreB": 0.458671,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8ocnkRSJ#28",
+   "phase": "middlegame",
+   "bestMoveA": "d4d5",
+   "bestMoveB": "d4d5",
+   "bestMoveMatch": true,
+   "cpA": 17,
+   "cpB": 17,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d4d5",
+    "d2b4",
+    "d4d5"
+   ],
+   "orderB": [
+    "d4d5",
+    "d2b4",
+    "d4d5"
+   ],
+   "baselineExpectedScoreA": 0.515644,
+   "baselineExpectedScoreB": 0.515644,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8ocnkRSJ#46",
+   "phase": "middlegame",
+   "bestMoveA": "h6d2",
+   "bestMoveB": "h6d2",
+   "bestMoveMatch": true,
+   "cpA": 15,
+   "cpB": 15,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h6d2",
+    "f3g3",
+    "f3f5"
+   ],
+   "orderB": [
+    "h6d2",
+    "f3g3",
+    "f3f5"
+   ],
+   "baselineExpectedScoreA": 0.513804,
+   "baselineExpectedScoreB": 0.513804,
+   "baselineDiff": 0
+  },
+  {
+   "id": "8ocnkRSJ#60",
+   "phase": "endgame",
+   "bestMoveA": "g4h4",
+   "bestMoveB": "g4h4",
+   "bestMoveMatch": true,
+   "cpA": -21,
+   "cpB": -21,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4h4",
+    "h2g1",
+    "g4g3"
+   ],
+   "orderB": [
+    "g4h4",
+    "h2g1",
+    "g4g3"
+   ],
+   "baselineExpectedScoreA": 0.480679,
+   "baselineExpectedScoreB": 0.480679,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ffF8BZ5m#9",
+   "phase": "opening",
+   "bestMoveA": "f6e4",
+   "bestMoveB": "f6e4",
+   "bestMoveMatch": true,
+   "cpA": -23,
+   "cpB": -23,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f6e4",
+    "f6d7",
+    "f6g8"
+   ],
+   "orderB": [
+    "f6e4",
+    "f6d7",
+    "f6g8"
+   ],
+   "baselineExpectedScoreA": 0.478841,
+   "baselineExpectedScoreB": 0.478841,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ffF8BZ5m#25",
+   "phase": "middlegame",
+   "bestMoveA": "f6g5",
+   "bestMoveB": "f6g5",
+   "bestMoveMatch": true,
+   "cpA": 356,
+   "cpB": 356,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f6g5",
+    "h7g8",
+    "h7h6"
+   ],
+   "orderB": [
+    "f6g5",
+    "h7g8",
+    "h7h6"
+   ],
+   "baselineExpectedScoreA": 0.78765,
+   "baselineExpectedScoreB": 0.78765,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ffF8BZ5m#41",
+   "phase": "middlegame",
+   "bestMoveA": "b8c6",
+   "bestMoveB": "b8c6",
+   "bestMoveMatch": true,
+   "cpA": 343,
+   "cpB": 343,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b8c6",
+    "h6g5",
+    "a8a7"
+   ],
+   "orderB": [
+    "b8c6",
+    "h6g5",
+    "a8a7"
+   ],
+   "baselineExpectedScoreA": 0.779534,
+   "baselineExpectedScoreB": 0.779534,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ffF8BZ5m#54",
+   "phase": "endgame",
+   "bestMoveA": "f3f7",
+   "bestMoveB": "f3f7",
+   "bestMoveMatch": true,
+   "cpA": 223,
+   "cpB": 223,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f3f7",
+    "a4b6",
+    "g4g5"
+   ],
+   "orderB": [
+    "f3f7",
+    "a4b6",
+    "g4g5"
+   ],
+   "baselineExpectedScoreA": 0.694471,
+   "baselineExpectedScoreB": 0.694471,
+   "baselineDiff": 0
+  },
+  {
+   "id": "AT2HsxPw#21",
+   "phase": "opening",
+   "bestMoveA": "f8e8",
+   "bestMoveB": "f8e8",
+   "bestMoveMatch": true,
+   "cpA": 57,
+   "cpB": 57,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f8e8",
+    "f5h7",
+    "d7c5"
+   ],
+   "orderB": [
+    "f8e8",
+    "f5h7",
+    "d7c5"
+   ],
+   "baselineExpectedScoreA": 0.552278,
+   "baselineExpectedScoreB": 0.552278,
+   "baselineDiff": 0
+  },
+  {
+   "id": "AT2HsxPw#55",
+   "phase": "middlegame",
+   "bestMoveA": "d2e2",
+   "bestMoveB": "d2e2",
+   "bestMoveMatch": true,
+   "cpA": 369,
+   "cpB": 369,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2e2",
+    "h7g7",
+    "f7f5"
+   ],
+   "orderB": [
+    "d2e2",
+    "h7g7",
+    "f7f5"
+   ],
+   "baselineExpectedScoreA": 0.795546,
+   "baselineExpectedScoreB": 0.795546,
+   "baselineDiff": 0
+  },
+  {
+   "id": "AT2HsxPw#89",
+   "phase": "middlegame",
+   "bestMoveA": "h6h5",
+   "bestMoveB": "h6h5",
+   "bestMoveMatch": true,
+   "cpA": 415,
+   "cpB": 415,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h6h5",
+    "e6f4",
+    "f6g5"
+   ],
+   "orderB": [
+    "h6h5",
+    "e6f4",
+    "f6g5"
+   ],
+   "baselineExpectedScoreA": 0.821723,
+   "baselineExpectedScoreB": 0.821723,
+   "baselineDiff": 0
+  },
+  {
+   "id": "AT2HsxPw#116",
+   "phase": "endgame",
+   "bestMoveA": "e2f3",
+   "bestMoveB": "e2f3",
+   "bestMoveMatch": true,
+   "cpA": -285,
+   "cpB": -285,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2f3",
+    "e2f1",
+    "e4d6"
+   ],
+   "orderB": [
+    "e2f3",
+    "e2f1",
+    "e4d6"
+   ],
+   "baselineExpectedScoreA": 0.259342,
+   "baselineExpectedScoreB": 0.259342,
+   "baselineDiff": 0
+  },
+  {
+   "id": "veBFD64W#11",
+   "phase": "opening",
+   "bestMoveA": "e7e6",
+   "bestMoveB": "e7e6",
+   "bestMoveMatch": true,
+   "cpA": -16,
+   "cpB": -16,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7e6",
+    "d8a5",
+    "d8d7"
+   ],
+   "orderB": [
+    "e7e6",
+    "d8a5",
+    "d8d7"
+   ],
+   "baselineExpectedScoreA": 0.485276,
+   "baselineExpectedScoreB": 0.485276,
+   "baselineDiff": 0
+  },
+  {
+   "id": "veBFD64W#29",
+   "phase": "middlegame",
+   "bestMoveA": "a6b8",
+   "bestMoveB": "a6b8",
+   "bestMoveMatch": true,
+   "cpA": 32,
+   "cpB": 32,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a6b8",
+    "a6b8",
+    "a8c8"
+   ],
+   "orderB": [
+    "a6b8",
+    "a6b8",
+    "a8c8"
+   ],
+   "baselineExpectedScoreA": 0.529423,
+   "baselineExpectedScoreB": 0.529423,
+   "baselineDiff": 0
+  },
+  {
+   "id": "veBFD64W#47",
+   "phase": "middlegame",
+   "bestMoveA": "e6d5",
+   "bestMoveB": "e6d5",
+   "bestMoveMatch": true,
+   "cpA": -65,
+   "cpB": -65,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e6d5",
+    "f6e5",
+    "e7d8"
+   ],
+   "orderB": [
+    "e6d5",
+    "f6e5",
+    "e7d8"
+   ],
+   "baselineExpectedScoreA": 0.44045,
+   "baselineExpectedScoreB": 0.44045,
+   "baselineDiff": 0
+  },
+  {
+   "id": "veBFD64W#61",
+   "phase": "endgame",
+   "bestMoveA": "c8c1",
+   "bestMoveB": "c8c1",
+   "bestMoveMatch": true,
+   "cpA": 1,
+   "cpB": 1,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8c1",
+    "b5b4",
+    "c8c7"
+   ],
+   "orderB": [
+    "c8c1",
+    "b5b4",
+    "c8c7"
+   ],
+   "baselineExpectedScoreA": 0.500921,
+   "baselineExpectedScoreB": 0.500921,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b9ieyXRY#12",
+   "phase": "opening",
+   "bestMoveA": "d2d4",
+   "bestMoveB": "d2d4",
+   "bestMoveMatch": true,
+   "cpA": -118,
+   "cpB": -118,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2d4",
+    "c3d5",
+    "h2h3"
+   ],
+   "orderB": [
+    "d2d4",
+    "c3d5",
+    "h2h3"
+   ],
+   "baselineExpectedScoreA": 0.393056,
+   "baselineExpectedScoreB": 0.393056,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b9ieyXRY#33",
+   "phase": "middlegame",
+   "bestMoveA": "d8b6",
+   "bestMoveB": "d8b6",
+   "bestMoveMatch": true,
+   "cpA": 479,
+   "cpB": 479,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8b6",
+    "e8g8",
+    "h8f8"
+   ],
+   "orderB": [
+    "d8b6",
+    "e8g8",
+    "h8f8"
+   ],
+   "baselineExpectedScoreA": 0.853674,
+   "baselineExpectedScoreB": 0.853674,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b9ieyXRY#54",
+   "phase": "middlegame",
+   "bestMoveA": "g2g1",
+   "bestMoveB": "g2g1",
+   "bestMoveMatch": true,
+   "cpA": 593,
+   "cpB": 593,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g2g1",
+    "g2f2",
+    "g2h3"
+   ],
+   "orderB": [
+    "g2g1",
+    "g2f2",
+    "g2h3"
+   ],
+   "baselineExpectedScoreA": 0.898756,
+   "baselineExpectedScoreB": 0.898756,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b9ieyXRY#71",
+   "phase": "endgame",
+   "bestMoveA": "a8e8",
+   "bestMoveB": "a8e8",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a8e8",
+    "f8e8",
+    "f8e8"
+   ],
+   "orderB": [
+    "a8e8",
+    "f8e8",
+    "f8e8"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "iMPAFcAx#9",
+   "phase": "opening",
+   "bestMoveA": "b7c6",
+   "bestMoveB": "b7c6",
+   "bestMoveMatch": true,
+   "cpA": -22,
+   "cpB": -22,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b7c6",
+    "d7c6",
+    "f7f5"
+   ],
+   "orderB": [
+    "b7c6",
+    "d7c6",
+    "f7f5"
+   ],
+   "baselineExpectedScoreA": 0.47976,
+   "baselineExpectedScoreB": 0.47976,
+   "baselineDiff": 0
+  },
+  {
+   "id": "iMPAFcAx#24",
+   "phase": "middlegame",
+   "bestMoveA": "d2b3",
+   "bestMoveB": "d2b3",
+   "bestMoveMatch": true,
+   "cpA": 58,
+   "cpB": 58,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2b3",
+    "d1e2",
+    "b2b4"
+   ],
+   "orderB": [
+    "d2b3",
+    "d1e2",
+    "b2b4"
+   ],
+   "baselineExpectedScoreA": 0.553188,
+   "baselineExpectedScoreB": 0.553188,
+   "baselineDiff": 0
+  },
+  {
+   "id": "iMPAFcAx#39",
+   "phase": "middlegame",
+   "bestMoveA": "d8d7",
+   "bestMoveB": "d8d7",
+   "bestMoveMatch": true,
+   "cpA": 153,
+   "cpB": 153,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8d7",
+    "d8d7",
+    "d8c8"
+   ],
+   "orderB": [
+    "d8d7",
+    "d8d7",
+    "d8c8"
+   ],
+   "baselineExpectedScoreA": 0.637229,
+   "baselineExpectedScoreB": 0.637229,
+   "baselineDiff": 0
+  },
+  {
+   "id": "iMPAFcAx#51",
+   "phase": "endgame",
+   "bestMoveA": "g8g4",
+   "bestMoveB": "g8g4",
+   "bestMoveMatch": true,
+   "cpA": 615,
+   "cpB": 615,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g8g4",
+    "e6g5",
+    "d6d5"
+   ],
+   "orderB": [
+    "g8g4",
+    "e6g5",
+    "d6d5"
+   ],
+   "baselineExpectedScoreA": 0.905892,
+   "baselineExpectedScoreB": 0.905892,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jsXaRbnq#11",
+   "phase": "opening",
+   "bestMoveA": "c6d4",
+   "bestMoveB": "c6d4",
+   "bestMoveMatch": true,
+   "cpA": 14,
+   "cpB": 14,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6d4",
+    "e8c8",
+    "e7e6"
+   ],
+   "orderB": [
+    "c6d4",
+    "e8c8",
+    "e7e6"
+   ],
+   "baselineExpectedScoreA": 0.512884,
+   "baselineExpectedScoreB": 0.512884,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jsXaRbnq#29",
+   "phase": "middlegame",
+   "bestMoveA": "c6a5",
+   "bestMoveB": "c6a5",
+   "bestMoveMatch": true,
+   "cpA": -360,
+   "cpB": -360,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6a5",
+    "h7h5",
+    "d5f4"
+   ],
+   "orderB": [
+    "c6a5",
+    "h7h5",
+    "d5f4"
+   ],
+   "baselineExpectedScoreA": 0.209897,
+   "baselineExpectedScoreB": 0.209897,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jsXaRbnq#47",
+   "phase": "middlegame",
+   "bestMoveA": "h3c3",
+   "bestMoveB": "h3c3",
+   "bestMoveMatch": true,
+   "cpA": 35,
+   "cpB": 35,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h3c3",
+    "h3d3",
+    "d8d4"
+   ],
+   "orderB": [
+    "h3c3",
+    "h3d3",
+    "d8d4"
+   ],
+   "baselineExpectedScoreA": 0.532174,
+   "baselineExpectedScoreB": 0.532174,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jsXaRbnq#62",
+   "phase": "endgame",
+   "bestMoveA": "g1g2",
+   "bestMoveB": "g1g2",
+   "bestMoveMatch": true,
+   "cpA": 278,
+   "cpB": 278,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1g2",
+    "d8g8",
+    "a2d2"
+   ],
+   "orderB": [
+    "g1g2",
+    "d8g8",
+    "a2d2"
+   ],
+   "baselineExpectedScoreA": 0.735677,
+   "baselineExpectedScoreB": 0.735677,
+   "baselineDiff": 0
+  },
+  {
+   "id": "zpL3Ijb5#9",
+   "phase": "opening",
+   "bestMoveA": "b8c6",
+   "bestMoveB": "b8c6",
+   "bestMoveMatch": true,
+   "cpA": 24,
+   "cpB": 24,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b8c6",
+    "f7f5",
+    "e4c3"
+   ],
+   "orderB": [
+    "b8c6",
+    "f7f5",
+    "e4c3"
+   ],
+   "baselineExpectedScoreA": 0.522078,
+   "baselineExpectedScoreB": 0.522078,
+   "baselineDiff": 0
+  },
+  {
+   "id": "zpL3Ijb5#23",
+   "phase": "middlegame",
+   "bestMoveA": "f8c5",
+   "bestMoveB": "f8c5",
+   "bestMoveMatch": true,
+   "cpA": 85,
+   "cpB": 85,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f8c5",
+    "d4c3",
+    "e6d5"
+   ],
+   "orderB": [
+    "f8c5",
+    "d4c3",
+    "e6d5"
+   ],
+   "baselineExpectedScoreA": 0.577612,
+   "baselineExpectedScoreB": 0.577612,
+   "baselineDiff": 0
+  },
+  {
+   "id": "zpL3Ijb5#38",
+   "phase": "middlegame",
+   "bestMoveA": "f6h8",
+   "bestMoveB": "f6h8",
+   "bestMoveMatch": true,
+   "cpA": 140,
+   "cpB": 140,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f6h8",
+    "b1b6",
+    "g1f2"
+   ],
+   "orderB": [
+    "f6h8",
+    "b1b6",
+    "g1f2"
+   ],
+   "baselineExpectedScoreA": 0.626093,
+   "baselineExpectedScoreB": 0.626093,
+   "baselineDiff": 0
+  },
+  {
+   "id": "zpL3Ijb5#49",
+   "phase": "endgame",
+   "bestMoveA": "d7h7",
+   "bestMoveB": "d7h7",
+   "bestMoveMatch": true,
+   "cpA": 399,
+   "cpB": 399,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7h7",
+    "d5c6",
+    "b6c5"
+   ],
+   "orderB": [
+    "d7h7",
+    "d5c6",
+    "b6c5"
+   ],
+   "baselineExpectedScoreA": 0.812928,
+   "baselineExpectedScoreB": 0.812928,
+   "baselineDiff": 0
+  },
+  {
+   "id": "wobRCfwU#11",
+   "phase": "opening",
+   "bestMoveA": "d8a5",
+   "bestMoveB": "d8a5",
+   "bestMoveMatch": true,
+   "cpA": -52,
+   "cpB": -52,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8a5",
+    "d8a5",
+    "g7g6"
+   ],
+   "orderB": [
+    "d8a5",
+    "d8a5",
+    "g7g6"
+   ],
+   "baselineExpectedScoreA": 0.452279,
+   "baselineExpectedScoreB": 0.452279,
+   "baselineDiff": 0
+  },
+  {
+   "id": "wobRCfwU#29",
+   "phase": "middlegame",
+   "bestMoveA": "g7c3",
+   "bestMoveB": "g7c3",
+   "bestMoveMatch": true,
+   "cpA": 125,
+   "cpB": 125,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g7c3",
+    "b6b7",
+    "b6a6"
+   ],
+   "orderB": [
+    "g7c3",
+    "b6b7",
+    "b6a6"
+   ],
+   "baselineExpectedScoreA": 0.613076,
+   "baselineExpectedScoreB": 0.613076,
+   "baselineDiff": 0
+  },
+  {
+   "id": "wobRCfwU#47",
+   "phase": "middlegame",
+   "bestMoveA": "h5f4",
+   "bestMoveB": "h5f4",
+   "bestMoveMatch": true,
+   "cpA": 536,
+   "cpB": 536,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5f4",
+    "a6a2",
+    "d6e5"
+   ],
+   "orderB": [
+    "h5f4",
+    "a6a2",
+    "d6e5"
+   ],
+   "baselineExpectedScoreA": 0.877997,
+   "baselineExpectedScoreB": 0.877997,
+   "baselineDiff": 0
+  },
+  {
+   "id": "wobRCfwU#61",
+   "phase": "endgame",
+   "bestMoveA": "e7d6",
+   "bestMoveB": "e7d6",
+   "bestMoveMatch": true,
+   "cpA": -408,
+   "cpB": -408,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7d6",
+    "b8b3",
+    "f6g5"
+   ],
+   "orderB": [
+    "e7d6",
+    "b8b3",
+    "f6g5"
+   ],
+   "baselineExpectedScoreA": 0.182084,
+   "baselineExpectedScoreB": 0.182084,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hPfDZQN2#15",
+   "phase": "opening",
+   "bestMoveA": "d7d5",
+   "bestMoveB": "d7d5",
+   "bestMoveMatch": true,
+   "cpA": 166,
+   "cpB": 166,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7d5",
+    "g8f6",
+    "g8e7"
+   ],
+   "orderB": [
+    "d7d5",
+    "g8f6",
+    "g8e7"
+   ],
+   "baselineExpectedScoreA": 0.64822,
+   "baselineExpectedScoreB": 0.64822,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hPfDZQN2#40",
+   "phase": "middlegame",
+   "bestMoveA": "d1c2",
+   "bestMoveB": "d1c2",
+   "bestMoveMatch": true,
+   "cpA": -1066,
+   "cpB": -1066,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1c2",
+    "d1c1",
+    "c4d5"
+   ],
+   "orderB": [
+    "d1c2",
+    "d1c1",
+    "c4d5"
+   ],
+   "baselineExpectedScoreA": 0.019358,
+   "baselineExpectedScoreB": 0.019358,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hPfDZQN2#66",
+   "phase": "middlegame",
+   "bestMoveA": "c4c3",
+   "bestMoveB": "c4c3",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c4c3",
+    "c4d3",
+    "c4c5"
+   ],
+   "orderB": [
+    "c4c3",
+    "c4d3",
+    "c4c5"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hPfDZQN2#86",
+   "phase": "endgame",
+   "bestMoveA": "d2e3",
+   "bestMoveB": "d2e3",
+   "bestMoveMatch": true,
+   "cpA": -40,
+   "cpB": -40,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2e3",
+    "d2c3",
+    "d2e2"
+   ],
+   "orderB": [
+    "d2e3",
+    "d2c3",
+    "d2e2"
+   ],
+   "baselineExpectedScoreA": 0.463246,
+   "baselineExpectedScoreB": 0.463246,
+   "baselineDiff": 0
+  },
+  {
+   "id": "rf2MrMXn#8",
+   "phase": "opening",
+   "bestMoveA": "b1c3",
+   "bestMoveB": "b1c3",
+   "bestMoveMatch": true,
+   "cpA": 56,
+   "cpB": 56,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1c3",
+    "f1d3",
+    "d1d3"
+   ],
+   "orderB": [
+    "b1c3",
+    "f1d3",
+    "d1d3"
+   ],
+   "baselineExpectedScoreA": 0.551367,
+   "baselineExpectedScoreB": 0.551367,
+   "baselineDiff": 0
+  },
+  {
+   "id": "rf2MrMXn#21",
+   "phase": "middlegame",
+   "bestMoveA": "d6e5",
+   "bestMoveB": "d6e5",
+   "bestMoveMatch": true,
+   "cpA": -25,
+   "cpB": -25,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d6e5",
+    "f6h5",
+    "f6e4"
+   ],
+   "orderB": [
+    "d6e5",
+    "f6h5",
+    "f6e4"
+   ],
+   "baselineExpectedScoreA": 0.477003,
+   "baselineExpectedScoreB": 0.477003,
+   "baselineDiff": 0
+  },
+  {
+   "id": "rf2MrMXn#34",
+   "phase": "middlegame",
+   "bestMoveA": "h6g7",
+   "bestMoveB": "h6g7",
+   "bestMoveMatch": true,
+   "cpA": -521,
+   "cpB": -521,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h6g7",
+    "e2b5",
+    "e2f3"
+   ],
+   "orderB": [
+    "h6g7",
+    "e2b5",
+    "e2f3"
+   ],
+   "baselineExpectedScoreA": 0.128044,
+   "baselineExpectedScoreB": 0.128044,
+   "baselineDiff": 0
+  },
+  {
+   "id": "rf2MrMXn#44",
+   "phase": "endgame",
+   "bestMoveA": "g4h5",
+   "bestMoveB": "g4h5",
+   "bestMoveMatch": true,
+   "cpA": -594,
+   "cpB": -594,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4h5",
+    "g4f3",
+    "e2e4"
+   ],
+   "orderB": [
+    "g4h5",
+    "g4f3",
+    "e2e4"
+   ],
+   "baselineExpectedScoreA": 0.10091,
+   "baselineExpectedScoreB": 0.10091,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9Cgy9pjB#15",
+   "phase": "opening",
+   "bestMoveA": "g7g6",
+   "bestMoveB": "g7g6",
+   "bestMoveMatch": true,
+   "cpA": -20,
+   "cpB": -20,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g7g6",
+    "b8d7",
+    "a7a6"
+   ],
+   "orderB": [
+    "g7g6",
+    "b8d7",
+    "a7a6"
+   ],
+   "baselineExpectedScoreA": 0.481598,
+   "baselineExpectedScoreB": 0.481598,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9Cgy9pjB#40",
+   "phase": "middlegame",
+   "bestMoveA": "d1d2",
+   "bestMoveB": "d1d2",
+   "bestMoveMatch": true,
+   "cpA": -49,
+   "cpB": -49,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1d2",
+    "d1d4",
+    "e1e3"
+   ],
+   "orderB": [
+    "d1d2",
+    "d1d4",
+    "e1e3"
+   ],
+   "baselineExpectedScoreA": 0.455016,
+   "baselineExpectedScoreB": 0.455016,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9Cgy9pjB#65",
+   "phase": "middlegame",
+   "bestMoveA": "c8f5",
+   "bestMoveB": "c8f5",
+   "bestMoveMatch": true,
+   "cpA": 447,
+   "cpB": 447,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8f5",
+    "d8e7",
+    "f7g8"
+   ],
+   "orderB": [
+    "c8f5",
+    "d8e7",
+    "f7g8"
+   ],
+   "baselineExpectedScoreA": 0.838335,
+   "baselineExpectedScoreB": 0.838335,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9Cgy9pjB#85",
+   "phase": "endgame",
+   "bestMoveA": "b7b5",
+   "bestMoveB": "b7b5",
+   "bestMoveMatch": true,
+   "cpA": 229,
+   "cpB": 229,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b7b5",
+    "b7b6",
+    "f7g8"
+   ],
+   "orderB": [
+    "b7b5",
+    "b7b6",
+    "f7g8"
+   ],
+   "baselineExpectedScoreA": 0.699138,
+   "baselineExpectedScoreB": 0.699138,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Dw81hRCl#19",
+   "phase": "opening",
+   "bestMoveA": "e6e5",
+   "bestMoveB": "e6e5",
+   "bestMoveMatch": true,
+   "cpA": -16,
+   "cpB": -16,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e6e5",
+    "e6e5",
+    "b8d7"
+   ],
+   "orderB": [
+    "e6e5",
+    "e6e5",
+    "b8d7"
+   ],
+   "baselineExpectedScoreA": 0.485276,
+   "baselineExpectedScoreB": 0.485276,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Dw81hRCl#52",
+   "phase": "middlegame",
+   "bestMoveA": "h4f3",
+   "bestMoveB": "h4f3",
+   "bestMoveMatch": true,
+   "cpA": -478,
+   "cpB": -478,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h4f3",
+    "g2f3",
+    "g2h3"
+   ],
+   "orderB": [
+    "h4f3",
+    "g2f3",
+    "g2h3"
+   ],
+   "baselineExpectedScoreA": 0.146786,
+   "baselineExpectedScoreB": 0.146786,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Dw81hRCl#84",
+   "phase": "middlegame",
+   "bestMoveA": "g4f6",
+   "bestMoveB": "g4f6",
+   "bestMoveMatch": true,
+   "cpA": -316,
+   "cpB": -316,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4f6",
+    "d3e4",
+    "g4f2"
+   ],
+   "orderB": [
+    "g4f6",
+    "d3e4",
+    "g4f2"
+   ],
+   "baselineExpectedScoreA": 0.238025,
+   "baselineExpectedScoreB": 0.238025,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Dw81hRCl#110",
+   "phase": "endgame",
+   "bestMoveA": "d5e6",
+   "bestMoveB": "d5e6",
+   "bestMoveMatch": true,
+   "cpA": 284,
+   "cpB": 284,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d5e6",
+    "d5c5",
+    "d5e5"
+   ],
+   "orderB": [
+    "d5e6",
+    "d5c5",
+    "d5e5"
+   ],
+   "baselineExpectedScoreA": 0.73995,
+   "baselineExpectedScoreB": 0.73995,
+   "baselineDiff": 0
+  },
+  {
+   "id": "73X9Ggzt#6",
+   "phase": "opening",
+   "bestMoveA": "f3e5",
+   "bestMoveB": "f3e5",
+   "bestMoveMatch": true,
+   "cpA": 212,
+   "cpB": 212,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f3e5",
+    "d2d4",
+    "d2d4"
+   ],
+   "orderB": [
+    "f3e5",
+    "d2d4",
+    "d2d4"
+   ],
+   "baselineExpectedScoreA": 0.68581,
+   "baselineExpectedScoreB": 0.68581,
+   "baselineDiff": 0
+  },
+  {
+   "id": "73X9Ggzt#16",
+   "phase": "middlegame",
+   "bestMoveA": "c1h6",
+   "bestMoveB": "c1h6",
+   "bestMoveMatch": true,
+   "cpA": 560,
+   "cpB": 560,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c1h6",
+    "e4f5",
+    "d4e6"
+   ],
+   "orderB": [
+    "c1h6",
+    "e4f5",
+    "d4e6"
+   ],
+   "baselineExpectedScoreA": 0.887151,
+   "baselineExpectedScoreB": 0.887151,
+   "baselineDiff": 0
+  },
+  {
+   "id": "73X9Ggzt#26",
+   "phase": "middlegame",
+   "bestMoveA": "a4c5",
+   "bestMoveB": "a4c5",
+   "bestMoveMatch": true,
+   "cpA": 563,
+   "cpB": 563,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a4c5",
+    "d3d4",
+    "d3h3"
+   ],
+   "orderB": [
+    "a4c5",
+    "d3d4",
+    "d3h3"
+   ],
+   "baselineExpectedScoreA": 0.888252,
+   "baselineExpectedScoreB": 0.888252,
+   "baselineDiff": 0
+  },
+  {
+   "id": "73X9Ggzt#34",
+   "phase": "endgame",
+   "bestMoveA": "d3h7",
+   "bestMoveB": "d3h7",
+   "bestMoveMatch": true,
+   "cpA": null,
+   "cpB": null,
+   "mateA": -5,
+   "mateB": -5,
+   "cpDiff": null,
+   "orderMatch": true,
+   "orderA": [
+    "d3h7",
+    "b7d6",
+    "d3g6"
+   ],
+   "orderB": [
+    "d3h7",
+    "b7d6",
+    "d3g6"
+   ],
+   "baselineExpectedScoreA": 0,
+   "baselineExpectedScoreB": 0,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UbBAyFgb#12",
+   "phase": "opening",
+   "bestMoveA": "g1f3",
+   "bestMoveB": "g1f3",
+   "bestMoveMatch": true,
+   "cpA": 27,
+   "cpB": 27,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1f3",
+    "g1f3",
+    "d2d4"
+   ],
+   "orderB": [
+    "g1f3",
+    "g1f3",
+    "d2d4"
+   ],
+   "baselineExpectedScoreA": 0.524834,
+   "baselineExpectedScoreB": 0.524834,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UbBAyFgb#32",
+   "phase": "middlegame",
+   "bestMoveA": "e6d8",
+   "bestMoveB": "e6d8",
+   "bestMoveMatch": true,
+   "cpA": 26,
+   "cpB": 26,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e6d8",
+    "e6c5",
+    "f1e1"
+   ],
+   "orderB": [
+    "e6d8",
+    "e6c5",
+    "f1e1"
+   ],
+   "baselineExpectedScoreA": 0.523915,
+   "baselineExpectedScoreB": 0.523915,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UbBAyFgb#53",
+   "phase": "middlegame",
+   "bestMoveA": "c7c8",
+   "bestMoveB": "c7c8",
+   "bestMoveMatch": true,
+   "cpA": -292,
+   "cpB": -292,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c7c8",
+    "c7b7",
+    "c7d7"
+   ],
+   "orderB": [
+    "c7c8",
+    "c7b7",
+    "c7d7"
+   ],
+   "baselineExpectedScoreA": 0.254422,
+   "baselineExpectedScoreB": 0.254422,
+   "baselineDiff": 0
+  },
+  {
+   "id": "UbBAyFgb#69",
+   "phase": "endgame",
+   "bestMoveA": "b5c4",
+   "bestMoveB": "b5c4",
+   "bestMoveMatch": true,
+   "cpA": 133,
+   "cpB": 133,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b5c4",
+    "b5a4",
+    "b5a6"
+   ],
+   "orderB": [
+    "b5c4",
+    "b5a4",
+    "b5a6"
+   ],
+   "baselineExpectedScoreA": 0.62004,
+   "baselineExpectedScoreB": 0.62004,
+   "baselineDiff": 0
+  },
+  {
+   "id": "fHjx0OSX#18",
+   "phase": "opening",
+   "bestMoveA": "e1g1",
+   "bestMoveB": "e1g1",
+   "bestMoveMatch": true,
+   "cpA": -3,
+   "cpB": -3,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e1g1",
+    "e2f3",
+    "f2f3"
+   ],
+   "orderB": [
+    "e1g1",
+    "e2f3",
+    "f2f3"
+   ],
+   "baselineExpectedScoreA": 0.497238,
+   "baselineExpectedScoreB": 0.497238,
+   "baselineDiff": 0
+  },
+  {
+   "id": "fHjx0OSX#49",
+   "phase": "middlegame",
+   "bestMoveA": "b3c3",
+   "bestMoveB": "b3c3",
+   "bestMoveMatch": true,
+   "cpA": 58,
+   "cpB": 58,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b3c3",
+    "c5d4",
+    "c5b4"
+   ],
+   "orderB": [
+    "b3c3",
+    "c5d4",
+    "c5b4"
+   ],
+   "baselineExpectedScoreA": 0.553188,
+   "baselineExpectedScoreB": 0.553188,
+   "baselineDiff": 0
+  },
+  {
+   "id": "fHjx0OSX#80",
+   "phase": "middlegame",
+   "bestMoveA": "e2c2",
+   "bestMoveB": "e2c2",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2c2",
+    "e2b2",
+    "f2f4"
+   ],
+   "orderB": [
+    "e2c2",
+    "e2b2",
+    "f2f4"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "fHjx0OSX#105",
+   "phase": "endgame",
+   "bestMoveA": "g3h4",
+   "bestMoveB": "g3h4",
+   "bestMoveMatch": true,
+   "cpA": -330,
+   "cpB": -330,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g3h4",
+    "g3h3",
+    "g3h2"
+   ],
+   "orderB": [
+    "g3h4",
+    "g3h3",
+    "g3h2"
+   ],
+   "baselineExpectedScoreA": 0.228802,
+   "baselineExpectedScoreB": 0.228802,
+   "baselineDiff": 0
+  },
+  {
+   "id": "o5Ju1zM3#6",
+   "phase": "opening",
+   "bestMoveA": "b5a4",
+   "bestMoveB": "b5a4",
+   "bestMoveMatch": true,
+   "cpA": 36,
+   "cpB": 36,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b5a4",
+    "b5c6",
+    "b5c4"
+   ],
+   "orderB": [
+    "b5a4",
+    "b5c6",
+    "b5c4"
+   ],
+   "baselineExpectedScoreA": 0.53309,
+   "baselineExpectedScoreB": 0.53309,
+   "baselineDiff": 0
+  },
+  {
+   "id": "o5Ju1zM3#11",
+   "phase": "middlegame",
+   "bestMoveA": "c8b7",
+   "bestMoveB": "c8b7",
+   "bestMoveMatch": true,
+   "cpA": -45,
+   "cpB": -45,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8b7",
+    "d7d6",
+    "f8d6"
+   ],
+   "orderB": [
+    "c8b7",
+    "d7d6",
+    "f8d6"
+   ],
+   "baselineExpectedScoreA": 0.458671,
+   "baselineExpectedScoreB": 0.458671,
+   "baselineDiff": 0
+  },
+  {
+   "id": "o5Ju1zM3#18",
+   "phase": "middlegame",
+   "bestMoveA": "f3e5",
+   "bestMoveB": "f3e5",
+   "bestMoveMatch": true,
+   "cpA": 66,
+   "cpB": 66,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f3e5",
+    "d2d4",
+    "h2h3"
+   ],
+   "orderB": [
+    "f3e5",
+    "d2d4",
+    "h2h3"
+   ],
+   "baselineExpectedScoreA": 0.560457,
+   "baselineExpectedScoreB": 0.560457,
+   "baselineDiff": 0
+  },
+  {
+   "id": "o5Ju1zM3#23",
+   "phase": "endgame",
+   "bestMoveA": "c8g4",
+   "bestMoveB": "c8g4",
+   "bestMoveMatch": true,
+   "cpA": -196,
+   "cpB": -196,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8g4",
+    "d8h4",
+    "f8e8"
+   ],
+   "orderB": [
+    "c8g4",
+    "d8h4",
+    "f8e8"
+   ],
+   "baselineExpectedScoreA": 0.327021,
+   "baselineExpectedScoreB": 0.327021,
+   "baselineDiff": 0
+  },
+  {
+   "id": "heaDbzar#6",
+   "phase": "opening",
+   "bestMoveA": "d2d4",
+   "bestMoveB": "d2d4",
+   "bestMoveMatch": true,
+   "cpA": 138,
+   "cpB": 138,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2d4",
+    "e1g1",
+    "d2d3"
+   ],
+   "orderB": [
+    "d2d4",
+    "e1g1",
+    "d2d3"
+   ],
+   "baselineExpectedScoreA": 0.624367,
+   "baselineExpectedScoreB": 0.624367,
+   "baselineDiff": 0
+  },
+  {
+   "id": "heaDbzar#16",
+   "phase": "middlegame",
+   "bestMoveA": "f3h3",
+   "bestMoveB": "f3h3",
+   "bestMoveMatch": true,
+   "cpA": 250,
+   "cpB": 250,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f3h3",
+    "f3f5",
+    "e6f8"
+   ],
+   "orderB": [
+    "f3h3",
+    "f3f5",
+    "e6f8"
+   ],
+   "baselineExpectedScoreA": 0.715148,
+   "baselineExpectedScoreB": 0.715148,
+   "baselineDiff": 0
+  },
+  {
+   "id": "heaDbzar#27",
+   "phase": "middlegame",
+   "bestMoveA": "f8e7",
+   "bestMoveB": "f8e7",
+   "bestMoveMatch": true,
+   "cpA": -359,
+   "cpB": -359,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f8e7",
+    "e8c8",
+    "f8f7"
+   ],
+   "orderB": [
+    "f8e7",
+    "e8c8",
+    "f8f7"
+   ],
+   "baselineExpectedScoreA": 0.210508,
+   "baselineExpectedScoreB": 0.210508,
+   "baselineDiff": 0
+  },
+  {
+   "id": "heaDbzar#35",
+   "phase": "endgame",
+   "bestMoveA": "f7f6",
+   "bestMoveB": "f7f6",
+   "bestMoveMatch": true,
+   "cpA": -403,
+   "cpB": -403,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f7f6",
+    "g7f6",
+    "d8a8"
+   ],
+   "orderB": [
+    "f7f6",
+    "g7f6",
+    "d8a8"
+   ],
+   "baselineExpectedScoreA": 0.184842,
+   "baselineExpectedScoreB": 0.184842,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RI6uVUzh#9",
+   "phase": "opening",
+   "bestMoveA": "d7d5",
+   "bestMoveB": "d7d5",
+   "bestMoveMatch": true,
+   "cpA": 33,
+   "cpB": 33,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7d5",
+    "f8b4",
+    "f6g4"
+   ],
+   "orderB": [
+    "d7d5",
+    "f8b4",
+    "f6g4"
+   ],
+   "baselineExpectedScoreA": 0.53034,
+   "baselineExpectedScoreB": 0.53034,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RI6uVUzh#25",
+   "phase": "middlegame",
+   "bestMoveA": "c8b7",
+   "bestMoveB": "c8b7",
+   "bestMoveMatch": true,
+   "cpA": -596,
+   "cpB": -596,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8b7",
+    "c7c5",
+    "f8e8"
+   ],
+   "orderB": [
+    "c8b7",
+    "c7c5",
+    "f8e8"
+   ],
+   "baselineExpectedScoreA": 0.100244,
+   "baselineExpectedScoreB": 0.100244,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RI6uVUzh#41",
+   "phase": "middlegame",
+   "bestMoveA": "h5f7",
+   "bestMoveB": "h5f7",
+   "bestMoveMatch": true,
+   "cpA": -728,
+   "cpB": -728,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5f7",
+    "c8e6",
+    "g8h7"
+   ],
+   "orderB": [
+    "h5f7",
+    "c8e6",
+    "g8h7"
+   ],
+   "baselineExpectedScoreA": 0.064131,
+   "baselineExpectedScoreB": 0.064131,
+   "baselineDiff": 0
+  },
+  {
+   "id": "RI6uVUzh#54",
+   "phase": "endgame",
+   "bestMoveA": "d3f5",
+   "bestMoveB": "d3f5",
+   "bestMoveMatch": true,
+   "cpA": 2288,
+   "cpB": 2288,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d3f5",
+    "e1e5",
+    "c2c3"
+   ],
+   "orderB": [
+    "d3f5",
+    "e1e5",
+    "c2c3"
+   ],
+   "baselineExpectedScoreA": 0.999781,
+   "baselineExpectedScoreB": 0.999781,
+   "baselineDiff": 0
+  },
+  {
+   "id": "sq43jfSc#6",
+   "phase": "opening",
+   "bestMoveA": "f4e5",
+   "bestMoveB": "f4e5",
+   "bestMoveMatch": true,
+   "cpA": -5,
+   "cpB": -5,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f4e5",
+    "g1f3",
+    "e4d5"
+   ],
+   "orderB": [
+    "f4e5",
+    "g1f3",
+    "e4d5"
+   ],
+   "baselineExpectedScoreA": 0.495398,
+   "baselineExpectedScoreB": 0.495398,
+   "baselineDiff": 0
+  },
+  {
+   "id": "sq43jfSc#11",
+   "phase": "middlegame",
+   "bestMoveA": "d8d4",
+   "bestMoveB": "d8d4",
+   "bestMoveMatch": true,
+   "cpA": 92,
+   "cpB": 92,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8d4",
+    "f8b4",
+    "f8b4"
+   ],
+   "orderB": [
+    "d8d4",
+    "f8b4",
+    "f8b4"
+   ],
+   "baselineExpectedScoreA": 0.583887,
+   "baselineExpectedScoreB": 0.583887,
+   "baselineDiff": 0
+  },
+  {
+   "id": "sq43jfSc#18",
+   "phase": "middlegame",
+   "bestMoveA": "e2e4",
+   "bestMoveB": "e2e4",
+   "bestMoveMatch": true,
+   "cpA": -161,
+   "cpB": -161,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2e4",
+    "d3e4",
+    "e5f7"
+   ],
+   "orderB": [
+    "e2e4",
+    "d3e4",
+    "e5f7"
+   ],
+   "baselineExpectedScoreA": 0.355989,
+   "baselineExpectedScoreB": 0.355989,
+   "baselineDiff": 0
+  },
+  {
+   "id": "sq43jfSc#23",
+   "phase": "endgame",
+   "bestMoveA": "c6e5",
+   "bestMoveB": "c6e5",
+   "bestMoveMatch": true,
+   "cpA": 712,
+   "cpB": 712,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6e5",
+    "f8e8",
+    "d8e8"
+   ],
+   "orderB": [
+    "c6e5",
+    "f8e8",
+    "d8e8"
+   ],
+   "baselineExpectedScoreA": 0.932241,
+   "baselineExpectedScoreB": 0.932241,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2iNKOHX3#7",
+   "phase": "opening",
+   "bestMoveA": "f5d3",
+   "bestMoveB": "f5d3",
+   "bestMoveMatch": true,
+   "cpA": -14,
+   "cpB": -14,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f5d3",
+    "e7e6",
+    "f5g6"
+   ],
+   "orderB": [
+    "f5d3",
+    "e7e6",
+    "f5g6"
+   ],
+   "baselineExpectedScoreA": 0.487116,
+   "baselineExpectedScoreB": 0.487116,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2iNKOHX3#18",
+   "phase": "middlegame",
+   "bestMoveA": "d3e4",
+   "bestMoveB": "d3e4",
+   "bestMoveMatch": true,
+   "cpA": 12,
+   "cpB": 12,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d3e4",
+    "f3e5",
+    "h2h4"
+   ],
+   "orderB": [
+    "d3e4",
+    "f3e5",
+    "h2h4"
+   ],
+   "baselineExpectedScoreA": 0.511044,
+   "baselineExpectedScoreB": 0.511044,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2iNKOHX3#29",
+   "phase": "middlegame",
+   "bestMoveA": "d8b6",
+   "bestMoveB": "d8b6",
+   "bestMoveMatch": true,
+   "cpA": 6,
+   "cpB": 6,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8b6",
+    "h7h6",
+    "a8c8"
+   ],
+   "orderB": [
+    "d8b6",
+    "h7h6",
+    "a8c8"
+   ],
+   "baselineExpectedScoreA": 0.505523,
+   "baselineExpectedScoreB": 0.505523,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2iNKOHX3#38",
+   "phase": "endgame",
+   "bestMoveA": "e5d7",
+   "bestMoveB": "e5d7",
+   "bestMoveMatch": true,
+   "cpA": 140,
+   "cpB": 140,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e5d7",
+    "e5c4",
+    "e5d3"
+   ],
+   "orderB": [
+    "e5d7",
+    "e5c4",
+    "e5d3"
+   ],
+   "baselineExpectedScoreA": 0.626093,
+   "baselineExpectedScoreB": 0.626093,
+   "baselineDiff": 0
+  },
+  {
+   "id": "xclKfayw#16",
+   "phase": "opening",
+   "bestMoveA": "c3d5",
+   "bestMoveB": "c3d5",
+   "bestMoveMatch": true,
+   "cpA": 92,
+   "cpB": 92,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3d5",
+    "e4d5",
+    "c4d2"
+   ],
+   "orderB": [
+    "c3d5",
+    "e4d5",
+    "c4d2"
+   ],
+   "baselineExpectedScoreA": 0.583887,
+   "baselineExpectedScoreB": 0.583887,
+   "baselineDiff": 0
+  },
+  {
+   "id": "xclKfayw#42",
+   "phase": "middlegame",
+   "bestMoveA": "f1e1",
+   "bestMoveB": "f1e1",
+   "bestMoveMatch": true,
+   "cpA": 88,
+   "cpB": 88,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f1e1",
+    "a1e1",
+    "a1c1"
+   ],
+   "orderB": [
+    "f1e1",
+    "a1e1",
+    "a1c1"
+   ],
+   "baselineExpectedScoreA": 0.580304,
+   "baselineExpectedScoreB": 0.580304,
+   "baselineDiff": 0
+  },
+  {
+   "id": "xclKfayw#68",
+   "phase": "middlegame",
+   "bestMoveA": "g1f2",
+   "bestMoveB": "g1f2",
+   "bestMoveMatch": true,
+   "cpA": 94,
+   "cpB": 94,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1f2",
+    "g1f1",
+    "e1e7"
+   ],
+   "orderB": [
+    "g1f2",
+    "g1f1",
+    "e1e7"
+   ],
+   "baselineExpectedScoreA": 0.585675,
+   "baselineExpectedScoreB": 0.585675,
+   "baselineDiff": 0
+  },
+  {
+   "id": "xclKfayw#88",
+   "phase": "endgame",
+   "bestMoveA": "d2e2",
+   "bestMoveB": "d2e2",
+   "bestMoveMatch": true,
+   "cpA": -117,
+   "cpB": -117,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2e2",
+    "c2c3",
+    "d2e3"
+   ],
+   "orderB": [
+    "d2e2",
+    "c2c3",
+    "d2e3"
+   ],
+   "baselineExpectedScoreA": 0.393935,
+   "baselineExpectedScoreB": 0.393935,
+   "baselineDiff": 0
+  },
+  {
+   "id": "MZHuf6rw#8",
+   "phase": "opening",
+   "bestMoveA": "b3c4",
+   "bestMoveB": "b3c4",
+   "bestMoveMatch": true,
+   "cpA": 41,
+   "cpB": 41,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b3c4",
+    "f3e5",
+    "d2d4"
+   ],
+   "orderB": [
+    "b3c4",
+    "f3e5",
+    "d2d4"
+   ],
+   "baselineExpectedScoreA": 0.53767,
+   "baselineExpectedScoreB": 0.53767,
+   "baselineDiff": 0
+  },
+  {
+   "id": "MZHuf6rw#21",
+   "phase": "middlegame",
+   "bestMoveA": "d8f6",
+   "bestMoveB": "d8f6",
+   "bestMoveMatch": true,
+   "cpA": -178,
+   "cpB": -178,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8f6",
+    "g8f6",
+    "f8d6"
+   ],
+   "orderB": [
+    "d8f6",
+    "g8f6",
+    "f8d6"
+   ],
+   "baselineExpectedScoreA": 0.341771,
+   "baselineExpectedScoreB": 0.341771,
+   "baselineDiff": 0
+  },
+  {
+   "id": "MZHuf6rw#34",
+   "phase": "middlegame",
+   "bestMoveA": "d1d8",
+   "bestMoveB": "d1d8",
+   "bestMoveMatch": true,
+   "cpA": 417,
+   "cpB": 417,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1d8",
+    "e5e6",
+    "a2a4"
+   ],
+   "orderB": [
+    "d1d8",
+    "e5e6",
+    "a2a4"
+   ],
+   "baselineExpectedScoreA": 0.822799,
+   "baselineExpectedScoreB": 0.822799,
+   "baselineDiff": 0
+  },
+  {
+   "id": "MZHuf6rw#44",
+   "phase": "endgame",
+   "bestMoveA": "d7f7",
+   "bestMoveB": "d7f7",
+   "bestMoveMatch": true,
+   "cpA": -511,
+   "cpB": -511,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7f7",
+    "d7d3",
+    "d7d3"
+   ],
+   "orderB": [
+    "d7f7",
+    "d7d3",
+    "d7d3"
+   ],
+   "baselineExpectedScoreA": 0.132212,
+   "baselineExpectedScoreB": 0.132212,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BRY9jwhu#9",
+   "phase": "opening",
+   "bestMoveA": "b8c6",
+   "bestMoveB": "b8c6",
+   "bestMoveMatch": true,
+   "cpA": -32,
+   "cpB": -32,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b8c6",
+    "e7e6",
+    "e7e6"
+   ],
+   "orderB": [
+    "b8c6",
+    "e7e6",
+    "e7e6"
+   ],
+   "baselineExpectedScoreA": 0.470577,
+   "baselineExpectedScoreB": 0.470577,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BRY9jwhu#24",
+   "phase": "middlegame",
+   "bestMoveA": "c3d5",
+   "bestMoveB": "c3d5",
+   "bestMoveMatch": true,
+   "cpA": 83,
+   "cpB": 83,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3d5",
+    "c1b1",
+    "c3d5"
+   ],
+   "orderB": [
+    "c3d5",
+    "c1b1",
+    "c3d5"
+   ],
+   "baselineExpectedScoreA": 0.575814,
+   "baselineExpectedScoreB": 0.575814,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BRY9jwhu#38",
+   "phase": "middlegame",
+   "bestMoveA": "h5g6",
+   "bestMoveB": "h5g6",
+   "bestMoveMatch": true,
+   "cpA": 258,
+   "cpB": 258,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h5g6",
+    "d5f6",
+    "d5b6"
+   ],
+   "orderB": [
+    "h5g6",
+    "d5f6",
+    "d5b6"
+   ],
+   "baselineExpectedScoreA": 0.72111,
+   "baselineExpectedScoreB": 0.72111,
+   "baselineDiff": 0
+  },
+  {
+   "id": "BRY9jwhu#50",
+   "phase": "endgame",
+   "bestMoveA": "e3d4",
+   "bestMoveB": "e3d4",
+   "bestMoveMatch": true,
+   "cpA": 419,
+   "cpB": 419,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e3d4",
+    "d2h2",
+    "b1b2"
+   ],
+   "orderB": [
+    "e3d4",
+    "d2h2",
+    "b1b2"
+   ],
+   "baselineExpectedScoreA": 0.82387,
+   "baselineExpectedScoreB": 0.82387,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yrxku7i3#11",
+   "phase": "opening",
+   "bestMoveA": "g8e7",
+   "bestMoveB": "g8e7",
+   "bestMoveMatch": true,
+   "cpA": -36,
+   "cpB": -36,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g8e7",
+    "f7f6",
+    "d8c7"
+   ],
+   "orderB": [
+    "g8e7",
+    "f7f6",
+    "d8c7"
+   ],
+   "baselineExpectedScoreA": 0.46691,
+   "baselineExpectedScoreB": 0.46691,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yrxku7i3#28",
+   "phase": "middlegame",
+   "bestMoveA": "a3a4",
+   "bestMoveB": "a3a4",
+   "bestMoveMatch": true,
+   "cpA": -1,
+   "cpB": -1,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a3a4",
+    "f1e1",
+    "h2h4"
+   ],
+   "orderB": [
+    "a3a4",
+    "f1e1",
+    "h2h4"
+   ],
+   "baselineExpectedScoreA": 0.499079,
+   "baselineExpectedScoreB": 0.499079,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yrxku7i3#46",
+   "phase": "middlegame",
+   "bestMoveA": "b6d4",
+   "bestMoveB": "b6d4",
+   "bestMoveMatch": true,
+   "cpA": 192,
+   "cpB": 192,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b6d4",
+    "h2h4",
+    "b6c7"
+   ],
+   "orderB": [
+    "b6d4",
+    "h2h4",
+    "b6c7"
+   ],
+   "baselineExpectedScoreA": 0.669729,
+   "baselineExpectedScoreB": 0.669729,
+   "baselineDiff": 0
+  },
+  {
+   "id": "yrxku7i3#60",
+   "phase": "endgame",
+   "bestMoveA": "b7e7",
+   "bestMoveB": "b7e7",
+   "bestMoveMatch": true,
+   "cpA": 401,
+   "cpB": 401,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b7e7",
+    "b7b4",
+    "h3h4"
+   ],
+   "orderB": [
+    "b7e7",
+    "b7b4",
+    "h3h4"
+   ],
+   "baselineExpectedScoreA": 0.814045,
+   "baselineExpectedScoreB": 0.814045,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HlULCrzk#6",
+   "phase": "opening",
+   "bestMoveA": "f1d3",
+   "bestMoveB": "f1d3",
+   "bestMoveMatch": true,
+   "cpA": 58,
+   "cpB": 58,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f1d3",
+    "g1f3",
+    "f1e2"
+   ],
+   "orderB": [
+    "f1d3",
+    "g1f3",
+    "f1e2"
+   ],
+   "baselineExpectedScoreA": 0.553188,
+   "baselineExpectedScoreB": 0.553188,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HlULCrzk#15",
+   "phase": "middlegame",
+   "bestMoveA": "e6d5",
+   "bestMoveB": "e6d5",
+   "bestMoveMatch": true,
+   "cpA": -517,
+   "cpB": -517,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e6d5",
+    "f8b4",
+    "g8e7"
+   ],
+   "orderB": [
+    "e6d5",
+    "f8b4",
+    "g8e7"
+   ],
+   "baselineExpectedScoreA": 0.129698,
+   "baselineExpectedScoreB": 0.129698,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HlULCrzk#24",
+   "phase": "middlegame",
+   "bestMoveA": "a5d8",
+   "bestMoveB": "a5d8",
+   "bestMoveMatch": true,
+   "cpA": 625,
+   "cpB": 625,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a5d8",
+    "a5c3",
+    "d2b3"
+   ],
+   "orderB": [
+    "a5d8",
+    "a5c3",
+    "d2b3"
+   ],
+   "baselineExpectedScoreA": 0.908985,
+   "baselineExpectedScoreB": 0.908985,
+   "baselineDiff": 0
+  },
+  {
+   "id": "HlULCrzk#31",
+   "phase": "endgame",
+   "bestMoveA": "g7f6",
+   "bestMoveB": "g7f6",
+   "bestMoveMatch": true,
+   "cpA": -605,
+   "cpB": -605,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g7f6",
+    "d7f6",
+    "e7f6"
+   ],
+   "orderB": [
+    "g7f6",
+    "d7f6",
+    "e7f6"
+   ],
+   "baselineExpectedScoreA": 0.097294,
+   "baselineExpectedScoreB": 0.097294,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b3qtuXcV#8",
+   "phase": "opening",
+   "bestMoveA": "b1c3",
+   "bestMoveB": "b1c3",
+   "bestMoveMatch": true,
+   "cpA": -91,
+   "cpB": -91,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1c3",
+    "f1d3",
+    "g1e2"
+   ],
+   "orderB": [
+    "b1c3",
+    "f1d3",
+    "g1e2"
+   ],
+   "baselineExpectedScoreA": 0.417008,
+   "baselineExpectedScoreB": 0.417008,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b3qtuXcV#22",
+   "phase": "middlegame",
+   "bestMoveA": "f5h7",
+   "bestMoveB": "f5h7",
+   "bestMoveMatch": true,
+   "cpA": 217,
+   "cpB": 217,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f5h7",
+    "g1f3",
+    "h2h4"
+   ],
+   "orderB": [
+    "f5h7",
+    "g1f3",
+    "h2h4"
+   ],
+   "baselineExpectedScoreA": 0.689763,
+   "baselineExpectedScoreB": 0.689763,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b3qtuXcV#36",
+   "phase": "middlegame",
+   "bestMoveA": "d3a3",
+   "bestMoveB": "d3a3",
+   "bestMoveMatch": true,
+   "cpA": 677,
+   "cpB": 677,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d3a3",
+    "d3c4",
+    "d3c3"
+   ],
+   "orderB": [
+    "d3a3",
+    "d3c4",
+    "d3c3"
+   ],
+   "baselineExpectedScoreA": 0.923633,
+   "baselineExpectedScoreB": 0.923633,
+   "baselineDiff": 0
+  },
+  {
+   "id": "b3qtuXcV#48",
+   "phase": "endgame",
+   "bestMoveA": "a3a4",
+   "bestMoveB": "a3a4",
+   "bestMoveMatch": true,
+   "cpA": -905,
+   "cpB": -905,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a3a4",
+    "h2h4",
+    "g2g4"
+   ],
+   "orderB": [
+    "a3a4",
+    "h2h4",
+    "g2g4"
+   ],
+   "baselineExpectedScoreA": 0.03448,
+   "baselineExpectedScoreB": 0.03448,
+   "baselineDiff": 0
+  },
+  {
+   "id": "NN1vzz5k#7",
+   "phase": "opening",
+   "bestMoveA": "e7e6",
+   "bestMoveB": "e7e6",
+   "bestMoveMatch": true,
+   "cpA": -2,
+   "cpB": -2,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7e6",
+    "g7g6",
+    "g8f6"
+   ],
+   "orderB": [
+    "e7e6",
+    "g7g6",
+    "g8f6"
+   ],
+   "baselineExpectedScoreA": 0.498159,
+   "baselineExpectedScoreB": 0.498159,
+   "baselineDiff": 0
+  },
+  {
+   "id": "NN1vzz5k#20",
+   "phase": "middlegame",
+   "bestMoveA": "a4b5",
+   "bestMoveB": "a4b5",
+   "bestMoveMatch": true,
+   "cpA": 4,
+   "cpB": 4,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a4b5",
+    "e4e5",
+    "c3d5"
+   ],
+   "orderB": [
+    "a4b5",
+    "e4e5",
+    "c3d5"
+   ],
+   "baselineExpectedScoreA": 0.503682,
+   "baselineExpectedScoreB": 0.503682,
+   "baselineDiff": 0
+  },
+  {
+   "id": "NN1vzz5k#32",
+   "phase": "middlegame",
+   "bestMoveA": "c1b2",
+   "bestMoveB": "c1b2",
+   "bestMoveMatch": true,
+   "cpA": 126,
+   "cpB": 126,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c1b2",
+    "c1h6",
+    "a1b1"
+   ],
+   "orderB": [
+    "c1b2",
+    "c1h6",
+    "a1b1"
+   ],
+   "baselineExpectedScoreA": 0.613949,
+   "baselineExpectedScoreB": 0.613949,
+   "baselineDiff": 0
+  },
+  {
+   "id": "NN1vzz5k#42",
+   "phase": "endgame",
+   "bestMoveA": "c3e1",
+   "bestMoveB": "c3e1",
+   "bestMoveMatch": true,
+   "cpA": -120,
+   "cpB": -120,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3e1",
+    "c2b3",
+    "c3d2"
+   ],
+   "orderB": [
+    "c3e1",
+    "c2b3",
+    "c3d2"
+   ],
+   "baselineExpectedScoreA": 0.3913,
+   "baselineExpectedScoreB": 0.3913,
+   "baselineDiff": 0
+  },
+  {
+   "id": "k6YRs0Kj#15",
+   "phase": "opening",
+   "bestMoveA": "c6c5",
+   "bestMoveB": "c6c5",
+   "bestMoveMatch": true,
+   "cpA": -50,
+   "cpB": -50,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6c5",
+    "c6c5",
+    "f8e8"
+   ],
+   "orderB": [
+    "c6c5",
+    "c6c5",
+    "f8e8"
+   ],
+   "baselineExpectedScoreA": 0.454104,
+   "baselineExpectedScoreB": 0.454104,
+   "baselineDiff": 0
+  },
+  {
+   "id": "k6YRs0Kj#41",
+   "phase": "middlegame",
+   "bestMoveA": "e7d6",
+   "bestMoveB": "e7d6",
+   "bestMoveMatch": true,
+   "cpA": -120,
+   "cpB": -120,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7d6",
+    "f6e4",
+    "e7b4"
+   ],
+   "orderB": [
+    "e7d6",
+    "f6e4",
+    "e7b4"
+   ],
+   "baselineExpectedScoreA": 0.3913,
+   "baselineExpectedScoreB": 0.3913,
+   "baselineDiff": 0
+  },
+  {
+   "id": "k6YRs0Kj#67",
+   "phase": "middlegame",
+   "bestMoveA": "g8h8",
+   "bestMoveB": "g8h8",
+   "bestMoveMatch": true,
+   "cpA": 408,
+   "cpB": 408,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g8h8",
+    "g8f8"
+   ],
+   "orderB": [
+    "g8h8",
+    "g8f8"
+   ],
+   "baselineExpectedScoreA": 0.817916,
+   "baselineExpectedScoreB": 0.817916,
+   "baselineDiff": 0
+  },
+  {
+   "id": "k6YRs0Kj#88",
+   "phase": "endgame",
+   "bestMoveA": "d2e3",
+   "bestMoveB": "d2e3",
+   "bestMoveMatch": true,
+   "cpA": 449,
+   "cpB": 449,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2e3",
+    "h6f5",
+    "d2b4"
+   ],
+   "orderB": [
+    "d2e3",
+    "h6f5",
+    "d2b4"
+   ],
+   "baselineExpectedScoreA": 0.83933,
+   "baselineExpectedScoreB": 0.83933,
+   "baselineDiff": 0
+  },
+  {
+   "id": "84iailub#16",
+   "phase": "opening",
+   "bestMoveA": "f4e5",
+   "bestMoveB": "f4e5",
+   "bestMoveMatch": true,
+   "cpA": -56,
+   "cpB": -56,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f4e5",
+    "c3d5",
+    "e3e4"
+   ],
+   "orderB": [
+    "f4e5",
+    "c3d5",
+    "e3e4"
+   ],
+   "baselineExpectedScoreA": 0.448633,
+   "baselineExpectedScoreB": 0.448633,
+   "baselineDiff": 0
+  },
+  {
+   "id": "84iailub#42",
+   "phase": "middlegame",
+   "bestMoveA": "e3d2",
+   "bestMoveB": "e3d2",
+   "bestMoveMatch": true,
+   "cpA": 0,
+   "cpB": 0,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e3d2",
+    "b1e1",
+    "f1f3"
+   ],
+   "orderB": [
+    "e3d2",
+    "b1e1",
+    "f1f3"
+   ],
+   "baselineExpectedScoreA": 0.5,
+   "baselineExpectedScoreB": 0.5,
+   "baselineDiff": 0
+  },
+  {
+   "id": "84iailub#68",
+   "phase": "middlegame",
+   "bestMoveA": "g4e6",
+   "bestMoveB": "g4e6",
+   "bestMoveMatch": true,
+   "cpA": 675,
+   "cpB": 675,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4e6",
+    "g4f3",
+    "h2h4"
+   ],
+   "orderB": [
+    "g4e6",
+    "g4f3",
+    "h2h4"
+   ],
+   "baselineExpectedScoreA": 0.923112,
+   "baselineExpectedScoreB": 0.923112,
+   "baselineDiff": 0
+  },
+  {
+   "id": "84iailub#89",
+   "phase": "endgame",
+   "bestMoveA": "d5c7",
+   "bestMoveB": "d5c7",
+   "bestMoveMatch": true,
+   "cpA": -776,
+   "cpB": -776,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d5c7",
+    "d5f6",
+    "d5e3"
+   ],
+   "orderB": [
+    "d5c7",
+    "d5f6",
+    "d5e3"
+   ],
+   "baselineExpectedScoreA": 0.054305,
+   "baselineExpectedScoreB": 0.054305,
+   "baselineDiff": 0
+  },
+  {
+   "id": "eIet2Ioq#7",
+   "phase": "opening",
+   "bestMoveA": "g7h6",
+   "bestMoveB": "g7h6",
+   "bestMoveMatch": true,
+   "cpA": -165,
+   "cpB": -165,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g7h6",
+    "d6e5",
+    "c8e6"
+   ],
+   "orderB": [
+    "g7h6",
+    "d6e5",
+    "c8e6"
+   ],
+   "baselineExpectedScoreA": 0.35262,
+   "baselineExpectedScoreB": 0.35262,
+   "baselineDiff": 0
+  },
+  {
+   "id": "eIet2Ioq#20",
+   "phase": "middlegame",
+   "bestMoveA": "c6d7",
+   "bestMoveB": "c6d7",
+   "bestMoveMatch": true,
+   "cpA": 942,
+   "cpB": 942,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6d7",
+    "d5f6",
+    "d5c7"
+   ],
+   "orderB": [
+    "c6d7",
+    "d5f6",
+    "d5c7"
+   ],
+   "baselineExpectedScoreA": 0.969779,
+   "baselineExpectedScoreB": 0.969779,
+   "baselineDiff": 0
+  },
+  {
+   "id": "eIet2Ioq#32",
+   "phase": "middlegame",
+   "bestMoveA": "a1d1",
+   "bestMoveB": "a1d1",
+   "bestMoveMatch": true,
+   "cpA": 1557,
+   "cpB": 1557,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a1d1",
+    "e1g1",
+    "d2f4"
+   ],
+   "orderB": [
+    "a1d1",
+    "e1g1",
+    "d2f4"
+   ],
+   "baselineExpectedScoreA": 0.996773,
+   "baselineExpectedScoreB": 0.996773,
+   "baselineDiff": 0
+  },
+  {
+   "id": "eIet2Ioq#42",
+   "phase": "endgame",
+   "bestMoveA": "d3c4",
+   "bestMoveB": "d3c4",
+   "bestMoveMatch": true,
+   "cpA": 1734,
+   "cpB": 1734,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d3c4",
+    "d1b1",
+    "e4e5"
+   ],
+   "orderB": [
+    "d3c4",
+    "d1b1",
+    "e4e5"
+   ],
+   "baselineExpectedScoreA": 0.998316,
+   "baselineExpectedScoreB": 0.998316,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9n9LKUAR#6",
+   "phase": "opening",
+   "bestMoveA": "d2d4",
+   "bestMoveB": "d2d4",
+   "bestMoveMatch": true,
+   "cpA": 28,
+   "cpB": 28,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d2d4",
+    "f1b5",
+    "a2a4"
+   ],
+   "orderB": [
+    "d2d4",
+    "f1b5",
+    "a2a4"
+   ],
+   "baselineExpectedScoreA": 0.525752,
+   "baselineExpectedScoreB": 0.525752,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9n9LKUAR#13",
+   "phase": "middlegame",
+   "bestMoveA": "b4d3",
+   "bestMoveB": "b4d3",
+   "bestMoveMatch": true,
+   "cpA": 73,
+   "cpB": 73,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b4d3",
+    "d5e4",
+    "d8e7"
+   ],
+   "orderB": [
+    "b4d3",
+    "d5e4",
+    "d8e7"
+   ],
+   "baselineExpectedScoreA": 0.566796,
+   "baselineExpectedScoreB": 0.566796,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9n9LKUAR#21",
+   "phase": "middlegame",
+   "bestMoveA": "b4d3",
+   "bestMoveB": "b4d3",
+   "bestMoveMatch": true,
+   "cpA": 699,
+   "cpB": 699,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b4d3",
+    "e8c8",
+    "g7g6"
+   ],
+   "orderB": [
+    "b4d3",
+    "e8c8",
+    "g7g6"
+   ],
+   "baselineExpectedScoreA": 0.929155,
+   "baselineExpectedScoreB": 0.929155,
+   "baselineDiff": 0
+  },
+  {
+   "id": "9n9LKUAR#27",
+   "phase": "endgame",
+   "bestMoveA": "e7c5",
+   "bestMoveB": "e7c5",
+   "bestMoveMatch": true,
+   "cpA": 707,
+   "cpB": 707,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7c5",
+    "e6d5",
+    "f8g7"
+   ],
+   "orderB": [
+    "e7c5",
+    "e6d5",
+    "f8g7"
+   ],
+   "baselineExpectedScoreA": 0.931069,
+   "baselineExpectedScoreB": 0.931069,
+   "baselineDiff": 0
+  },
+  {
+   "id": "K5YFzA4c#10",
+   "phase": "opening",
+   "bestMoveA": "b1c3",
+   "bestMoveB": "b1c3",
+   "bestMoveMatch": true,
+   "cpA": 111,
+   "cpB": 111,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1c3",
+    "d1e2",
+    "b5d7"
+   ],
+   "orderB": [
+    "b1c3",
+    "d1e2",
+    "b5d7"
+   ],
+   "baselineExpectedScoreA": 0.600779,
+   "baselineExpectedScoreB": 0.600779,
+   "baselineDiff": 0
+  },
+  {
+   "id": "K5YFzA4c#26",
+   "phase": "middlegame",
+   "bestMoveA": "c2c3",
+   "bestMoveB": "c2c3",
+   "bestMoveMatch": true,
+   "cpA": 214,
+   "cpB": 214,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c2c3",
+    "a1a5",
+    "a1a5"
+   ],
+   "orderB": [
+    "c2c3",
+    "a1a5",
+    "a1a5"
+   ],
+   "baselineExpectedScoreA": 0.687394,
+   "baselineExpectedScoreB": 0.687394,
+   "baselineDiff": 0
+  },
+  {
+   "id": "K5YFzA4c#42",
+   "phase": "middlegame",
+   "bestMoveA": "b1d2",
+   "bestMoveB": "b1d2",
+   "bestMoveMatch": true,
+   "cpA": -41,
+   "cpB": -41,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1d2",
+    "a1a6",
+    "e1e7"
+   ],
+   "orderB": [
+    "b1d2",
+    "a1a6",
+    "e1e7"
+   ],
+   "baselineExpectedScoreA": 0.46233,
+   "baselineExpectedScoreB": 0.46233,
+   "baselineDiff": 0
+  },
+  {
+   "id": "K5YFzA4c#54",
+   "phase": "endgame",
+   "bestMoveA": "g2g3",
+   "bestMoveB": "g2g3",
+   "bestMoveMatch": true,
+   "cpA": 503,
+   "cpB": 503,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g2g3",
+    "a5c5",
+    "a5a6"
+   ],
+   "orderB": [
+    "g2g3",
+    "a5c5",
+    "a5a6"
+   ],
+   "baselineExpectedScoreA": 0.864372,
+   "baselineExpectedScoreB": 0.864372,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Ry7WqOgZ#6",
+   "phase": "opening",
+   "bestMoveA": "g1f3",
+   "bestMoveB": "g1f3",
+   "bestMoveMatch": true,
+   "cpA": 10,
+   "cpB": 10,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g1f3",
+    "c2c4",
+    "c2c4"
+   ],
+   "orderB": [
+    "g1f3",
+    "c2c4",
+    "c2c4"
+   ],
+   "baselineExpectedScoreA": 0.509204,
+   "baselineExpectedScoreB": 0.509204,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Ry7WqOgZ#10",
+   "phase": "middlegame",
+   "bestMoveA": "c2c4",
+   "bestMoveB": "c2c4",
+   "bestMoveMatch": true,
+   "cpA": 22,
+   "cpB": 22,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c2c4",
+    "b2b4",
+    "e3e4"
+   ],
+   "orderB": [
+    "c2c4",
+    "b2b4",
+    "e3e4"
+   ],
+   "baselineExpectedScoreA": 0.52024,
+   "baselineExpectedScoreB": 0.52024,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Ry7WqOgZ#17",
+   "phase": "middlegame",
+   "bestMoveA": "g4f6",
+   "bestMoveB": "g4f6",
+   "bestMoveMatch": true,
+   "cpA": -156,
+   "cpB": -156,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4f6",
+    "f7f5",
+    "h7h5"
+   ],
+   "orderB": [
+    "g4f6",
+    "f7f5",
+    "h7h5"
+   ],
+   "baselineExpectedScoreA": 0.360221,
+   "baselineExpectedScoreB": 0.360221,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Ry7WqOgZ#22",
+   "phase": "endgame",
+   "bestMoveA": "f2f4",
+   "bestMoveB": "f2f4",
+   "bestMoveMatch": true,
+   "cpA": null,
+   "cpB": null,
+   "mateA": -2,
+   "mateB": -2,
+   "cpDiff": null,
+   "orderMatch": true,
+   "orderA": [
+    "f2f4",
+    "f2f3",
+    "e2g4"
+   ],
+   "orderB": [
+    "f2f4",
+    "f2f3",
+    "e2g4"
+   ],
+   "baselineExpectedScoreA": 0,
+   "baselineExpectedScoreB": 0,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2hBy2eJ2#8",
+   "phase": "opening",
+   "bestMoveA": "d3d4",
+   "bestMoveB": "d3d4",
+   "bestMoveMatch": true,
+   "cpA": 11,
+   "cpB": 11,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d3d4",
+    "c3d5",
+    "g2g3"
+   ],
+   "orderB": [
+    "d3d4",
+    "c3d5",
+    "g2g3"
+   ],
+   "baselineExpectedScoreA": 0.510124,
+   "baselineExpectedScoreB": 0.510124,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2hBy2eJ2#22",
+   "phase": "middlegame",
+   "bestMoveA": "c3d5",
+   "bestMoveB": "c3d5",
+   "bestMoveMatch": true,
+   "cpA": -25,
+   "cpB": -25,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c3d5",
+    "b4b5",
+    "c3e4"
+   ],
+   "orderB": [
+    "c3d5",
+    "b4b5",
+    "c3e4"
+   ],
+   "baselineExpectedScoreA": 0.477003,
+   "baselineExpectedScoreB": 0.477003,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2hBy2eJ2#36",
+   "phase": "middlegame",
+   "bestMoveA": "d1d2",
+   "bestMoveB": "d1d2",
+   "bestMoveMatch": true,
+   "cpA": -128,
+   "cpB": -128,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1d2",
+    "a4a5",
+    "d1c2"
+   ],
+   "orderB": [
+    "d1d2",
+    "a4a5",
+    "d1c2"
+   ],
+   "baselineExpectedScoreA": 0.384307,
+   "baselineExpectedScoreB": 0.384307,
+   "baselineDiff": 0
+  },
+  {
+   "id": "2hBy2eJ2#48",
+   "phase": "endgame",
+   "bestMoveA": "b2g2",
+   "bestMoveB": "b2g2",
+   "bestMoveMatch": true,
+   "cpA": null,
+   "cpB": null,
+   "mateA": -10,
+   "mateB": -10,
+   "cpDiff": null,
+   "orderMatch": true,
+   "orderA": [
+    "b2g2",
+    "f1f3"
+   ],
+   "orderB": [
+    "b2g2",
+    "f1f3"
+   ],
+   "baselineExpectedScoreA": 0,
+   "baselineExpectedScoreB": 0,
+   "baselineDiff": 0
+  },
+  {
+   "id": "bHgsICWb#20",
+   "phase": "opening",
+   "bestMoveA": "d1e2",
+   "bestMoveB": "d1e2",
+   "bestMoveMatch": true,
+   "cpA": 44,
+   "cpB": 44,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1e2",
+    "c2c4",
+    "f1e1"
+   ],
+   "orderB": [
+    "d1e2",
+    "c2c4",
+    "f1e1"
+   ],
+   "baselineExpectedScoreA": 0.540415,
+   "baselineExpectedScoreB": 0.540415,
+   "baselineDiff": 0
+  },
+  {
+   "id": "bHgsICWb#53",
+   "phase": "middlegame",
+   "bestMoveA": "c7c1",
+   "bestMoveB": "c7c1",
+   "bestMoveMatch": true,
+   "cpA": 117,
+   "cpB": 117,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c7c1",
+    "c8a6",
+    "e8d8"
+   ],
+   "orderB": [
+    "c7c1",
+    "c8a6",
+    "e8d8"
+   ],
+   "baselineExpectedScoreA": 0.606065,
+   "baselineExpectedScoreB": 0.606065,
+   "baselineDiff": 0
+  },
+  {
+   "id": "bHgsICWb#86",
+   "phase": "middlegame",
+   "bestMoveA": "a2a4",
+   "bestMoveB": "a2a4",
+   "bestMoveMatch": true,
+   "cpA": -197,
+   "cpB": -197,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a2a4",
+    "b3b4",
+    "d5e6"
+   ],
+   "orderB": [
+    "a2a4",
+    "b3b4",
+    "d5e6"
+   ],
+   "baselineExpectedScoreA": 0.326212,
+   "baselineExpectedScoreB": 0.326212,
+   "baselineDiff": 0
+  },
+  {
+   "id": "bHgsICWb#112",
+   "phase": "endgame",
+   "bestMoveA": "g4h4",
+   "bestMoveB": "g4h4",
+   "bestMoveMatch": true,
+   "cpA": -860,
+   "cpB": -860,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4h4",
+    "g4g3",
+    "g4h3"
+   ],
+   "orderB": [
+    "g4h4",
+    "g4g3",
+    "g4h3"
+   ],
+   "baselineExpectedScoreA": 0.040443,
+   "baselineExpectedScoreB": 0.040443,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jRFrcrgi#9",
+   "phase": "opening",
+   "bestMoveA": "c8d7",
+   "bestMoveB": "c8d7",
+   "bestMoveMatch": true,
+   "cpA": 19,
+   "cpB": 19,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c8d7",
+    "g8e7",
+    "g8h6"
+   ],
+   "orderB": [
+    "c8d7",
+    "g8e7",
+    "g8h6"
+   ],
+   "baselineExpectedScoreA": 0.517483,
+   "baselineExpectedScoreB": 0.517483,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jRFrcrgi#23",
+   "phase": "middlegame",
+   "bestMoveA": "f7f6",
+   "bestMoveB": "f7f6",
+   "bestMoveMatch": true,
+   "cpA": -200,
+   "cpB": -200,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f7f6",
+    "e8g8",
+    "b7b6"
+   ],
+   "orderB": [
+    "f7f6",
+    "e8g8",
+    "b7b6"
+   ],
+   "baselineExpectedScoreA": 0.323788,
+   "baselineExpectedScoreB": 0.323788,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jRFrcrgi#38",
+   "phase": "middlegame",
+   "bestMoveA": "e3b6",
+   "bestMoveB": "e3b6",
+   "bestMoveMatch": true,
+   "cpA": 137,
+   "cpB": 137,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e3b6",
+    "a4a5",
+    "g1h2"
+   ],
+   "orderB": [
+    "e3b6",
+    "a4a5",
+    "g1h2"
+   ],
+   "baselineExpectedScoreA": 0.623503,
+   "baselineExpectedScoreB": 0.623503,
+   "baselineDiff": 0
+  },
+  {
+   "id": "jRFrcrgi#49",
+   "phase": "endgame",
+   "bestMoveA": "h7h6",
+   "bestMoveB": "h7h6",
+   "bestMoveMatch": true,
+   "cpA": -43,
+   "cpB": -43,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h7h6",
+    "c6b4",
+    "d5d4"
+   ],
+   "orderB": [
+    "h7h6",
+    "c6b4",
+    "d5d4"
+   ],
+   "baselineExpectedScoreA": 0.4605,
+   "baselineExpectedScoreB": 0.4605,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Iex4MeFD#13",
+   "phase": "opening",
+   "bestMoveA": "d7d5",
+   "bestMoveB": "d7d5",
+   "bestMoveMatch": true,
+   "cpA": -16,
+   "cpB": -16,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7d5",
+    "e8g8",
+    "d7d6"
+   ],
+   "orderB": [
+    "d7d5",
+    "e8g8",
+    "d7d6"
+   ],
+   "baselineExpectedScoreA": 0.485276,
+   "baselineExpectedScoreB": 0.485276,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Iex4MeFD#35",
+   "phase": "middlegame",
+   "bestMoveA": "c6c5",
+   "bestMoveB": "c6c5",
+   "bestMoveMatch": true,
+   "cpA": 37,
+   "cpB": 37,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c6c5",
+    "a7a5",
+    "a8f8"
+   ],
+   "orderB": [
+    "c6c5",
+    "a7a5",
+    "a8f8"
+   ],
+   "baselineExpectedScoreA": 0.534007,
+   "baselineExpectedScoreB": 0.534007,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Iex4MeFD#57",
+   "phase": "middlegame",
+   "bestMoveA": "e4f6",
+   "bestMoveB": "e4f6",
+   "bestMoveMatch": true,
+   "cpA": 245,
+   "cpB": 245,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e4f6",
+    "e4f6",
+    "d7d5"
+   ],
+   "orderB": [
+    "e4f6",
+    "e4f6",
+    "d7d5"
+   ],
+   "baselineExpectedScoreA": 0.711383,
+   "baselineExpectedScoreB": 0.711383,
+   "baselineDiff": 0
+  },
+  {
+   "id": "Iex4MeFD#75",
+   "phase": "endgame",
+   "bestMoveA": "g5f4",
+   "bestMoveB": "g5f4",
+   "bestMoveMatch": true,
+   "cpA": 108,
+   "cpB": 108,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g5f4",
+    "e5e6",
+    "e5d5"
+   ],
+   "orderB": [
+    "g5f4",
+    "e5e6",
+    "e5d5"
+   ],
+   "baselineExpectedScoreA": 0.598126,
+   "baselineExpectedScoreB": 0.598126,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hRTYuLO3#12",
+   "phase": "opening",
+   "bestMoveA": "e1g1",
+   "bestMoveB": "e1g1",
+   "bestMoveMatch": true,
+   "cpA": 24,
+   "cpB": 24,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e1g1",
+    "e3e4",
+    "h2h3"
+   ],
+   "orderB": [
+    "e1g1",
+    "e3e4",
+    "h2h3"
+   ],
+   "baselineExpectedScoreA": 0.522078,
+   "baselineExpectedScoreB": 0.522078,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hRTYuLO3#32",
+   "phase": "middlegame",
+   "bestMoveA": "h1e1",
+   "bestMoveB": "h1e1",
+   "bestMoveMatch": true,
+   "cpA": 1,
+   "cpB": 1,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h1e1",
+    "f2f3",
+    "c3c4"
+   ],
+   "orderB": [
+    "h1e1",
+    "f2f3",
+    "c3c4"
+   ],
+   "baselineExpectedScoreA": 0.500921,
+   "baselineExpectedScoreB": 0.500921,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hRTYuLO3#53",
+   "phase": "middlegame",
+   "bestMoveA": "d8d3",
+   "bestMoveB": "d8d3",
+   "bestMoveMatch": true,
+   "cpA": -552,
+   "cpB": -552,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d8d3",
+    "d8d5",
+    "d8d6"
+   ],
+   "orderB": [
+    "d8d3",
+    "d8d5",
+    "d8d6"
+   ],
+   "baselineExpectedScoreA": 0.115832,
+   "baselineExpectedScoreB": 0.115832,
+   "baselineDiff": 0
+  },
+  {
+   "id": "hRTYuLO3#69",
+   "phase": "endgame",
+   "bestMoveA": "e8f8",
+   "bestMoveB": "e8f8",
+   "bestMoveMatch": true,
+   "cpA": -1077,
+   "cpB": -1077,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e8f8",
+    "e8d8"
+   ],
+   "orderB": [
+    "e8f8",
+    "e8d8"
+   ],
+   "baselineExpectedScoreA": 0.018604,
+   "baselineExpectedScoreB": 0.018604,
+   "baselineDiff": 0
+  },
+  {
+   "id": "EtyflSie#6",
+   "phase": "opening",
+   "bestMoveA": "c4d5",
+   "bestMoveB": "c4d5",
+   "bestMoveMatch": true,
+   "cpA": 33,
+   "cpB": 33,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c4d5",
+    "g1f3",
+    "e2e3"
+   ],
+   "orderB": [
+    "c4d5",
+    "g1f3",
+    "e2e3"
+   ],
+   "baselineExpectedScoreA": 0.53034,
+   "baselineExpectedScoreB": 0.53034,
+   "baselineDiff": 0
+  },
+  {
+   "id": "EtyflSie#16",
+   "phase": "middlegame",
+   "bestMoveA": "d1b3",
+   "bestMoveB": "d1b3",
+   "bestMoveMatch": true,
+   "cpA": 39,
+   "cpB": 39,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1b3",
+    "h2h3",
+    "b2b4"
+   ],
+   "orderB": [
+    "d1b3",
+    "h2h3",
+    "b2b4"
+   ],
+   "baselineExpectedScoreA": 0.535839,
+   "baselineExpectedScoreB": 0.535839,
+   "baselineDiff": 0
+  },
+  {
+   "id": "EtyflSie#26",
+   "phase": "middlegame",
+   "bestMoveA": "f3e2",
+   "bestMoveB": "f3e2",
+   "bestMoveMatch": true,
+   "cpA": 10,
+   "cpB": 10,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f3e2",
+    "c1d2",
+    "f1d1"
+   ],
+   "orderB": [
+    "f3e2",
+    "c1d2",
+    "f1d1"
+   ],
+   "baselineExpectedScoreA": 0.509204,
+   "baselineExpectedScoreB": 0.509204,
+   "baselineDiff": 0
+  },
+  {
+   "id": "EtyflSie#34",
+   "phase": "endgame",
+   "bestMoveA": "e2b5",
+   "bestMoveB": "e2b5",
+   "bestMoveMatch": true,
+   "cpA": 164,
+   "cpB": 164,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e2b5",
+    "e2a6",
+    "c2d1"
+   ],
+   "orderB": [
+    "e2b5",
+    "e2a6",
+    "c2d1"
+   ],
+   "baselineExpectedScoreA": 0.646539,
+   "baselineExpectedScoreB": 0.646539,
+   "baselineDiff": 0
+  },
+  {
+   "id": "vZ2kSxbH#9",
+   "phase": "opening",
+   "bestMoveA": "g4e3",
+   "bestMoveB": "g4e3",
+   "bestMoveMatch": true,
+   "cpA": 194,
+   "cpB": 194,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g4e3",
+    "c5e3",
+    "c5e7"
+   ],
+   "orderB": [
+    "g4e3",
+    "c5e3",
+    "c5e7"
+   ],
+   "baselineExpectedScoreA": 0.671356,
+   "baselineExpectedScoreB": 0.671356,
+   "baselineDiff": 0
+  },
+  {
+   "id": "vZ2kSxbH#23",
+   "phase": "middlegame",
+   "bestMoveA": "d7d6",
+   "bestMoveB": "d7d6",
+   "bestMoveMatch": true,
+   "cpA": 98,
+   "cpB": 98,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d7d6",
+    "f6e5",
+    "a6c5"
+   ],
+   "orderB": [
+    "d7d6",
+    "f6e5",
+    "a6c5"
+   ],
+   "baselineExpectedScoreA": 0.589245,
+   "baselineExpectedScoreB": 0.589245,
+   "baselineDiff": 0
+  },
+  {
+   "id": "vZ2kSxbH#37",
+   "phase": "middlegame",
+   "bestMoveA": "b8c8",
+   "bestMoveB": "b8c8",
+   "bestMoveMatch": true,
+   "cpA": 10,
+   "cpB": 10,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b8c8",
+    "f8c8",
+    "a6c5"
+   ],
+   "orderB": [
+    "b8c8",
+    "f8c8",
+    "a6c5"
+   ],
+   "baselineExpectedScoreA": 0.509204,
+   "baselineExpectedScoreB": 0.509204,
+   "baselineDiff": 0
+  },
+  {
+   "id": "vZ2kSxbH#48",
+   "phase": "endgame",
+   "bestMoveA": "h4h5",
+   "bestMoveB": "h4h5",
+   "bestMoveMatch": true,
+   "cpA": 310,
+   "cpB": 310,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h4h5",
+    "f1f5",
+    "f1f5"
+   ],
+   "orderB": [
+    "h4h5",
+    "f1f5",
+    "f1f5"
+   ],
+   "baselineExpectedScoreA": 0.757945,
+   "baselineExpectedScoreB": 0.757945,
+   "baselineDiff": 0
+  },
+  {
+   "id": "u6gRWgZC#9",
+   "phase": "opening",
+   "bestMoveA": "e7e5",
+   "bestMoveB": "e7e5",
+   "bestMoveMatch": true,
+   "cpA": -26,
+   "cpB": -26,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "e7e5",
+    "g8f6",
+    "a7a6"
+   ],
+   "orderB": [
+    "e7e5",
+    "g8f6",
+    "a7a6"
+   ],
+   "baselineExpectedScoreA": 0.476085,
+   "baselineExpectedScoreB": 0.476085,
+   "baselineDiff": 0
+  },
+  {
+   "id": "u6gRWgZC#24",
+   "phase": "middlegame",
+   "bestMoveA": "b1a3",
+   "bestMoveB": "b1a3",
+   "bestMoveMatch": true,
+   "cpA": 144,
+   "cpB": 144,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b1a3",
+    "f1d1",
+    "b2b4"
+   ],
+   "orderB": [
+    "b1a3",
+    "f1d1",
+    "b2b4"
+   ],
+   "baselineExpectedScoreA": 0.629534,
+   "baselineExpectedScoreB": 0.629534,
+   "baselineDiff": 0
+  },
+  {
+   "id": "u6gRWgZC#38",
+   "phase": "middlegame",
+   "bestMoveA": "d1b1",
+   "bestMoveB": "d1b1",
+   "bestMoveMatch": true,
+   "cpA": 1,
+   "cpB": 1,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d1b1",
+    "e2c4",
+    "e2a6"
+   ],
+   "orderB": [
+    "d1b1",
+    "e2c4",
+    "e2a6"
+   ],
+   "baselineExpectedScoreA": 0.500921,
+   "baselineExpectedScoreB": 0.500921,
+   "baselineDiff": 0
+  },
+  {
+   "id": "u6gRWgZC#50",
+   "phase": "endgame",
+   "bestMoveA": "d5d6",
+   "bestMoveB": "d5d6",
+   "bestMoveMatch": true,
+   "cpA": -24,
+   "cpB": -24,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d5d6",
+    "c4c6",
+    "g2g3"
+   ],
+   "orderB": [
+    "d5d6",
+    "c4c6",
+    "g2g3"
+   ],
+   "baselineExpectedScoreA": 0.477922,
+   "baselineExpectedScoreB": 0.477922,
+   "baselineDiff": 0
+  },
+  {
+   "id": "pePPZQMo#6",
+   "phase": "opening",
+   "bestMoveA": "c2c3",
+   "bestMoveB": "c2c3",
+   "bestMoveMatch": true,
+   "cpA": 70,
+   "cpB": 70,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c2c3",
+    "c2c3",
+    "g1f3"
+   ],
+   "orderB": [
+    "c2c3",
+    "c2c3",
+    "g1f3"
+   ],
+   "baselineExpectedScoreA": 0.564082,
+   "baselineExpectedScoreB": 0.564082,
+   "baselineDiff": 0
+  },
+  {
+   "id": "pePPZQMo#14",
+   "phase": "middlegame",
+   "bestMoveA": "g5d8",
+   "bestMoveB": "g5d8",
+   "bestMoveMatch": true,
+   "cpA": 823,
+   "cpB": 823,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g5d8",
+    "e2d2",
+    "h2h4"
+   ],
+   "orderB": [
+    "g5d8",
+    "e2d2",
+    "h2h4"
+   ],
+   "baselineExpectedScoreA": 0.953927,
+   "baselineExpectedScoreB": 0.953927,
+   "baselineDiff": 0
+  },
+  {
+   "id": "pePPZQMo#23",
+   "phase": "middlegame",
+   "bestMoveA": "f8e7",
+   "bestMoveB": "f8e7",
+   "bestMoveMatch": true,
+   "cpA": -176,
+   "cpB": -176,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f8e7",
+    "f7f6",
+    "f7f5"
+   ],
+   "orderB": [
+    "f8e7",
+    "f7f6",
+    "f7f5"
+   ],
+   "baselineExpectedScoreA": 0.34343,
+   "baselineExpectedScoreB": 0.34343,
+   "baselineDiff": 0
+  },
+  {
+   "id": "pePPZQMo#30",
+   "phase": "endgame",
+   "bestMoveA": "f3f4",
+   "bestMoveB": "f3f4",
+   "bestMoveMatch": true,
+   "cpA": 520,
+   "cpB": 520,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f3f4",
+    "h2h4",
+    "a1d1"
+   ],
+   "orderB": [
+    "f3f4",
+    "h2h4",
+    "a1d1"
+   ],
+   "baselineExpectedScoreA": 0.871544,
+   "baselineExpectedScoreB": 0.871544,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CDDzPeQi#15",
+   "phase": "opening",
+   "bestMoveA": "a5c4",
+   "bestMoveB": "a5c4",
+   "bestMoveMatch": true,
+   "cpA": 107,
+   "cpB": 107,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a5c4",
+    "b7b6",
+    "a5c6"
+   ],
+   "orderB": [
+    "a5c4",
+    "b7b6",
+    "a5c6"
+   ],
+   "baselineExpectedScoreA": 0.597241,
+   "baselineExpectedScoreB": 0.597241,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CDDzPeQi#41",
+   "phase": "middlegame",
+   "bestMoveA": "f5g3",
+   "bestMoveB": "f5g3",
+   "bestMoveMatch": true,
+   "cpA": -459,
+   "cpB": -459,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f5g3",
+    "h8h7",
+    "h8f8"
+   ],
+   "orderB": [
+    "f5g3",
+    "h8h7",
+    "h8f8"
+   ],
+   "baselineExpectedScoreA": 0.155766,
+   "baselineExpectedScoreB": 0.155766,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CDDzPeQi#67",
+   "phase": "middlegame",
+   "bestMoveA": "b7b6",
+   "bestMoveB": "b7b6",
+   "bestMoveMatch": true,
+   "cpA": -567,
+   "cpB": -567,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b7b6",
+    "a8b8",
+    "f7e6"
+   ],
+   "orderB": [
+    "b7b6",
+    "a8b8",
+    "f7e6"
+   ],
+   "baselineExpectedScoreA": 0.110294,
+   "baselineExpectedScoreB": 0.110294,
+   "baselineDiff": 0
+  },
+  {
+   "id": "CDDzPeQi#88",
+   "phase": "endgame",
+   "bestMoveA": "g6g7",
+   "bestMoveB": "g6g7",
+   "bestMoveMatch": true,
+   "cpA": 79,
+   "cpB": 79,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "g6g7",
+    "g3g4",
+    "e5e6"
+   ],
+   "orderB": [
+    "g6g7",
+    "g3g4",
+    "e5e6"
+   ],
+   "baselineExpectedScoreA": 0.572213,
+   "baselineExpectedScoreB": 0.572213,
+   "baselineDiff": 0
+  },
+  {
+   "id": "7IqVExxl#13",
+   "phase": "opening",
+   "bestMoveA": "d6b4",
+   "bestMoveB": "d6b4",
+   "bestMoveMatch": true,
+   "cpA": -52,
+   "cpB": -52,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "d6b4",
+    "d6e7",
+    "d6f8"
+   ],
+   "orderB": [
+    "d6b4",
+    "d6e7",
+    "d6f8"
+   ],
+   "baselineExpectedScoreA": 0.452279,
+   "baselineExpectedScoreB": 0.452279,
+   "baselineDiff": 0
+  },
+  {
+   "id": "7IqVExxl#34",
+   "phase": "middlegame",
+   "bestMoveA": "a3a4",
+   "bestMoveB": "a3a4",
+   "bestMoveMatch": true,
+   "cpA": 61,
+   "cpB": 61,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a3a4",
+    "f3e5",
+    "d2g5"
+   ],
+   "orderB": [
+    "a3a4",
+    "f3e5",
+    "d2g5"
+   ],
+   "baselineExpectedScoreA": 0.555917,
+   "baselineExpectedScoreB": 0.555917,
+   "baselineDiff": 0
+  },
+  {
+   "id": "7IqVExxl#55",
+   "phase": "middlegame",
+   "bestMoveA": "f6d7",
+   "bestMoveB": "f6d7",
+   "bestMoveMatch": true,
+   "cpA": -170,
+   "cpB": -170,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f6d7",
+    "h7h6",
+    "f6e8"
+   ],
+   "orderB": [
+    "f6d7",
+    "h7h6",
+    "f6e8"
+   ],
+   "baselineExpectedScoreA": 0.348429,
+   "baselineExpectedScoreB": 0.348429,
+   "baselineDiff": 0
+  },
+  {
+   "id": "7IqVExxl#71",
+   "phase": "endgame",
+   "bestMoveA": "b2a2",
+   "bestMoveB": "b2a2",
+   "bestMoveMatch": true,
+   "cpA": -113,
+   "cpB": -113,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b2a2",
+    "b2b1",
+    "b2b4"
+   ],
+   "orderB": [
+    "b2a2",
+    "b2b1",
+    "b2b4"
+   ],
+   "baselineExpectedScoreA": 0.397456,
+   "baselineExpectedScoreB": 0.397456,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ZWCFfUT1#8",
+   "phase": "opening",
+   "bestMoveA": "c2c3",
+   "bestMoveB": "c2c3",
+   "bestMoveMatch": true,
+   "cpA": 53,
+   "cpB": 53,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "c2c3",
+    "b5a4",
+    "e1g1"
+   ],
+   "orderB": [
+    "c2c3",
+    "b5a4",
+    "e1g1"
+   ],
+   "baselineExpectedScoreA": 0.548633,
+   "baselineExpectedScoreB": 0.548633,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ZWCFfUT1#22",
+   "phase": "middlegame",
+   "bestMoveA": "a2a4",
+   "bestMoveB": "a2a4",
+   "bestMoveMatch": true,
+   "cpA": 145,
+   "cpB": 145,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a2a4",
+    "h2h3",
+    "c2b3"
+   ],
+   "orderB": [
+    "a2a4",
+    "h2h3",
+    "c2b3"
+   ],
+   "baselineExpectedScoreA": 0.630393,
+   "baselineExpectedScoreB": 0.630393,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ZWCFfUT1#35",
+   "phase": "middlegame",
+   "bestMoveA": "f8h6",
+   "bestMoveB": "f8h6",
+   "bestMoveMatch": true,
+   "cpA": 561,
+   "cpB": 561,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f8h6",
+    "e8d7",
+    "f8g7"
+   ],
+   "orderB": [
+    "f8h6",
+    "e8d7",
+    "f8g7"
+   ],
+   "baselineExpectedScoreA": 0.887519,
+   "baselineExpectedScoreB": 0.887519,
+   "baselineDiff": 0
+  },
+  {
+   "id": "ZWCFfUT1#46",
+   "phase": "endgame",
+   "bestMoveA": "a1c1",
+   "bestMoveB": "a1c1",
+   "bestMoveMatch": true,
+   "cpA": -526,
+   "cpB": -526,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "a1c1",
+    "e1c1",
+    "a2a4"
+   ],
+   "orderB": [
+    "a1c1",
+    "e1c1",
+    "a2a4"
+   ],
+   "baselineExpectedScoreA": 0.126003,
+   "baselineExpectedScoreB": 0.126003,
+   "baselineDiff": 0
+  },
+  {
+   "id": "kwUPCBDT#17",
+   "phase": "opening",
+   "bestMoveA": "f7f5",
+   "bestMoveB": "f7f5",
+   "bestMoveMatch": true,
+   "cpA": -92,
+   "cpB": -92,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f7f5",
+    "f7f5",
+    "d8e8"
+   ],
+   "orderB": [
+    "f7f5",
+    "f7f5",
+    "d8e8"
+   ],
+   "baselineExpectedScoreA": 0.416113,
+   "baselineExpectedScoreB": 0.416113,
+   "baselineDiff": 0
+  },
+  {
+   "id": "kwUPCBDT#46",
+   "phase": "middlegame",
+   "bestMoveA": "h6f8",
+   "bestMoveB": "h6f8",
+   "bestMoveMatch": true,
+   "cpA": 397,
+   "cpB": 397,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "h6f8",
+    "f4f5",
+    "g4g5"
+   ],
+   "orderB": [
+    "h6f8",
+    "f4f5",
+    "g4g5"
+   ],
+   "baselineExpectedScoreA": 0.811806,
+   "baselineExpectedScoreB": 0.811806,
+   "baselineDiff": 0
+  },
+  {
+   "id": "kwUPCBDT#75",
+   "phase": "middlegame",
+   "bestMoveA": "f7e7",
+   "bestMoveB": "f7e7",
+   "bestMoveMatch": true,
+   "cpA": -332,
+   "cpB": -332,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "f7e7",
+    "f7f8",
+    "g7g8"
+   ],
+   "orderB": [
+    "f7e7",
+    "f7f8",
+    "g7g8"
+   ],
+   "baselineExpectedScoreA": 0.227505,
+   "baselineExpectedScoreB": 0.227505,
+   "baselineDiff": 0
+  },
+  {
+   "id": "kwUPCBDT#99",
+   "phase": "endgame",
+   "bestMoveA": "b5b4",
+   "bestMoveB": "b5b4",
+   "bestMoveMatch": true,
+   "cpA": -55,
+   "cpB": -55,
+   "mateA": null,
+   "mateB": null,
+   "cpDiff": 0,
+   "orderMatch": true,
+   "orderA": [
+    "b5b4",
+    "c3d3",
+    "c3b3"
+   ],
+   "orderB": [
+    "b5b4",
+    "c3d3",
+    "c3b3"
+   ],
+   "baselineExpectedScoreA": 0.449544,
+   "baselineExpectedScoreB": 0.449544,
+   "baselineDiff": 0
+  }
+ ]
+}

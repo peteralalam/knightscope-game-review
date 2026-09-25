@@ -227,19 +227,22 @@ SPECS = {
 }
 
 
-def curve_samples(theta, spec):
+REPRESENTATIVE_CPS = [-500, -300, -150, -75, 0, 75, 150, 300, 500]
+
+
+def curve_samples(theta, spec, cps=None):
     """Predicted expected score at fixed cp for each band midpoint and time class."""
+    cps = np.array(cps if cps is not None else [50, 100, 200, 300, 500, 1000], dtype=float)
     out = {}
     for tc in TCS:
         for lo, hi in BANDS:
             r = (lo + min(hi, 2600)) / 2
-            cps = np.array([50, 100, 200, 300, 500, 1000], dtype=float)
             d = {"z": np.full(len(cps), (r - 1500) / 400), "rapid": np.full(len(cps), 1.0 if tc == "rapid" else 0.0),
                  "endgame": np.zeros(len(cps)), "cp": cps, "diff": np.zeros(len(cps))}
             p = predict(theta, d, spec, with_diff=False)
             out[f"{tc}|{band_label(lo, hi)}"] = {int(c): round(float(v), 3) for c, v in zip(cps, p)}
-    base = 1 / (1 + np.exp(-BASELINE_SLOPE * np.array([50, 100, 200, 300, 500, 1000])))
-    out["baseline"] = {int(c): round(float(v), 3) for c, v in zip([50, 100, 200, 300, 500, 1000], base)}
+    base = 1 / (1 + np.exp(-BASELINE_SLOPE * cps))
+    out["baseline"] = {int(c): round(float(v), 3) for c, v in zip(cps, base)}
     return out
 
 
@@ -339,6 +342,8 @@ def main():
     }
     report["calibrationValidation"] = {"chosen": calibration_table(val, p_val), "baseline": calibration_table(val, baseline_val)}
     report["curves"] = curve_samples(theta, spec)
+    # Representative evaluation table requested for the report: -500..+500 cp.
+    report["representativeCurves"] = curve_samples(theta, spec, REPRESENTATIVE_CPS)
 
     if args.final_test:
         test = subset(data, data["split"] == "test")

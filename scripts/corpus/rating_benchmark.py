@@ -416,6 +416,16 @@ def bias_by_true_band(rows, y, pred):
     return out
 
 
+def bias_by_decisions(rows, y, pred):
+    """MAE and signed bias by meaningful-decision count, for the point estimate."""
+    out = {}
+    for lo, hi, label in DECISION_BINS:
+        m = np.array([lo <= r["meaningfulMoves"] < hi for r in rows])
+        if m.sum() >= 10:
+            out[label] = {"n": int(m.sum()), "mae": round(float(np.abs(pred[m] - y[m]).mean()), 1), "bias": round(float((pred[m] - y[m]).mean()), 1)}
+    return out
+
+
 def bias_by_band_and_decisions(rows, y, pred):
     """Does the extreme-band bias shrink when a game has more decisions (more information)?"""
     out = {}
@@ -543,6 +553,7 @@ def main():
             lo_st, hi_st = apply_scale(pt, np.array([r["meaningfulMoves"] for r in test], float), scale)
             tr["test"] = {name: metrics(yt, p) for name, p in preds.items()}
             tr["testByTrueBand"] = {name: bias_by_true_band(test, yt, p) for name, p in preds.items()}
+            tr["testByDecisions"] = {name: bias_by_decisions(test, yt, p) for name, p in preds.items()}
             tr["testCalibration"] = calibration_table(yt, pt)
             tr["testIntervals"] = {"mondrian": coverage_report(yt, lo_t, hi_t, test, pt),
                                    "scale(previous)": coverage_report(yt, lo_st, hi_st, test, pt)}

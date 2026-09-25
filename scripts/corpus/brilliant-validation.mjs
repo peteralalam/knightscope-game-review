@@ -13,7 +13,7 @@
 // by this script; it only measures it.
 import { appendFileSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
-import { loadCases, MUST_NOT_BE_BRILLIANT, runSuite } from "./brilliant-suite.mjs";
+import { AMBIGUOUS_CATEGORIES, loadCases, MUST_NOT_BE_BRILLIANT, runSuite } from "./brilliant-suite.mjs";
 
 function argument(name, fallback) {
   const index = process.argv.indexOf(`--${name}`);
@@ -26,9 +26,14 @@ function expand(pattern) {
   return readdirSync(directory).filter((name) => regex.test(name)).sort().map((name) => join(directory, name));
 }
 
+function labelFor(category) {
+  if (AMBIGUOUS_CATEGORIES.has(category)) return "ambiguous";
+  return MUST_NOT_BE_BRILLIANT.has(category) ? "negative" : "positive";
+}
+
 export function allCases() {
   const expanded = JSON.parse(readFileSync(new URL("../../data/brilliant-suite/validation.json", import.meta.url), "utf8")).cases;
-  const handBuilt = loadCases().map((item) => ({ ...item, label: MUST_NOT_BE_BRILLIANT.has(item.category) ? "negative" : "positive", handBuilt: true }));
+  const handBuilt = loadCases().map((item) => ({ ...item, label: labelFor(item.category), handBuilt: true }));
   return [...handBuilt, ...expanded];
 }
 
@@ -45,6 +50,7 @@ export function wilson(successes, total, z = 1.96) {
 export function summarize(results) {
   const positives = results.filter((r) => r.label === "positive");
   const negatives = results.filter((r) => r.label === "negative");
+  const ambiguous = results.filter((r) => r.label === "ambiguous");
   const tp = positives.filter((r) => r.grade === "brilliant").length;
   const fp = negatives.filter((r) => r.grade === "brilliant").length;
   const byCategory = {};
@@ -75,6 +81,7 @@ export function summarize(results) {
     byCategory,
     positiveRejections: rejections,
     falsePositiveCases: negatives.filter((r) => r.grade === "brilliant").map((r) => ({ id: r.id, move: r.move, source: r.source })),
+    ambiguousCases: ambiguous.map((r) => ({ id: r.id, move: r.move, grade: r.grade, reason: r.reason, note: r.source })),
   };
 }
 
@@ -102,11 +109,17 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const pattern = argument("summarize");
   if (pattern) {
     const results = expand(pattern).flatMap((file) => readFileSync(file, "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line)));
-    const report = { all: summarize(results), expandedOnly: summarize(results.filter((r) => !r.handBuilt)) };
+    const report = {
+      all: summarize(results),
+      automaticOnly: summarize(results.filter((r) => !r.handBuilt)),
+      goldSubset: summarize(results.filter((r) => r.handBuilt)),
+    };
     const json = argument("json");
     if (json) writeFileSync(json, `${JSON.stringify(report, null, 1)}\n`);
     const { byCategory, ...headline } = report.all;
-    console.log(JSON.stringify(headline, null, 1));
+    console.log("ALL:", JSON.stringify(headline, null, 1));
+    const { byCategory: goldByCategory, ...goldHeadline } = report.goldSubset;
+    console.log("GOLD SUBSET (hand-audited):", JSON.stringify(goldHeadline, null, 1));
     for (const [category, value] of Object.entries(byCategory)) console.log(category.padEnd(28), value.label, `${value.brilliant}/${value.n}`, JSON.stringify(value.grades));
   } else {
     await run();

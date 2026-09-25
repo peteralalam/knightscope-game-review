@@ -227,7 +227,7 @@ function PlayerStrip({
       </div>
       <div className="player-metrics">
         <div><span>Accuracy</span><strong>{complete ? `${summary.accuracy.toFixed(1)}%` : "—"}</strong></div>
-        <div><span title="Lichess-equivalent estimated game performance (approximate performance range)">Est. performance</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
+        <div><span title="Estimated Lichess-equivalent playing level, based on this game only (approximate range, not a measured rating)">Est. level</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
       </div>
     </div>
   );
@@ -429,8 +429,8 @@ function SummaryPanel({
         <span className="result-pill">{game.result}</span>
       </div>
       <div className="accuracy-pair">
-        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>{complete ? ratingDetail(white) : "estimated game performance"}</small></div>
-        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>{complete ? ratingDetail(black) : "estimated game performance"}</small></div>
+        <div><span>{playerName(game, "w")}</span><AccuracyRing value={white.accuracy} color="w" /><strong>{complete ? ratingRange(white) : "Analyzing"}</strong><small>{complete ? ratingDetail(white) : "estimated playing level"}</small></div>
+        <div><span>{playerName(game, "b")}</span><AccuracyRing value={black.accuracy} color="b" /><strong>{complete ? ratingRange(black) : "Analyzing"}</strong><small>{complete ? ratingDetail(black) : "estimated playing level"}</small></div>
       </div>
       <div className="grade-table" aria-label="Move classification counts">
         <div className="grade-table__header"><span>Move quality</span><span>White</span><span>Black</span></div>
@@ -445,11 +445,13 @@ function SummaryPanel({
       {complete && reviews.length > 0 && (
         <p className="estimate-note">
           {white.performance?.calibrated
-            ? <>Lichess-equivalent estimated game performance: the Lichess {white.performance.timeControl === "blitz" || white.performance.timeControl === "bullet" ? "blitz" : "rapid"} rating
-              whose typical games look like this one. The range is approximate: it held the true rating for
+            ? <>Estimated Lichess-equivalent playing level, based on this game only: the Lichess {white.performance.timeControl === "blitz" || white.performance.timeControl === "bullet" ? "blitz" : "rapid"} rating
+              whose typical games look like this one. This is not a direct read of the player&apos;s actual rating – one game is a
+              noisy sample of how someone plays, and the same player&apos;s estimate can swing widely from game to game (see
+              &quot;single-game noise&quot; in the validation report). The range is approximate: it held the true rating for
               {" "}{Math.round((white.performance.heldOutCoverage ?? 0.8) * 100)}% of held-out Lichess players with a similar estimate,
               but less often for players far above or below average, whose single-game estimates drift toward the middle.
-              It is not a Chess.com or FIDE rating, and one game says little: on held-out players the estimate was off by
+              It is not a Chess.com or FIDE rating, and on held-out players the estimate was off by
               {" "}{Math.round((white.performance.heldOutMae ?? 0) / 10) * 10} points on average.</>
             : <>Ranges come from an uncalibrated, prior-based model – not account ratings.</>}
           {" "}Accuracy measures engine precision and is not an Elo.

@@ -242,6 +242,14 @@ Test MAE (bias) by true rating band:
 | 2200–2399 | 71 | 285.7 (-285.7) | 671.1 (-671.1) | 211.2 (-204.6) | 293.5 (-293.2) | 205.4 (-194.2) |
 | 2400+ | 55 | 514 (-514) | 777.3 (-777.3) | 368.5 (-368.5) | 464.8 (-464.8) | 349.3 (-349.3) |
 
+Test MAE (bias) by meaningful-decision count:
+
+| Decisions | n | constant | heuristic | ridge | ridge-w | shipped |
+| --- | --- | --- | --- | --- | --- | --- |
+| <20 | 63 | 300.5 (+122.6) | 451.5 (-426.6) | 247.7 (+46.3) | 278.7 (+46.6) | 243.3 (+45.3) |
+| 20–34 | 168 | 297.8 (+26) | 485.4 (-467.9) | 241.1 (-4.6) | 247.7 (-65.5) | 239.3 (-16.6) |
+| 35+ | 127 | 306.3 (-64.8) | 476.9 (-461.8) | 244.3 (+1.7) | 280.8 (-85.8) | 236.6 (+6.9) |
+
 Why the extremes are biased (out-of-fold, chosen model): bias by true band × meaningful decisions. If more decisions shrink the bias, the cause is missing information in one game rather than model form.
 
 | Band | decisions | n | Bias |
@@ -383,6 +391,14 @@ Test MAE (bias) by true rating band:
 | 2200–2399 | 50 | 518.2 (-518.2) | 736.9 (-736.9) | 307.7 (-298.1) | 325 (-314.3) | 276.4 (-264.6) |
 | 2400+ | 37 | 704.8 (-704.8) | 863.7 (-863.7) | 478.7 (-478.7) | 495.6 (-495.6) | 435.2 (-435.2) |
 
+Test MAE (bias) by meaningful-decision count:
+
+| Decisions | n | constant | heuristic | ridge | ridge-w | shipped |
+| --- | --- | --- | --- | --- | --- | --- |
+| <20 | 125 | 361.6 (+165.5) | 322 (-199.8) | 265.1 (-11.2) | 271.2 (-44.3) | 266.1 (-16.1) |
+| 20–34 | 206 | 329.1 (-38.8) | 410.1 (-336.5) | 250.5 (-3.6) | 253.2 (-35.1) | 253.2 (-11.5) |
+| 35+ | 133 | 341 (-151.5) | 484.2 (-472.4) | 237.5 (-9.2) | 237.2 (-41.2) | 226.8 (-4.7) |
+
 Why the extremes are biased (out-of-fold, chosen model): bias by true band × meaningful decisions. If more decisions shrink the bias, the cause is missing information in one game rather than model form.
 
 | Band | decisions | n | Bias |
@@ -521,17 +537,116 @@ Mean actual rating by predicted range. Calibration error (weighted mean |gap|): 
 | 80–119 | 144 | 0.847 | 1316 |
 | 120+ | 34 | 0.824 | 1259 |
 
-## 9. Lite vs Full engine
+## 7. Rating-conditioned outcome model E[result | cp, rating, time control]
 
-Measured in this project's 4-core container while four corpus-analysis processes were also running, so absolute times are pessimistic; the ratios are what matter. Browser = headless Chromium against the production build; Node = the same UciEngine and pipeline.
+Positions (side to move, own-engine cp, final score): train 96245, validation 29702, test 30132. Chosen on validation: **rating** (simplest model not significantly worse than the best, by a player-grouped bootstrap).
 
-|  | Lite | Full |
+| Model | Val log loss | Brier | Calibration error | Constraints |
+| --- | --- | --- | --- | --- |
+| baseline | 0.71343 | 0.23237 | 0.102 |  |
+| global | 0.64651 | 0.20963 | 0.0331 | monotone, neutral; E(+3000 cp) ≥ 0.9568 |
+| tc | 0.64633 | 0.20989 | 0.0293 | monotone, neutral; E(+3000 cp) ≥ 0.842 |
+| rating | 0.64489 | 0.20918 | 0.0282 | monotone, neutral; E(+3000 cp) ≥ 0.7991 |
+| rating+sat | 0.64512 | 0.20929 | 0.0251 | monotone, neutral; E(+3000 cp) ≥ 0.7917 |
+| rating+sat+phase | 0.64295 | 0.20837 | 0.0314 | monotone, neutral; E(+3000 cp) ≥ 0.7774 |
+| rating+sat+phase+isotonic | 0.6434 | 0.20837 | 0.0418 |  |
+
+Log-loss improvement over the fixed Lichess curve (validation, 95% CI): [0.03702,0.0953].
+
+Expected score at representative evaluations (chosen model vs the fixed baseline curve):
+
+| tc | band | +0 | +75 | +150 | +300 | +500 | -500 | -300 | -150 | -75 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| blitz|800–999 | 0.5 | 0.511 | 0.522 | 0.544 | 0.574 | 0.426 | 0.456 | 0.478 | 0.489 |
+| blitz|1000–1199 | 0.5 | 0.51 | 0.519 | 0.539 | 0.564 | 0.436 | 0.461 | 0.481 | 0.49 |
+| blitz|1200–1399 | 0.5 | 0.509 | 0.518 | 0.535 | 0.559 | 0.441 | 0.465 | 0.482 | 0.491 |
+| blitz|1400–1599 | 0.5 | 0.509 | 0.517 | 0.534 | 0.557 | 0.443 | 0.466 | 0.483 | 0.491 |
+| blitz|1600–1799 | 0.5 | 0.509 | 0.518 | 0.535 | 0.559 | 0.441 | 0.465 | 0.482 | 0.491 |
+| blitz|1800–1999 | 0.5 | 0.51 | 0.519 | 0.538 | 0.564 | 0.436 | 0.462 | 0.481 | 0.49 |
+| blitz|2000–2199 | 0.5 | 0.511 | 0.522 | 0.544 | 0.573 | 0.427 | 0.456 | 0.478 | 0.489 |
+| blitz|2200–2399 | 0.5 | 0.513 | 0.527 | 0.553 | 0.588 | 0.412 | 0.447 | 0.473 | 0.487 |
+| blitz|2400+ | 0.5 | 0.517 | 0.534 | 0.568 | 0.612 | 0.388 | 0.432 | 0.466 | 0.483 |
+| rapid|800–999 | 0.5 | 0.528 | 0.556 | 0.61 | 0.678 | 0.322 | 0.39 | 0.444 | 0.472 |
+| rapid|1000–1199 | 0.5 | 0.527 | 0.554 | 0.606 | 0.673 | 0.327 | 0.394 | 0.446 | 0.473 |
+| rapid|1200–1399 | 0.5 | 0.526 | 0.553 | 0.604 | 0.669 | 0.331 | 0.396 | 0.447 | 0.474 |
+| rapid|1400–1599 | 0.5 | 0.526 | 0.552 | 0.603 | 0.668 | 0.332 | 0.397 | 0.448 | 0.474 |
+| rapid|1600–1799 | 0.5 | 0.526 | 0.552 | 0.603 | 0.667 | 0.333 | 0.397 | 0.448 | 0.474 |
+| rapid|1800–1999 | 0.5 | 0.526 | 0.552 | 0.604 | 0.668 | 0.332 | 0.396 | 0.448 | 0.474 |
+| rapid|2000–2199 | 0.5 | 0.527 | 0.553 | 0.605 | 0.671 | 0.329 | 0.395 | 0.447 | 0.473 |
+| rapid|2200–2399 | 0.5 | 0.527 | 0.555 | 0.608 | 0.676 | 0.324 | 0.392 | 0.445 | 0.473 |
+| rapid|2400+ | 0.5 | 0.529 | 0.557 | 0.612 | 0.682 | 0.318 | 0.388 | 0.443 | 0.471 |
+| baseline | 0.5 | 0.569 | 0.635 | 0.751 | 0.863 | 0.137 | 0.249 | 0.365 | 0.431 |
+
+Expected score at fixed cp by rating band (chosen model):
+
+| tc | band | +50 | +100 | +200 | +300 | +500 | +1000 |
+| --- | --- | --- | --- | --- | --- | --- |
+| blitz|800–999 | 0.507 | 0.515 | 0.53 | 0.544 | 0.574 | 0.644 |
+| blitz|1000–1199 | 0.506 | 0.513 | 0.526 | 0.539 | 0.564 | 0.626 |
+| blitz|1200–1399 | 0.506 | 0.512 | 0.524 | 0.535 | 0.559 | 0.616 |
+| blitz|1400–1599 | 0.506 | 0.512 | 0.523 | 0.534 | 0.557 | 0.613 |
+| blitz|1600–1799 | 0.506 | 0.512 | 0.524 | 0.535 | 0.559 | 0.616 |
+| blitz|1800–1999 | 0.506 | 0.513 | 0.526 | 0.538 | 0.564 | 0.625 |
+| blitz|2000–2199 | 0.507 | 0.515 | 0.529 | 0.544 | 0.573 | 0.643 |
+| blitz|2200–2399 | 0.509 | 0.518 | 0.536 | 0.553 | 0.588 | 0.671 |
+| blitz|2400+ | 0.511 | 0.523 | 0.545 | 0.568 | 0.612 | 0.713 |
+| rapid|800–999 | 0.519 | 0.537 | 0.574 | 0.61 | 0.678 | 0.816 |
+| rapid|1000–1199 | 0.518 | 0.536 | 0.572 | 0.606 | 0.673 | 0.809 |
+| rapid|1200–1399 | 0.518 | 0.535 | 0.57 | 0.604 | 0.669 | 0.804 |
+| rapid|1400–1599 | 0.517 | 0.535 | 0.569 | 0.603 | 0.668 | 0.801 |
+| rapid|1600–1799 | 0.517 | 0.535 | 0.569 | 0.603 | 0.667 | 0.801 |
+| rapid|1800–1999 | 0.518 | 0.535 | 0.57 | 0.604 | 0.668 | 0.803 |
+| rapid|2000–2199 | 0.518 | 0.536 | 0.571 | 0.605 | 0.671 | 0.807 |
+| rapid|2200–2399 | 0.518 | 0.537 | 0.573 | 0.608 | 0.676 | 0.813 |
+| rapid|2400+ | 0.519 | 0.538 | 0.576 | 0.612 | 0.682 | 0.821 |
+| baseline | 0.546 | 0.591 | 0.676 | 0.751 | 0.863 | 0.975 |
+
+Validation log loss by rating band, chosen vs baseline:
+
+| Band | n | Chosen | Baseline |
+| --- | --- | --- | --- |
+| 800–999 | 835 | 0.58408 | 0.85049 |
+| 1000–1199 | 1444 | 0.56725 | 0.59312 |
+| 1200–1399 | 1561 | 0.5422 | 0.61878 |
+| 1400–1599 | 3324 | 0.63804 | 0.75089 |
+| 1600–1799 | 3884 | 0.64105 | 0.78154 |
+| 1800–1999 | 3698 | 0.67954 | 0.8106 |
+| 2000–2199 | 4540 | 0.6527 | 0.67854 |
+| 2200–2399 | 5440 | 0.64822 | 0.67741 |
+| 2400+ | 4976 | 0.68086 | 0.67586 |
+
+### Would the rating-conditioned curve change displayed grades? (test players)
+
+Not enabled automatically; shown as evidence. "true" grades at the player's real rating (oracle); "est" grades at this session's single-game estimate (what the app could actually do, step 2 → step 3, no feedback).
+
+By rating band:
+
+| Band | Moves | Blunder base → true / est | Mistake base → true / est | Inaccuracy base → true / est | Grades changed (true / est) |
+| --- | --- | --- | --- | --- | --- |
+| 800–999 | 355 | 104.2 → 45.1 / 45.1 | 98.6 → 84.5 / 78.9 | 166.2 → 140.8 / 135.2 | 45% / 46% |
+| 1000–1199 | 803 | 73.5 → 27.4 / 27.4 | 82.2 → 61 / 61 | 154.4 → 93.4 / 89.7 | 42% / 41% |
+| 1200–1399 | 934 | 66.4 → 31 / 30 | 78.2 → 49.3 / 49.3 | 145.6 → 92.1 / 92.1 | 41% / 41% |
+| 1400–1599 | 3446 | 55.7 → 4.4 / 5.2 | 67.3 → 18.3 / 18.9 | 114 → 52.5 / 54.3 | 42% / 42% |
+| 1600–1799 | 4356 | 59.2 → 6 / 6.4 | 60.6 → 28.2 / 29.6 | 115.9 → 50.5 / 51.7 | 41% / 41% |
+| 1800–1999 | 4432 | 46.3 → 6.8 / 7 | 51.2 → 22.3 / 22.1 | 106.3 → 43.3 / 43.5 | 38% / 38% |
+| 2000–2199 | 3591 | 40.4 → 7 / 6.4 | 57.6 → 18.1 / 17.5 | 103.6 → 41.2 / 41.2 | 38% / 38% |
+| 2200–2399 | 4722 | 37.7 → 3.8 / 3.4 | 50.4 → 18.2 / 15.2 | 96.4 → 39.8 / 33.9 | 37% / 38% |
+| 2400+ | 3495 | 34.9 → 4.3 / 3.1 | 44.1 → 20 / 13.2 | 77.5 → 37.5 / 32.6 | 33% / 35% |
+
+By time control:
+
+| Time control | Moves | Grades changed (true / est) |
 | --- | --- | --- |
-| Download | 1.8 MB, same-origin static asset | 99.1 MB, opt-in, from R2; SHA-256 verified, then Cache Storage |
-| Network | nn-61e7af4bb97d (1.1 MB Lite net, sscg13; P_hm features) | nn-1a298aa575a0 (official Stockfish 19) |
-| Parallel engines (browser) | up to 4 (3 here) | up to 2 (memory) |
-| Download + verify + cache (local network) | – | 2.0 s |
-| Opera Game, Quick, browser | 9.7 s | 19.2 s |
-| Opera Game, Deep, browser | – | 97 s (Auto chose Full) |
-| Kasparov–Topalov, Balanced, Node, 3 engines | Brilliant: 36.Bf1 only (24.Rxd4 not found); Great: 22...Nbxd5, 25.Re7+, 27.b4+, 29...Bb7, 34.Qa1+ | Brilliant: 24.Rxd4, 30.Rxb7, 36.Bf1; Great: 22...Nbxd5, 25...Kb6, 27.b4+, 29...Bb7, 34.Qa1+ (140 s) |
-| Tablebases | none (Syzygy compiled out) | none (Syzygy compiled out) |
+| blitz | 12039 | 43% / 44% |
+| rapid | 14095 | 34% / 35% |
+
+By CURRENT (baseline) classification — how often does a move shown as each grade today change under the rating-conditioned curve:
+
+| Current grade | Moves | Grades changed (true / est) |
+| --- | --- | --- |
+| Best | 13526 | 1% / 1% |
+| Excellent | 3491 | 50% / 52% |
+| Good | 3680 | 85% / 86% |
+| Inaccuracy | 2728 | 93% / 93% |
+| Mistake | 1462 | 97% / 97% |
+| Blunder | 1247 | 85% / 85% |

@@ -12,6 +12,12 @@ import { uciParts } from "../../lib/chess-analysis.ts";
 import { parsePgn } from "../../lib/chess-review.ts";
 import { ANALYSIS_PRESETS } from "../../lib/review-config.ts";
 
+// Sound sacrifices with genuinely debatable value (roughly balanced compensation,
+// not a clear win): the algorithm is not required to call these Brilliant, and
+// it is not a false positive if it does (they are objectively sound theory) –
+// reported qualitatively rather than scored as pass/fail.
+export const AMBIGUOUS_CATEGORIES = new Set(["borderline-sacrifice"]);
+
 export const MUST_NOT_BE_BRILLIANT = new Set([
   "sac-while-winning",
   "sac-while-losing",

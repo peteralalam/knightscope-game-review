@@ -311,6 +311,15 @@ export interface PerformanceFeatures {
   endgameAccuracy: number | null;
 }
 
+/**
+ * The estimated Lichess-equivalent playing level, based on this game only.
+ * Trained target: a player's long-term Lichess rating at the time of the
+ * game. Input: one game's continuous, rating-independent features. This is
+ * NOT a direct read of the individual game's hypothetical performance Elo,
+ * and one game is a noisy sample of how a player performs – the same player
+ * can produce estimates that differ by hundreds of points across two games
+ * (see docs/validation-report.md, single-game noise).
+ */
 export interface PerformanceEstimate {
   estimatedPerformanceRating: number;
   confidenceLow: number;

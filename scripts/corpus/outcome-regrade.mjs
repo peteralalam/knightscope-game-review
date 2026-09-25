@@ -1,5 +1,6 @@
 // Does grading on the rating-conditioned outcome curve materially change the
-// displayed classifications, by rating band?
+// displayed classifications, by rating band, time control, and by the move's
+// CURRENT (baseline) classification?
 //
 //   node scripts/corpus/outcome-regrade.mjs --analyses ".cache/corpus/rating-v2.*.jsonl" \
 //     --samples data/rating-corpus-v2/samples.jsonl --outcome data/rating-corpus-v2/outcome-model.json \
@@ -50,8 +51,46 @@ function main() {
     const row = JSON.parse(line);
     if (row.split === split) samples.set(`${row.gameId}:${row.color}`, row);
   }
-  const tally = {};
-  const changed = {};
+  // Three independent breakdowns over the same eligible moves: rating band,
+  // time control, and the move's CURRENT (baseline) grade.
+  function makeAccumulator() {
+    const tally = {};
+    const changed = {};
+    return {
+      record(key, grades) {
+        tally[key] ??= { moves: 0, baseline: {}, true: {}, estimated: {} };
+        changed[key] ??= { true: 0, estimated: 0, eligible: 0 };
+        const t = tally[key];
+        t.moves += 1;
+        changed[key].eligible += 1;
+        for (const [k, grade] of Object.entries(grades)) t[k][grade] = (t[k][grade] ?? 0) + 1;
+        if (grades.true !== grades.baseline) changed[key].true += 1;
+        if (grades.estimated !== grades.baseline) changed[key].estimated += 1;
+      },
+      finalize(keys) {
+        const per1000 = (counts, total) => Object.fromEntries(ORDINARY.map((grade) => [grade, Math.round(((counts[grade] ?? 0) / Math.max(1, total)) * 10000) / 10]));
+        const out = {};
+        for (const key of keys) {
+          const t = tally[key];
+          if (!t) continue;
+          out[key] = {
+            moves: t.moves,
+            baseline: per1000(t.baseline, t.moves),
+            ratedAtTrueRating: per1000(t.true, t.moves),
+            ratedAtEstimate: per1000(t.estimated, t.moves),
+            changedShare: {
+              trueRating: Math.round((changed[key].true / Math.max(1, changed[key].eligible)) * 1000) / 1000,
+              estimate: Math.round((changed[key].estimated / Math.max(1, changed[key].eligible)) * 1000) / 1000,
+            },
+          };
+        }
+        return out;
+      },
+    };
+  }
+  const byBandAcc = makeAccumulator();
+  const byTcAcc = makeAccumulator();
+  const byCurrentGradeAcc = makeAccumulator();
   const seen = new Set();
   for (const file of expand(argument("analyses"))) {
     for (const line of readFileSync(file, "utf8").split("\n")) {
@@ -65,49 +104,43 @@ function main() {
         const params = REGRESSION_MODELS[row.tc];
         const estimate = params ? regressionFromVector(row.x, row.meaningfulMoves, params).center : row.rating;
         const band = bandOf(row.rating);
-        tally[band] ??= { moves: 0, baseline: {}, true: {}, estimated: {} };
-        changed[band] ??= { true: 0, estimated: 0, eligible: 0 };
         for (const move of analysis.moves) {
           if (move.c !== color || move.book) continue;
           if (!ORDINARY.includes(move.g)) continue;
           const before = typeof move.cpb === "number" ? move.cpb : cpFromExpected(move.eb);
           const after = cpFromExpected(move.ea);
           if (before === null || after === null || move.mb != null) continue;
-          const t = tally[band];
-          t.moves += 1;
-          changed[band].eligible += 1;
           const grades = {
             baseline: severityFromLoss(Math.max(0, baseline(before) - baseline(after)), move.top),
             true: severityFromLoss(Math.max(0, ratedExpectedScore(before, row.rating, row.tc, model) - ratedExpectedScore(after, row.rating, row.tc, model)), move.top),
             estimated: severityFromLoss(Math.max(0, ratedExpectedScore(before, estimate, row.tc, model) - ratedExpectedScore(after, estimate, row.tc, model)), move.top),
           };
-          for (const [key, grade] of Object.entries(grades)) t[key][grade] = (t[key][grade] ?? 0) + 1;
-          if (grades.true !== grades.baseline) changed[band].true += 1;
-          if (grades.estimated !== grades.baseline) changed[band].estimated += 1;
+          byBandAcc.record(band, grades);
+          byTcAcc.record(row.tc, grades);
+          byCurrentGradeAcc.record(move.g, grades);
         }
       }
     }
   }
-  const per1000 = (counts, total) => Object.fromEntries(ORDINARY.map((grade) => [grade, Math.round(((counts[grade] ?? 0) / Math.max(1, total)) * 10000) / 10]));
-  const out = { model: name, split, bands: {} };
-  for (const band of BANDS) {
-    const t = tally[band];
-    if (!t) continue;
-    out.bands[band] = {
-      moves: t.moves,
-      baseline: per1000(t.baseline, t.moves),
-      ratedAtTrueRating: per1000(t.true, t.moves),
-      ratedAtEstimate: per1000(t.estimated, t.moves),
-      changedShare: {
-        trueRating: Math.round((changed[band].true / Math.max(1, changed[band].eligible)) * 1000) / 1000,
-        estimate: Math.round((changed[band].estimated / Math.max(1, changed[band].eligible)) * 1000) / 1000,
-      },
-    };
-  }
+  const out = {
+    model: name,
+    split,
+    byBand: byBandAcc.finalize(BANDS),
+    byTimeControl: byTcAcc.finalize(["blitz", "rapid"]),
+    byCurrentGrade: byCurrentGradeAcc.finalize(ORDINARY),
+    // Legacy alias kept for anything still reading `bands`.
+    bands: byBandAcc.finalize(BANDS),
+  };
   writeFileSync(argument("out"), `${JSON.stringify(out, null, 1)}\n`);
-  for (const [band, value] of Object.entries(out.bands)) {
-    console.log(band, value.moves, "blunder", value.baseline.blunder, "→", value.ratedAtTrueRating.blunder, "/", value.ratedAtEstimate.blunder,
+  for (const [band, value] of Object.entries(out.byBand)) {
+    console.log("band", band, value.moves, "blunder", value.baseline.blunder, "→", value.ratedAtTrueRating.blunder, "/", value.ratedAtEstimate.blunder,
       "mistake", value.baseline.mistake, "→", value.ratedAtTrueRating.mistake, "changed", value.changedShare);
+  }
+  for (const [tc, value] of Object.entries(out.byTimeControl)) {
+    console.log("tc", tc, value.moves, "changed", value.changedShare);
+  }
+  for (const [grade, value] of Object.entries(out.byCurrentGrade)) {
+    console.log("currentGrade", grade, value.moves, "changed", value.changedShare);
   }
 }
 
