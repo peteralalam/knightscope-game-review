@@ -154,7 +154,7 @@ function ImportPanel({
   return (
     <section className={`import-card${compact ? " import-card--compact" : ""}`} aria-labelledby="import-title">
       <div className="import-copy">
-        <span className="eyebrow">Private analysis · no account needed</span>
+        <span className="eyebrow">Analysis runs in your browser · game data is not uploaded</span>
         <h1 id="import-title">See the story behind every move.</h1>
         <p>
           Drop in a PGN. KnightScope runs Stockfish in your browser, grades every decision,
@@ -227,7 +227,7 @@ function PlayerStrip({
       </div>
       <div className="player-metrics">
         <div><span>Accuracy</span><strong>{complete ? `${summary.accuracy.toFixed(1)}%` : "—"}</strong></div>
-        <div><span title="Lichess-equivalent estimated game performance (80% range)">Est. performance</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
+        <div><span title="Lichess-equivalent estimated game performance (approximate performance range)">Est. performance</span><strong>{complete ? ratingRange(summary) : "—"}</strong></div>
       </div>
     </div>
   );
@@ -359,6 +359,9 @@ function GradeEvidence({ review }: { review: ReviewedMove }) {
           <div><dt>Decision</dt><dd>{great.decision}</dd></div>
         </dl>
       )}
+      <p className="grade-evidence__note">
+        Percentages are expected scores (win = 1, draw = ½) on a fixed, rating-independent curve, not win probabilities.
+      </p>
     </details>
   );
 }
@@ -443,10 +446,12 @@ function SummaryPanel({
         <p className="estimate-note">
           {white.performance?.calibrated
             ? <>Lichess-equivalent estimated game performance: the Lichess {white.performance.timeControl === "blitz" || white.performance.timeControl === "bullet" ? "blitz" : "rapid"} rating
-              whose typical games look like this one, with an 80% range that contained the true rating for {Math.round((white.performance.heldOutCoverage ?? 0.8) * 100)}% of held-out Lichess players.
+              whose typical games look like this one. The range is approximate: it held the true rating for
+              {" "}{Math.round((white.performance.heldOutCoverage ?? 0.8) * 100)}% of held-out Lichess players with a similar estimate,
+              but less often for players far above or below average, whose single-game estimates drift toward the middle.
               It is not a Chess.com or FIDE rating, and one game says little: on held-out players the estimate was off by
               {" "}{Math.round((white.performance.heldOutMae ?? 0) / 10) * 10} points on average.</>
-            : <>Ranges are 80% intervals from an uncalibrated, prior-based model – not account ratings.</>}
+            : <>Ranges come from an uncalibrated, prior-based model – not account ratings.</>}
           {" "}Accuracy measures engine precision and is not an Elo.
         </p>
       )}
@@ -690,7 +695,7 @@ export function ChessReviewApp() {
             <>
               <span>
                 {engineMode === "full" ? "The full engine" : "For Deep reviews, Auto switches to the full engine once it"} is a one-time ≈99 MB download,
-                verified (SHA-256) and cached in this browser. Only the engine file is downloaded; your games never leave the device.
+                verified against a SHA-256 built into this app and cached in this browser. That download is a network request for a static file; it carries no PGN, moves, positions or results.
                 {fullEngine.state === "error" && <b> {fullEngine.message}</b>}
               </span>
               <button className="button button--compact" onClick={() => void startFullDownload()}>Download full engine</button>

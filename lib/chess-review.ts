@@ -125,7 +125,7 @@ export interface Criticality {
   onlyMove: boolean;
   /**
    * UNIQUENESS: how much better the played move is than the best alternative, in
-   * human expected score (the candidate-pass gap, never negative).
+   * baseline expected score (the candidate-pass gap, never negative).
    */
   moveUniqueness?: number;
   /**
@@ -290,16 +290,22 @@ export interface PerformanceFeatures {
   p90Loss: number;
   /** Mean loss weighted by how much was at stake (balanced positions count most). */
   complexityWeightedLoss: number;
-  blunderRate: number;
-  mistakeRate: number;
-  inaccuracyRate: number;
+  /**
+   * Shares of decisions by baseline EP loss: > 0.20, (0.10, 0.20], (0.05, 0.10].
+   * Deliberately NOT counts of displayed grades, so the rating estimate can never
+   * depend on a (possibly rating-conditioned) classification of the same game.
+   */
+  severeLossRate: number;
+  largeLossRate: number;
+  moderateLossRate: number;
   top1Agreement: number;
   topNAgreement: number | null;
   criticalAccuracy: number | null;
   onlyMoveSuccess: number | null;
   conversionAccuracy: number | null;
   defensiveAccuracy: number | null;
-  opportunityConversion: number | null;
+  /** After an opponent move that lost ≥ 0.10 EP: share of replies losing ≤ 0.05 EP (punishing the error). */
+  punishRate: number | null;
   openingAccuracy: number | null;
   middlegameAccuracy: number | null;
   endgameAccuracy: number | null;
@@ -319,7 +325,7 @@ export interface PerformanceEstimate {
   extrapolated?: boolean;
   /** Mean absolute error of this model on held-out players (Elo points). */
   heldOutMae?: number;
-  /** Share of held-out players whose rating fell inside the 80 % range. */
+  /** Share of held-out players whose rating fell inside the (nominal 80 %) approximate range. */
   heldOutCoverage?: number;
 }
 
@@ -527,8 +533,8 @@ function describeSacrifice(sacrifice: Sacrifice) {
 function describeOutcome(played: Evaluation) {
   const mate = matingIn(played);
   if (mate !== undefined && mate > 0) return `leads to a forced mate in ${mate}`;
-  const band = outcomeBand(played.humanExpectedScore);
-  return `keeps the position ${OUTCOME_WORDS[band]} (${percent(played.humanExpectedScore)} expected score)`;
+  const band = outcomeBand(played.baselineExpectedScore);
+  return `keeps the position ${OUTCOME_WORDS[band]} (${percent(played.baselineExpectedScore)} expected score)`;
 }
 
 interface Alternatives {
@@ -640,12 +646,12 @@ export function reviewMove(
     topCandidate?.pv[0] === move.uci;
   const resultingEvaluation = isTop && engine.bestMove === move.uci ? bestEvaluation : engine.played;
 
-  const bestE = bestEvaluation.humanExpectedScore;
-  const playedE = resultingEvaluation.humanExpectedScore;
+  const bestE = bestEvaluation.baselineExpectedScore;
+  const playedE = resultingEvaluation.baselineExpectedScore;
   let loss = isTop ? 0 : Math.max(0, bestE - playedE);
   if (!isTop && topCandidate && playedCandidate) {
     // Two independent comparisons of the same move; averaging damps search noise.
-    loss = (loss + Math.max(0, topCandidate.humanExpectedScore - playedCandidate.humanExpectedScore)) / 2;
+    loss = (loss + Math.max(0, topCandidate.baselineExpectedScore - playedCandidate.baselineExpectedScore)) / 2;
   }
 
   const bestMate = matingIn(bestEvaluation);
@@ -700,17 +706,17 @@ export function reviewMove(
   const unstable =
     context.unstable === true ||
     (engine.verification?.[0] !== undefined &&
-      Math.abs(engine.verification[0].humanExpectedScore - bestE) > VERIFICATION.maxDrift);
+      Math.abs(engine.verification[0].baselineExpectedScore - bestE) > VERIFICATION.maxDrift);
 
   // --- Criticality from the candidate pass --------------------------------
-  const playedScoreForGap = playedCandidate?.humanExpectedScore ?? (isTop ? bestE : playedE);
-  const gap = bestAlternative ? playedScoreForGap - bestAlternative.humanExpectedScore : undefined;
+  const playedScoreForGap = playedCandidate?.baselineExpectedScore ?? (isTop ? bestE : playedE);
+  const gap = bestAlternative ? playedScoreForGap - bestAlternative.baselineExpectedScore : undefined;
   const candidateList = engine.verification ?? engine.candidates ?? [];
   const goodMoves = candidateList.length
-    ? candidateList.filter((line) => candidateList[0].humanExpectedScore - line.humanExpectedScore <= LOSS_BANDS.good).length
+    ? candidateList.filter((line) => candidateList[0].baselineExpectedScore - line.baselineExpectedScore <= LOSS_BANDS.good).length
     : undefined;
   const viableMoves = goodMoves;
-  const alternativeScore = bestAlternative?.humanExpectedScore;
+  const alternativeScore = bestAlternative?.baselineExpectedScore;
   const moveUniqueness = gap === undefined ? undefined : Math.max(0, gap);
   const outcomeImportance =
     alternativeScore === undefined ? undefined : Math.max(0, undecided(playedScoreForGap) - undecided(alternativeScore));
@@ -780,8 +786,8 @@ export function reviewMove(
         candidate = { ...offered, accepted: false };
         if (engine.acceptance) {
           acceptanceOk =
-            engine.acceptance.humanExpectedScore >= BRILLIANT.minExpectedAfter &&
-            engine.acceptance.humanExpectedScore >= playedE - BRILLIANT.acceptanceTolerance;
+            engine.acceptance.baselineExpectedScore >= BRILLIANT.minExpectedAfter &&
+            engine.acceptance.baselineExpectedScore >= playedE - BRILLIANT.acceptanceTolerance;
         }
       }
     } else if (realized && realized.piece !== "p") {
@@ -791,13 +797,13 @@ export function reviewMove(
     const detectedBy = statics.length > 0 ? "board" : "line";
 
     if (candidate) {
-      const alternativeScore = bestAlternative?.humanExpectedScore;
+      const alternativeScore = bestAlternative?.baselineExpectedScore;
       // When a quiet alternative already wins overwhelmingly, the sacrifice is
       // a flourish – even a faster forced mate does not change the result.
       const unnecessary = alternativeScore !== undefined && alternativeScore >= BRILLIANT.alternativeAlreadyWinning;
       const edgeOk = gap === undefined || gap >= ratingEdge(context.playerRating);
       const candidateConfirms = !playedCandidate || !topCandidate ||
-        topCandidate.humanExpectedScore - playedCandidate.humanExpectedScore <= BRILLIANT.maxLoss;
+        topCandidate.baselineExpectedScore - playedCandidate.baselineExpectedScore <= BRILLIANT.maxLoss;
       // Material regained by force almost at once is a combination, not a sacrifice.
       const pseudo =
         candidate.accepted === true &&
@@ -844,7 +850,7 @@ export function reviewMove(
         expectedScoreBefore: round4(bestE)!,
         expectedScoreAfter: round4(playedE)!,
         expectedScoreAfterAcceptance: round4(
-          candidate.accepted ? playedE : engine.acceptance?.humanExpectedScore,
+          candidate.accepted ? playedE : engine.acceptance?.baselineExpectedScore,
         ),
         bestDefense: continuation[0] ? uciToSan(move.after, continuation[0]) : undefined,
         acceptanceIsBestDefense: candidate.accepted === true,
@@ -852,7 +858,7 @@ export function reviewMove(
         forcedMate: forcedMate !== undefined && forcedMate > 0 ? forcedMate : undefined,
         bestMoveRank: isTop ? 1 : engine.playedRank,
         bestAlternativeExpectedScore: round4(alternativeScore),
-        deepVerificationScore: round4(verificationLine?.humanExpectedScore),
+        deepVerificationScore: round4(verificationLine?.baselineExpectedScore),
         decision,
       };
 
@@ -863,7 +869,7 @@ export function reviewMove(
             ? `Stockfish's best defence takes it, and the material comes back ${candidate.recoveredAfterPlies} plies later`
             : "Stockfish's best defence takes it"
           : engine.acceptance
-            ? `Taking it leaves the opponent worse off (${percent(1 - engine.acceptance.humanExpectedScore)} for them after the capture)`
+            ? `Taking it leaves the opponent worse off (${percent(1 - engine.acceptance.baselineExpectedScore)} for them after the capture)`
             : "Stockfish's best defence declines it";
         brilliantReason = `${isTop ? "Best move" : "Near-best move"}. ${describeSacrifice(candidate)}. ${acceptanceText}, and the move ${describeOutcome(resultingEvaluation)}.`;
         grade = "brilliant";
@@ -894,14 +900,14 @@ export function reviewMove(
     gap >= GREAT.minGap
   ) {
     const playedBand = outcomeBand(playedScoreForGap);
-    const alternativeBand = outcomeBand(bestAlternative.humanExpectedScore);
+    const alternativeBand = outcomeBand(bestAlternative.baselineExpectedScore);
     const baselineBand = outcomeBand(baseline);
     // The alternative must change the likely result: either Stockfish's own WDL
-    // verdict (win / draw / loss) flips, or the human expected score falls by at
+    // verdict (win / draw / loss) flips, or the baseline expected score falls by at
     // least two outcome bands (e.g. winning → balanced, balanced → losing).
     const objectiveChange = RESULT_RANK[playedResultClass] > RESULT_RANK[objectiveResult(bestAlternative)];
     const altSan = criticality.bestAlternativeSan ?? "the next-best move";
-    const altText = `the best alternative, ${altSan}, scores ${percent(bestAlternative.humanExpectedScore)} against ${percent(playedScoreForGap)}`;
+    const altText = `the best alternative, ${altSan}, scores ${percent(bestAlternative.baselineExpectedScore)} against ${percent(playedScoreForGap)}`;
     let decision = "great";
     if (obviousRecapture) decision = "rejected: recapture";
     else if (freeCapture) decision = "rejected: takes a hanging piece";
@@ -934,11 +940,11 @@ export function reviewMove(
       evaluationBefore: formatMoverEvaluation(bestEvaluation, move.color),
       bestMove: bestMoveSan,
       playedMove: move.san,
-      bestExpectedScore: round4(topCandidate?.humanExpectedScore ?? bestE)!,
+      bestExpectedScore: round4(topCandidate?.baselineExpectedScore ?? bestE)!,
       playedExpectedScore: round4(playedScoreForGap)!,
-      secondBestExpectedScore: round4(candidateList[1]?.humanExpectedScore),
-      thirdBestExpectedScore: round4(candidateList[2]?.humanExpectedScore),
-      gapBestToSecond: candidateList[1] ? round4(candidateList[0].humanExpectedScore - candidateList[1].humanExpectedScore) : undefined,
+      secondBestExpectedScore: round4(candidateList[1]?.baselineExpectedScore),
+      thirdBestExpectedScore: round4(candidateList[2]?.baselineExpectedScore),
+      gapBestToSecond: candidateList[1] ? round4(candidateList[0].baselineExpectedScore - candidateList[1].baselineExpectedScore) : undefined,
       numberOfAcceptableMoves: viableMoves,
       acceptableMovesIsLowerBound: criticality.viableMovesAtLeast,
       legalMoveCount,
@@ -1027,8 +1033,8 @@ export function reviewMove(
   const alternativesAlsoDecided =
     !bestAlternative ||
     (bestE >= 0.5
-      ? bestAlternative.humanExpectedScore >= INFORMATIVENESS.decidedThreshold
-      : bestAlternative.humanExpectedScore <= 1 - INFORMATIVENESS.decidedThreshold);
+      ? bestAlternative.baselineExpectedScore >= INFORMATIVENESS.decidedThreshold
+      : bestAlternative.baselineExpectedScore <= 1 - INFORMATIVENESS.decidedThreshold);
   if (isBook) {
     informativeness = INFORMATIVENESS.book;
     forcedReason ??= "opening theory";
@@ -1205,7 +1211,13 @@ function rate(moves: ReviewedMove[], predicate: (move: ReviewedMove) => boolean)
   return relevant.reduce((sum, move) => sum + (predicate(move) ? move.informativeness : 0), 0) / weight;
 }
 
-export function extractFeatures(sideMoves: ReviewedMove[]): PerformanceFeatures | null {
+/**
+ * Rating-model inputs. Every feature is a function of continuous, rating-
+ * independent quantities only – baseline expected-point losses and scores,
+ * engine agreement, criticality and phase – never of grade labels, which may be
+ * re-derived from the rating estimate afterwards (see analysis-pipeline.ts).
+ */
+export function extractFeatures(sideMoves: ReviewedMove[], allMoves?: ReviewedMove[]): PerformanceFeatures | null {
   const decisions = sideMoves.filter((move) => move.informativeness > 0);
   if (decisions.length === 0) return null;
   const effectiveMoves = decisions.reduce((sum, move) => sum + move.informativeness, 0);
@@ -1216,10 +1228,14 @@ export function extractFeatures(sideMoves: ReviewedMove[]): PerformanceFeatures 
   const onlyMoves = decisions.filter((move) => move.criticality.onlyMove);
   const conversion = decisions.filter((move) => move.expectedBefore >= OUTCOME_BANDS.winning);
   const defence = decisions.filter((move) => move.expectedBefore <= OUTCOME_BANDS.worse);
-  const opportunities = decisions.filter((move) => move.miss || move.grade === "great" || move.grade === "brilliant");
+  const byIndex = new Map((allMoves ?? []).map((move) => [move.index, move]));
+  const opportunities = allMoves
+    ? decisions.filter((move) => (byIndex.get(move.index - 1)?.expectedPointsLost ?? 0) >= LOSS_BANDS.inaccuracy)
+    : [];
   const meanAccuracy = (moves: ReviewedMove[]) =>
     moves.length ? moves.reduce((sum, move) => sum + move.accuracy, 0) / moves.length : null;
-  const severe = (grades: Grade[]) => (move: ReviewedMove) => grades.includes(move.objectiveGrade);
+  const lossIn = (low: number, high: number) => (move: ReviewedMove) =>
+    move.expectedPointsLost > low && move.expectedPointsLost <= high;
 
   const stakesWeight = (move: ReviewedMove) =>
     move.informativeness * (0.25 + 4 * move.expectedBefore * (1 - move.expectedBefore));
@@ -1237,9 +1253,9 @@ export function extractFeatures(sideMoves: ReviewedMove[]): PerformanceFeatures 
     complexityWeightedLoss: stakesTotal > 0
       ? decisions.reduce((sum, move) => sum + stakesWeight(move) * move.expectedPointsLost, 0) / stakesTotal
       : meanLoss,
-    blunderRate: rate(decisions, severe(["blunder"])) ?? 0,
-    mistakeRate: rate(decisions, severe(["mistake", "miss"])) ?? 0,
-    inaccuracyRate: rate(decisions, severe(["inaccuracy"])) ?? 0,
+    severeLossRate: rate(decisions, lossIn(LOSS_BANDS.mistake, Infinity)) ?? 0,
+    largeLossRate: rate(decisions, lossIn(LOSS_BANDS.inaccuracy, LOSS_BANDS.mistake)) ?? 0,
+    moderateLossRate: rate(decisions, lossIn(LOSS_BANDS.good, LOSS_BANDS.inaccuracy)) ?? 0,
     top1Agreement: rate(decisions, (move) => move.isTopMove) ?? 0,
     topNAgreement: withCandidates.length ? rate(withCandidates, (move) => move.playedRank !== null) : null,
     criticalAccuracy: meanAccuracy(critical),
@@ -1248,8 +1264,8 @@ export function extractFeatures(sideMoves: ReviewedMove[]): PerformanceFeatures 
       : null,
     conversionAccuracy: meanAccuracy(conversion),
     defensiveAccuracy: meanAccuracy(defence),
-    opportunityConversion: opportunities.length
-      ? opportunities.filter((move) => !move.miss).length / opportunities.length
+    punishRate: opportunities.length
+      ? opportunities.filter((move) => move.expectedPointsLost <= LOSS_BANDS.good).length / opportunities.length
       : null,
     openingAccuracy: meanAccuracy(inPhase("opening")),
     middlegameAccuracy: meanAccuracy(inPhase("middlegame")),
@@ -1285,7 +1301,7 @@ export function summarizeSide(
     if (value !== null) phaseAccuracy[phase] = value;
   }
 
-  const features = extractFeatures(sideMoves);
+  const features = extractFeatures(sideMoves, reviews);
   const performance = estimatePerformance(sideMoves, {
     ...options,
     features,

@@ -1,28 +1,13 @@
 {
  "samples": 4271,
- "protocol": "Model choice, hyperparameters and the interval model use 5-fold player-grouped cross-validation on train+validation; the final model is refit on train+validation; every held-out number is on test.",
+ "level": 0.8,
+ "minGroup": 150,
  "timeControls": {
   "blitz": {
-   "splits": {
-    "train+validation": 1443,
-    "test": 358
-   },
-   "players": {
-    "train+validation": 1418,
-    "test": 348
-   },
-   "chosen": {
-    "isotonic": null,
-    "ridge": 300,
-    "gbm": [
-     0.03,
-     200
-    ]
-   },
-   "cvMae": {
-    "isotonic": 271.8,
-    "ridge": 255.5,
-    "gbm": 253.7
+   "dev": {
+    "playerGames": 1443,
+    "players": 1418,
+    "groups": 697
    },
    "test": {
     "constant": {
@@ -41,714 +26,1265 @@
      "r2": -1.644,
      "bias": -458.5
     },
-    "errmodel": {
-     "n": 358,
-     "mae": 287.5,
-     "medianAe": 302.0,
-     "rmse": 327.9,
-     "r2": 0.089,
-     "bias": -3.1
-    },
-    "isotonic": {
-     "n": 358,
-     "mae": 260.4,
-     "medianAe": 240.6,
-     "rmse": 305.5,
-     "r2": 0.21,
-     "bias": 4.1
-    },
     "ridge": {
      "n": 358,
-     "mae": 242.8,
-     "medianAe": 231.6,
+     "mae": 243.4,
+     "medianAe": 228.7,
      "rmse": 284.7,
      "r2": 0.314,
-     "bias": 5.6
+     "bias": 6.6
     },
-    "gbm": {
+    "ridge-w": {
      "n": 358,
-     "mae": 235.1,
-     "medianAe": 217.6,
-     "rmse": 282.7,
-     "r2": 0.323,
-     "bias": 8.8
+     "mae": 264.9,
+     "medianAe": 242.4,
+     "rmse": 314.2,
+     "r2": 0.164,
+     "bias": -53.0
     },
-    "ridge+opponent (not shipped)": {
+    "shipped": {
      "n": 358,
-     "mae": 233.8,
-     "medianAe": 209.1,
-     "rmse": 276.6,
-     "r2": 0.352,
-     "bias": 5.3
+     "mae": 239.1,
+     "medianAe": 223.8,
+     "rmse": 283.0,
+     "r2": 0.322,
+     "bias": 2.6
     }
    },
-   "maeByBand": {
-    "1400–1600": {
-     "constant": 456.8,
-     "heuristic": 226.7,
-     "errmodel": 421.7,
-     "isotonic": 372.6,
-     "ridge": 341.5,
-     "gbm": 326.9,
-     "ridge+opponent (not shipped)": 321.7,
-     "n": 62
+   "ratingDistributionDev": {
+    "800–999": 0,
+    "1000–1199": 1,
+    "1200–1399": 0,
+    "1400–1599": 232,
+    "1600–1799": 262,
+    "1800–1999": 245,
+    "2000–2199": 206,
+    "2200–2399": 237,
+    "2400+": 260
+   },
+   "cv": {
+    "ridge": {
+     "param": 300,
+     "mae": 255.3,
+     "se": 3.3,
+     "medianAe": 243.0,
+     "rmse": 304.5,
+     "r2": 0.253,
+     "bias": 1.1
     },
-    "1600–1800": {
-     "constant": 323.2,
-     "heuristic": 283.6,
-     "errmodel": 293.5,
-     "isotonic": 246.9,
-     "ridge": 250.3,
-     "gbm": 238.5,
-     "ridge+opponent (not shipped)": 246.3,
-     "n": 67
+    "ridge-w": {
+     "param": 1000,
+     "mae": 269.4,
+     "se": 5.3,
+     "medianAe": 254.1,
+     "rmse": 325.6,
+     "r2": 0.145,
+     "bias": -53.4
     },
-    "1800–2000": {
-     "constant": 101.3,
-     "heuristic": 373.1,
-     "errmodel": 89.7,
-     "isotonic": 144.6,
-     "ridge": 129.9,
-     "gbm": 141.1,
-     "ridge+opponent (not shipped)": 134.1,
-     "n": 58
-    },
-    "2000–2200": {
-     "constant": 77.0,
-     "heuristic": 565.8,
-     "errmodel": 95.4,
-     "isotonic": 142.1,
-     "ridge": 134.8,
-     "gbm": 145.9,
-     "ridge+opponent (not shipped)": 143.5,
-     "n": 45
-    },
-    "2200–2400": {
-     "constant": 285.7,
-     "heuristic": 671.1,
-     "errmodel": 286.9,
-     "isotonic": 231.9,
-     "ridge": 210.4,
-     "gbm": 199.4,
-     "ridge+opponent (not shipped)": 203.3,
-     "n": 71
-    },
-    "2400+": {
-     "constant": 514.0,
-     "heuristic": 777.3,
-     "errmodel": 495.3,
-     "isotonic": 406.2,
-     "ridge": 371.7,
-     "gbm": 346.1,
-     "ridge+opponent (not shipped)": 338.1,
-     "n": 55
+    "constant": {
+     "mae": 307.1
     }
    },
-   "maeByDecisions": {
-    "<15": {
-     "constant": 238.6,
-     "heuristic": 461.4,
-     "errmodel": 216.6,
-     "isotonic": 175.6,
-     "ridge": 200.3,
-     "gbm": 191.0,
-     "ridge+opponent (not shipped)": 192.5,
-     "n": 18
-    },
-    "15–24": {
-     "constant": 316.3,
-     "heuristic": 438.5,
-     "errmodel": 301.5,
-     "isotonic": 274.8,
-     "ridge": 240.3,
-     "gbm": 245.5,
-     "ridge+opponent (not shipped)": 227.5,
-     "n": 109
-    },
-    "25–39": {
-     "constant": 304.5,
-     "heuristic": 501.8,
-     "errmodel": 294.2,
-     "isotonic": 268.5,
-     "ridge": 261.9,
-     "gbm": 250.5,
-     "ridge+opponent (not shipped)": 257.6,
-     "n": 139
-    },
-    "40+": {
-     "constant": 290.9,
-     "heuristic": 485.9,
-     "errmodel": 274.5,
-     "isotonic": 247.7,
-     "ridge": 225.3,
-     "gbm": 208.3,
-     "ridge+opponent (not shipped)": 213.6,
-     "n": 92
-    }
-   },
-   "maeByResult": {
-    "win": {
-     "constant": 312.1,
-     "heuristic": 435.9,
-     "errmodel": 297.9,
-     "isotonic": 274.8,
-     "ridge": 251.4,
-     "gbm": 249.4,
-     "ridge+opponent (not shipped)": 247.0,
-     "n": 172
-    },
-    "draw": {
-     "constant": 356.9,
-     "heuristic": 565.6,
-     "errmodel": 346.9,
-     "isotonic": 301.9,
-     "ridge": 251.0,
-     "gbm": 213.7,
-     "ridge+opponent (not shipped)": 206.0,
-     "n": 14
-    },
-    "loss": {
-     "constant": 286.0,
-     "heuristic": 509.7,
-     "errmodel": 272.3,
-     "isotonic": 242.7,
-     "ridge": 233.5,
-     "gbm": 222.6,
-     "ridge+opponent (not shipped)": 223.0,
-     "n": 172
-    }
-   },
-   "maeByPhaseComposition": {
-    "no endgame": {
-     "constant": 298.3,
-     "heuristic": 483.8,
-     "errmodel": 286.3,
-     "isotonic": 255.8,
-     "ridge": 243.1,
-     "gbm": 242.3,
-     "ridge+opponent (not shipped)": 236.9,
-     "n": 173
-    },
-    "some endgame": {
-     "constant": 297.2,
-     "heuristic": 491.6,
-     "errmodel": 280.5,
-     "isotonic": 257.6,
-     "ridge": 235.2,
-     "gbm": 229.1,
-     "ridge+opponent (not shipped)": 227.8,
-     "n": 88
-    },
-    "endgame-heavy": {
-     "constant": 310.3,
-     "heuristic": 449.4,
-     "errmodel": 295.8,
-     "isotonic": 271.2,
-     "ridge": 249.3,
-     "gbm": 227.9,
-     "ridge+opponent (not shipped)": 233.8,
-     "n": 97
-    }
-   },
-   "maeBySource": {
-    "lichess-puzzle-db": {
-     "constant": 301.3,
-     "heuristic": 476.4,
-     "errmodel": 287.5,
-     "isotonic": 260.4,
-     "ridge": 242.8,
-     "gbm": 235.1,
-     "ridge+opponent (not shipped)": 233.8,
-     "n": 358
-    }
-   },
-   "intervals": {
-    "heuristic": {
-     "coverage80": 0.43,
-     "meanWidth": 757,
-     "byDecisions": {
-      "<15": {
-       "n": 18,
-       "coverage": 0.667,
-       "meanWidth": 944
-      },
-      "15–24": {
-       "n": 109,
-       "coverage": 0.541,
-       "meanWidth": 839
-      },
-      "25–39": {
-       "n": 139,
-       "coverage": 0.374,
-       "meanWidth": 737
-      },
-      "40+": {
-       "n": 92,
-       "coverage": 0.337,
-       "meanWidth": 654
-      }
+   "oofBiasByTrueBand": {
+    "ridge": {
+     "1400–1599": {
+      "n": 232,
+      "mae": 363.1,
+      "bias": 362.5
      },
-     "byBand": {
-      "1400–1600": {
-       "n": 62,
-       "coverage": 0.774,
-       "meanWidth": 731
-      },
-      "1600–1800": {
-       "n": 67,
-       "coverage": 0.731,
-       "meanWidth": 763
-      },
-      "1800–2000": {
-       "n": 58,
-       "coverage": 0.534,
-       "meanWidth": 774
-      },
-      "2000–2200": {
-       "n": 45,
-       "coverage": 0.267,
-       "meanWidth": 758
-      },
-      "2200–2400": {
-       "n": 71,
-       "coverage": 0.141,
-       "meanWidth": 737
-      },
-      "2400+": {
-       "n": 55,
-       "coverage": 0.073,
-       "meanWidth": 787
-      }
+     "1600–1799": {
+      "n": 262,
+      "mae": 242.8,
+      "bias": 239.1
+     },
+     "1800–1999": {
+      "n": 245,
+      "mae": 142.4,
+      "bias": 85.8
+     },
+     "2000–2199": {
+      "n": 206,
+      "mae": 124.3,
+      "bias": -51.6
+     },
+     "2200–2399": {
+      "n": 237,
+      "mae": 242.5,
+      "bias": -232.7
+     },
+     "2400+": {
+      "n": 260,
+      "mae": 391.3,
+      "bias": -389.3
      }
     },
-    "errmodel": {
-     "coverage80": 0.816,
-     "meanWidth": 872,
-     "byDecisions": {
-      "<15": {
-       "n": 18,
-       "coverage": 0.889,
-       "meanWidth": 886
-      },
-      "15–24": {
-       "n": 109,
-       "coverage": 0.817,
-       "meanWidth": 879
-      },
-      "25–39": {
-       "n": 139,
-       "coverage": 0.806,
-       "meanWidth": 872
-      },
-      "40+": {
-       "n": 92,
-       "coverage": 0.815,
-       "meanWidth": 861
-      }
+    "ridge-w": {
+     "1400–1599": {
+      "n": 232,
+      "mae": 332.0,
+      "bias": 324.6
      },
-     "byBand": {
-      "1400–1600": {
-       "n": 62,
-       "coverage": 0.629,
-       "meanWidth": 874
+     "1600–1799": {
+      "n": 262,
+      "mae": 210.6,
+      "bias": 190.2
+     },
+     "1800–1999": {
+      "n": 245,
+      "mae": 126.2,
+      "bias": 49.7
+     },
+     "2000–2199": {
+      "n": 206,
+      "mae": 146.2,
+      "bias": -102.3
+     },
+     "2200–2399": {
+      "n": 237,
+      "mae": 307.2,
+      "bias": -305.0
+     },
+     "2400+": {
+      "n": 260,
+      "mae": 468.9,
+      "bias": -468.6
+     }
+    }
+   },
+   "oofCalibration": {
+    "ridge": {
+     "bins": [
+      {
+       "predicted": "1600–1799",
+       "n": 125,
+       "meanPredicted": 1740,
+       "meanActual": 1746,
+       "gap": 6
       },
-      "1600–1800": {
-       "n": 67,
-       "coverage": 1.0,
-       "meanWidth": 875
+      {
+       "predicted": "1800–1999",
+       "n": 522,
+       "meanPredicted": 1908,
+       "meanActual": 1866,
+       "gap": -42
       },
-      "1800–2000": {
-       "n": 58,
-       "coverage": 1.0,
-       "meanWidth": 874
+      {
+       "predicted": "2000–2199",
+       "n": 581,
+       "meanPredicted": 2088,
+       "meanActual": 2109,
+       "gap": 21
       },
-      "2000–2200": {
-       "n": 45,
-       "coverage": 1.0,
+      {
+       "predicted": "2200+",
+       "n": 206,
+       "meanPredicted": 2276,
+       "meanActual": 2301,
+       "gap": 25
+      }
+     ],
+     "calibrationError": 27.9,
+     "slopeActualOnPredicted": 1.073
+    },
+    "ridge-w": {
+     "bins": [
+      {
+       "predicted": "1400–1599",
+       "n": 21,
+       "meanPredicted": 1528,
+       "meanActual": 1699,
+       "gap": 171
+      },
+      {
+       "predicted": "1600–1799",
+       "n": 195,
+       "meanPredicted": 1721,
+       "meanActual": 1835,
+       "gap": 114
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 625,
+       "meanPredicted": 1910,
+       "meanActual": 1935,
+       "gap": 25
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 503,
+       "meanPredicted": 2081,
+       "meanActual": 2150,
+       "gap": 68
+      },
+      {
+       "predicted": "2200+",
+       "n": 96,
+       "meanPredicted": 2274,
+       "meanActual": 2281,
+       "gap": 7
+      }
+     ],
+     "calibrationError": 53.0,
+     "slopeActualOnPredicted": 0.885
+    }
+   },
+   "chosen": "ridge",
+   "extremeBiasDiagnosis": {
+    "oofBiasByBandAndDecisions": {
+     "1400–1599 | <20": {
+      "n": 51,
+      "bias": 305.8
+     },
+     "1400–1599 | 20–34": {
+      "n": 106,
+      "bias": 344.5
+     },
+     "1400–1599 | 35+": {
+      "n": 75,
+      "bias": 426.3
+     },
+     "1600–1799 | <20": {
+      "n": 61,
+      "bias": 181.8
+     },
+     "1600–1799 | 20–34": {
+      "n": 111,
+      "bias": 213.6
+     },
+     "1600–1799 | 35+": {
+      "n": 90,
+      "bias": 309.4
+     },
+     "1800–1999 | <20": {
+      "n": 51,
+      "bias": 15.5
+     },
+     "1800–1999 | 20–34": {
+      "n": 115,
+      "bias": 73.5
+     },
+     "1800–1999 | 35+": {
+      "n": 79,
+      "bias": 149.2
+     },
+     "2000–2199 | <20": {
+      "n": 33,
+      "bias": -100.5
+     },
+     "2000–2199 | 20–34": {
+      "n": 94,
+      "bias": -75.7
+     },
+     "2000–2199 | 35+": {
+      "n": 79,
+      "bias": -2.5
+     },
+     "2200–2399 | <20": {
+      "n": 36,
+      "bias": -261.3
+     },
+     "2200–2399 | 20–34": {
+      "n": 98,
+      "bias": -244.6
+     },
+     "2200–2399 | 35+": {
+      "n": 103,
+      "bias": -211.4
+     },
+     "2400+ | <20": {
+      "n": 27,
+      "bias": -381.6
+     },
+     "2400+ | 20–34": {
+      "n": 90,
+      "bias": -400.7
+     },
+     "2400+ | 35+": {
+      "n": 143,
+      "bias": -383.6
+     }
+    },
+    "attenuationSlopePredictedOnActual": 0.237
+   },
+   "calibrationLayer": {
+    "without": {
+     "mae": 255.3,
+     "bins": [
+      {
+       "predicted": "1600–1799",
+       "n": 125,
+       "meanPredicted": 1740,
+       "meanActual": 1746,
+       "gap": 6
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 522,
+       "meanPredicted": 1908,
+       "meanActual": 1866,
+       "gap": -42
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 581,
+       "meanPredicted": 2088,
+       "meanActual": 2109,
+       "gap": 21
+      },
+      {
+       "predicted": "2200+",
+       "n": 206,
+       "meanPredicted": 2276,
+       "meanActual": 2301,
+       "gap": 25
+      }
+     ],
+     "calibrationError": 27.9,
+     "slopeActualOnPredicted": 1.073
+    },
+    "withIsotonic": {
+     "mae": 252.5,
+     "bins": [
+      {
+       "predicted": "1600–1799",
+       "n": 222,
+       "meanPredicted": 1747,
+       "meanActual": 1753,
+       "gap": 6
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 493,
+       "meanPredicted": 1901,
+       "meanActual": 1915,
+       "gap": 14
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 439,
+       "meanPredicted": 2099,
+       "meanActual": 2099,
+       "gap": -1
+      },
+      {
+       "predicted": "2200+",
+       "n": 288,
+       "meanPredicted": 2289,
+       "meanActual": 2260,
+       "gap": -29
+      }
+     ],
+     "calibrationError": 11.8,
+     "slopeActualOnPredicted": 0.932
+    },
+    "used": true
+   },
+   "intervalsDev": {
+    "mondrian": {
+     "coverage": 0.798,
+     "meanWidth": 810,
+     "byPredictedBand": {
+      "1600–1799": {
+       "n": 222,
+       "coverage": 0.811,
+       "meanWidth": 636
+      },
+      "1800–1999": {
+       "n": 493,
+       "coverage": 0.809,
+       "meanWidth": 805
+      },
+      "2000–2199": {
+       "n": 439,
+       "coverage": 0.781,
        "meanWidth": 873
       },
-      "2200–2400": {
-       "n": 71,
-       "coverage": 0.986,
-       "meanWidth": 869
+      "2200+": {
+       "n": 288,
+       "coverage": 0.795,
+       "meanWidth": 860
+      }
+     },
+     "byTrueBand": {
+      "1400–1599": {
+       "n": 232,
+       "coverage": 0.491,
+       "meanWidth": 763
+      },
+      "1600–1799": {
+       "n": 262,
+       "coverage": 0.916,
+       "meanWidth": 773
+      },
+      "1800–1999": {
+       "n": 245,
+       "coverage": 0.992,
+       "meanWidth": 807
+      },
+      "2000–2199": {
+       "n": 206,
+       "coverage": 0.976,
+       "meanWidth": 833
+      },
+      "2200–2399": {
+       "n": 237,
+       "coverage": 0.899,
+       "meanWidth": 837
       },
       "2400+": {
-       "n": 55,
-       "coverage": 0.236,
-       "meanWidth": 869
+       "n": 260,
+       "coverage": 0.538,
+       "meanWidth": 852
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 259,
+       "coverage": 0.807,
+       "meanWidth": 769
+      },
+      "20–34": {
+       "n": 614,
+       "coverage": 0.813,
+       "meanWidth": 795
+      },
+      "35+": {
+       "n": 570,
+       "coverage": 0.777,
+       "meanWidth": 846
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 217,
+       "coverage": 0.829,
+       "meanWidth": 763
+      },
+      "50–79": {
+       "n": 592,
+       "coverage": 0.807,
+       "meanWidth": 794
+      },
+      "80–119": {
+       "n": 448,
+       "coverage": 0.808,
+       "meanWidth": 834
+      },
+      "120+": {
+       "n": 186,
+       "coverage": 0.704,
+       "meanWidth": 860
       }
      }
     },
-    "isotonic": {
-     "coverage80": 0.832,
-     "meanWidth": 847,
-     "byDecisions": {
-      "<15": {
-       "n": 18,
-       "coverage": 0.833,
-       "meanWidth": 847
+    "scale(previous)": {
+     "coverage": 0.799,
+     "meanWidth": 783,
+     "byPredictedBand": {
+      "1600–1799": {
+       "n": 222,
+       "coverage": 0.919,
+       "meanWidth": 783
       },
-      "15–24": {
-       "n": 109,
-       "coverage": 0.771,
-       "meanWidth": 847
+      "1800–1999": {
+       "n": 493,
+       "coverage": 0.801,
+       "meanWidth": 783
       },
-      "25–39": {
-       "n": 139,
-       "coverage": 0.835,
-       "meanWidth": 847
+      "2000–2199": {
+       "n": 439,
+       "coverage": 0.745,
+       "meanWidth": 783
       },
-      "40+": {
-       "n": 92,
-       "coverage": 0.902,
-       "meanWidth": 847
+      "2200+": {
+       "n": 288,
+       "coverage": 0.788,
+       "meanWidth": 783
       }
      },
-     "byBand": {
-      "1400–1600": {
-       "n": 62,
-       "coverage": 0.613,
-       "meanWidth": 847
+     "byTrueBand": {
+      "1400–1599": {
+       "n": 232,
+       "coverage": 0.655,
+       "meanWidth": 783
       },
-      "1600–1800": {
-       "n": 67,
-       "coverage": 0.91,
-       "meanWidth": 847
+      "1600–1799": {
+       "n": 262,
+       "coverage": 0.817,
+       "meanWidth": 783
       },
-      "1800–2000": {
-       "n": 58,
-       "coverage": 0.948,
-       "meanWidth": 847
+      "1800–1999": {
+       "n": 245,
+       "coverage": 0.939,
+       "meanWidth": 783
       },
-      "2000–2200": {
-       "n": 45,
-       "coverage": 1.0,
-       "meanWidth": 847
+      "2000–2199": {
+       "n": 206,
+       "coverage": 0.985,
+       "meanWidth": 783
       },
-      "2200–2400": {
-       "n": 71,
-       "coverage": 0.944,
-       "meanWidth": 847
+      "2200–2399": {
+       "n": 237,
+       "coverage": 0.793,
+       "meanWidth": 783
       },
       "2400+": {
-       "n": 55,
-       "coverage": 0.582,
-       "meanWidth": 847
+       "n": 260,
+       "coverage": 0.638,
+       "meanWidth": 783
       }
      },
-     "model": {
-      "a": 115118.757,
-      "b": 0.0,
-      "qLow": -1.178,
-      "qHigh": 1.318
+     "byDecisions": {
+      "<20": {
+       "n": 259,
+       "coverage": 0.83,
+       "meanWidth": 783
+      },
+      "20–34": {
+       "n": 614,
+       "coverage": 0.849,
+       "meanWidth": 783
+      },
+      "35+": {
+       "n": 570,
+       "coverage": 0.732,
+       "meanWidth": 783
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 217,
+       "coverage": 0.839,
+       "meanWidth": 783
+      },
+      "50–79": {
+       "n": 592,
+       "coverage": 0.848,
+       "meanWidth": 783
+      },
+      "80–119": {
+       "n": 448,
+       "coverage": 0.763,
+       "meanWidth": 783
+      },
+      "120+": {
+       "n": 186,
+       "coverage": 0.683,
+       "meanWidth": 783
+      }
+     }
+    }
+   },
+   "conformalGroups": [
+    {
+     "predLow": null,
+     "predHigh": 1800,
+     "decisionsLow": 0,
+     "decisionsHigh": null,
+     "qLow": -234.8,
+     "qHigh": 383.0,
+     "n": 223
+    },
+    {
+     "predLow": 1800,
+     "predHigh": 2000,
+     "decisionsLow": 0,
+     "decisionsHigh": 35,
+     "qLow": -347.9,
+     "qHigh": 427.5,
+     "n": 337
+    },
+    {
+     "predLow": 1800,
+     "predHigh": 2000,
+     "decisionsLow": 35,
+     "decisionsHigh": null,
+     "qLow": -330.7,
+     "qHigh": 499.2,
+     "n": 156
+    },
+    {
+     "predLow": 2000,
+     "predHigh": 2200,
+     "decisionsLow": 0,
+     "decisionsHigh": 35,
+     "qLow": -465.1,
+     "qHigh": 386.9,
+     "n": 221
+    },
+    {
+     "predLow": 2000,
+     "predHigh": 2200,
+     "decisionsLow": 35,
+     "decisionsHigh": null,
+     "qLow": -473.8,
+     "qHigh": 420.1,
+     "n": 218
+    },
+    {
+     "predLow": 2200,
+     "predHigh": null,
+     "decisionsLow": 0,
+     "decisionsHigh": null,
+     "qLow": -508.1,
+     "qHigh": 365.0,
+     "n": 288
+    }
+   ],
+   "neymanBelt": {
+    "0": {
+     "0.1": [
+      0.1693,
+      1411.2
+     ],
+     "0.9": [
+      0.3216,
+      1576.1
+     ]
+    },
+    "1": {
+     "0.1": [
+      0.1531,
+      1492.6
+     ],
+     "0.9": [
+      0.3357,
+      1518.6
+     ]
+    },
+    "2": {
+     "0.1": [
+      0.1815,
+      1484.1
+     ],
+     "0.9": [
+      0.1232,
+      2045.1
+     ]
+    }
+   },
+   "testByTrueBand": {
+    "constant": {
+     "1400–1599": {
+      "n": 62,
+      "mae": 456.8,
+      "bias": 456.8
+     },
+     "1600–1799": {
+      "n": 67,
+      "mae": 323.2,
+      "bias": 323.2
+     },
+     "1800–1999": {
+      "n": 58,
+      "mae": 101.3,
+      "bias": 101.3
+     },
+     "2000–2199": {
+      "n": 45,
+      "mae": 77.0,
+      "bias": -76.3
+     },
+     "2200–2399": {
+      "n": 71,
+      "mae": 285.7,
+      "bias": -285.7
+     },
+     "2400+": {
+      "n": 55,
+      "mae": 514.0,
+      "bias": -514.0
+     }
+    },
+    "heuristic": {
+     "1400–1599": {
+      "n": 62,
+      "mae": 226.7,
+      "bias": -157.5
+     },
+     "1600–1799": {
+      "n": 67,
+      "mae": 283.6,
+      "bias": -259.0
+     },
+     "1800–1999": {
+      "n": 58,
+      "mae": 373.1,
+      "bias": -364.7
+     },
+     "2000–2199": {
+      "n": 45,
+      "mae": 565.8,
+      "bias": -565.8
+     },
+     "2200–2399": {
+      "n": 71,
+      "mae": 671.1,
+      "bias": -671.1
+     },
+     "2400+": {
+      "n": 55,
+      "mae": 777.3,
+      "bias": -777.3
      }
     },
     "ridge": {
-     "coverage80": 0.841,
-     "meanWidth": 806,
-     "byDecisions": {
-      "<15": {
-       "n": 18,
-       "coverage": 0.833,
-       "meanWidth": 806
-      },
-      "15–24": {
-       "n": 109,
-       "coverage": 0.853,
-       "meanWidth": 806
-      },
-      "25–39": {
-       "n": 139,
-       "coverage": 0.784,
-       "meanWidth": 806
-      },
-      "40+": {
-       "n": 92,
-       "coverage": 0.913,
-       "meanWidth": 806
-      }
+     "1400–1599": {
+      "n": 62,
+      "mae": 339.8,
+      "bias": 339.8
      },
-     "byBand": {
-      "1400–1600": {
-       "n": 62,
-       "coverage": 0.565,
-       "meanWidth": 806
-      },
-      "1600–1800": {
-       "n": 67,
-       "coverage": 0.925,
-       "meanWidth": 806
-      },
-      "1800–2000": {
-       "n": 58,
-       "coverage": 0.983,
-       "meanWidth": 806
-      },
-      "2000–2200": {
-       "n": 45,
-       "coverage": 1.0,
-       "meanWidth": 806
-      },
-      "2200–2400": {
-       "n": 71,
-       "coverage": 0.915,
-       "meanWidth": 806
-      },
-      "2400+": {
-       "n": 55,
-       "coverage": 0.673,
-       "meanWidth": 806
-      }
+     "1600–1799": {
+      "n": 67,
+      "mae": 253.6,
+      "bias": 238.3
      },
-     "model": {
-      "a": 104717.165,
-      "b": 0.0,
-      "qLow": -1.209,
-      "qHigh": 1.282
+     "1800–1999": {
+      "n": 58,
+      "mae": 130.3,
+      "bias": 66.6
+     },
+     "2000–2199": {
+      "n": 45,
+      "mae": 139.1,
+      "bias": -83.5
+     },
+     "2200–2399": {
+      "n": 71,
+      "mae": 211.2,
+      "bias": -204.6
+     },
+     "2400+": {
+      "n": 55,
+      "mae": 368.5,
+      "bias": -368.5
      }
     },
-    "gbm": {
-     "coverage80": 0.849,
-     "meanWidth": 802,
-     "byDecisions": {
-      "<15": {
-       "n": 18,
-       "coverage": 0.889,
-       "meanWidth": 802
-      },
-      "15–24": {
-       "n": 109,
-       "coverage": 0.844,
-       "meanWidth": 802
-      },
-      "25–39": {
-       "n": 139,
-       "coverage": 0.813,
-       "meanWidth": 802
-      },
-      "40+": {
-       "n": 92,
-       "coverage": 0.902,
-       "meanWidth": 802
-      }
+    "ridge-w": {
+     "1400–1599": {
+      "n": 62,
+      "mae": 299.4,
+      "bias": 287.5
      },
-     "byBand": {
-      "1400–1600": {
-       "n": 62,
-       "coverage": 0.677,
-       "meanWidth": 802
-      },
-      "1600–1800": {
-       "n": 67,
-       "coverage": 0.851,
-       "meanWidth": 802
-      },
-      "1800–2000": {
-       "n": 58,
-       "coverage": 0.966,
-       "meanWidth": 802
-      },
-      "2000–2200": {
-       "n": 45,
-       "coverage": 1.0,
-       "meanWidth": 802
-      },
-      "2200–2400": {
-       "n": 71,
-       "coverage": 0.915,
-       "meanWidth": 802
-      },
-      "2400+": {
-       "n": 55,
-       "coverage": 0.709,
-       "meanWidth": 802
-      }
+     "1600–1799": {
+      "n": 67,
+      "mae": 218.8,
+      "bias": 205.2
      },
-     "model": {
-      "a": 105053.84,
-      "b": 0.0,
-      "qLow": -1.19,
-      "qHigh": 1.284
+     "1800–1999": {
+      "n": 58,
+      "mae": 125.5,
+      "bias": 25.7
+     },
+     "2000–2199": {
+      "n": 45,
+      "mae": 176.4,
+      "bias": -125.5
+     },
+     "2200–2399": {
+      "n": 71,
+      "mae": 293.5,
+      "bias": -293.2
+     },
+     "2400+": {
+      "n": 55,
+      "mae": 464.8,
+      "bias": -464.8
+     }
+    },
+    "shipped": {
+     "1400–1599": {
+      "n": 62,
+      "mae": 325.6,
+      "bias": 325.6
+     },
+     "1600–1799": {
+      "n": 67,
+      "mae": 227.8,
+      "bias": 223.7
+     },
+     "1800–1999": {
+      "n": 58,
+      "mae": 144.4,
+      "bias": 56.5
+     },
+     "2000–2199": {
+      "n": 45,
+      "mae": 176.8,
+      "bias": -100.2
+     },
+     "2200–2399": {
+      "n": 71,
+      "mae": 205.4,
+      "bias": -194.2
+     },
+     "2400+": {
+      "n": 55,
+      "mae": 349.3,
+      "bias": -349.3
      }
     }
    },
-   "ridgeCoefficients": {
-    "logMeanLoss": -45.1,
-    "logMedianLoss": -6.8,
-    "logP75Loss": 5.0,
-    "logP90Loss": 3.9,
-    "logComplexityWeightedLoss": -56.7,
-    "blunderRate": -9.8,
-    "mistakeRate": -3.9,
-    "inaccuracyRate": -14.0,
-    "top1Agreement": 48.0,
-    "top3Agreement": 32.5,
-    "criticalAccuracy": 0.0,
-    "onlyMoveSuccess": 0.0,
-    "opportunityConversion": 11.6,
-    "defensiveAccuracy": -3.6,
-    "conversionAccuracy": -12.2,
-    "middlegameAccuracy": -5.6,
-    "endgameAccuracy": -9.1,
-    "logMeaningfulDecisions": 22.7,
-    "logGameLength": 17.4,
-    "missing:criticalAccuracy": 2.7,
-    "missing:onlyMoveSuccess": -0.4,
-    "missing:opportunityConversion": -6.5,
-    "missing:defensiveAccuracy": -12.0,
-    "missing:conversionAccuracy": 46.3,
-    "missing:middlegameAccuracy": -3.9,
-    "missing:endgameAccuracy": 26.4
+   "testCalibration": {
+    "bins": [
+     {
+      "predicted": "1600–1799",
+      "n": 59,
+      "meanPredicted": 1749,
+      "meanActual": 1750,
+      "gap": 1
+     },
+     {
+      "predicted": "1800–1999",
+      "n": 115,
+      "meanPredicted": 1898,
+      "meanActual": 1879,
+      "gap": -19
+     },
+     {
+      "predicted": "2000–2199",
+      "n": 119,
+      "meanPredicted": 2092,
+      "meanActual": 2085,
+      "gap": -7
+     },
+     {
+      "predicted": "2200+",
+      "n": 65,
+      "meanPredicted": 2279,
+      "meanActual": 2309,
+      "gap": 30
+     }
+    ],
+    "calibrationError": 14.0,
+    "slopeActualOnPredicted": 1.076
+   },
+   "testIntervals": {
+    "mondrian": {
+     "coverage": 0.846,
+     "meanWidth": 805,
+     "byPredictedBand": {
+      "1600–1799": {
+       "n": 59,
+       "coverage": 0.915,
+       "meanWidth": 618
+      },
+      "1800–1999": {
+       "n": 115,
+       "coverage": 0.774,
+       "meanWidth": 792
+      },
+      "2000–2199": {
+       "n": 119,
+       "coverage": 0.84,
+       "meanWidth": 872
+      },
+      "2200+": {
+       "n": 65,
+       "coverage": 0.923,
+       "meanWidth": 873
+      }
+     },
+     "byTrueBand": {
+      "1400–1599": {
+       "n": 62,
+       "coverage": 0.565,
+       "meanWidth": 747
+      },
+      "1600–1799": {
+       "n": 67,
+       "coverage": 0.97,
+       "meanWidth": 774
+      },
+      "1800–1999": {
+       "n": 58,
+       "coverage": 1.0,
+       "meanWidth": 788
+      },
+      "2000–2199": {
+       "n": 45,
+       "coverage": 1.0,
+       "meanWidth": 807
+      },
+      "2200–2399": {
+       "n": 71,
+       "coverage": 0.901,
+       "meanWidth": 850
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.655,
+       "meanWidth": 865
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 63,
+       "coverage": 0.841,
+       "meanWidth": 753
+      },
+      "20–34": {
+       "n": 168,
+       "coverage": 0.863,
+       "meanWidth": 777
+      },
+      "35+": {
+       "n": 127,
+       "coverage": 0.827,
+       "meanWidth": 867
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 46,
+       "coverage": 0.783,
+       "meanWidth": 735
+      },
+      "50–79": {
+       "n": 172,
+       "coverage": 0.86,
+       "meanWidth": 780
+      },
+      "80–119": {
+       "n": 94,
+       "coverage": 0.83,
+       "meanWidth": 847
+      },
+      "120+": {
+       "n": 46,
+       "coverage": 0.891,
+       "meanWidth": 878
+      }
+     }
+    },
+    "scale(previous)": {
+     "coverage": 0.832,
+     "meanWidth": 783,
+     "byPredictedBand": {
+      "1600–1799": {
+       "n": 59,
+       "coverage": 0.949,
+       "meanWidth": 783
+      },
+      "1800–1999": {
+       "n": 115,
+       "coverage": 0.817,
+       "meanWidth": 783
+      },
+      "2000–2199": {
+       "n": 119,
+       "coverage": 0.756,
+       "meanWidth": 783
+      },
+      "2200+": {
+       "n": 65,
+       "coverage": 0.892,
+       "meanWidth": 783
+      }
+     },
+     "byTrueBand": {
+      "1400–1599": {
+       "n": 62,
+       "coverage": 0.645,
+       "meanWidth": 783
+      },
+      "1600–1799": {
+       "n": 67,
+       "coverage": 0.836,
+       "meanWidth": 783
+      },
+      "1800–1999": {
+       "n": 58,
+       "coverage": 0.966,
+       "meanWidth": 783
+      },
+      "2000–2199": {
+       "n": 45,
+       "coverage": 1.0,
+       "meanWidth": 783
+      },
+      "2200–2399": {
+       "n": 71,
+       "coverage": 0.887,
+       "meanWidth": 783
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.691,
+       "meanWidth": 783
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 63,
+       "coverage": 0.825,
+       "meanWidth": 783
+      },
+      "20–34": {
+       "n": 168,
+       "coverage": 0.845,
+       "meanWidth": 783
+      },
+      "35+": {
+       "n": 127,
+       "coverage": 0.819,
+       "meanWidth": 783
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 46,
+       "coverage": 0.804,
+       "meanWidth": 783
+      },
+      "50–79": {
+       "n": 172,
+       "coverage": 0.826,
+       "meanWidth": 783
+      },
+      "80–119": {
+       "n": 94,
+       "coverage": 0.862,
+       "meanWidth": 783
+      },
+      "120+": {
+       "n": 46,
+       "coverage": 0.826,
+       "meanWidth": 783
+      }
+     }
+    },
+    "neymanBelt(research)": {
+     "coverage": 0.835,
+     "meanWidth": 1453,
+     "byPredictedBand": {
+      "1600–1799": {
+       "n": 59,
+       "coverage": 0.559,
+       "meanWidth": 1121
+      },
+      "1800–1999": {
+       "n": 115,
+       "coverage": 0.957,
+       "meanWidth": 1608
+      },
+      "2000–2199": {
+       "n": 119,
+       "coverage": 0.958,
+       "meanWidth": 1758
+      },
+      "2200+": {
+       "n": 65,
+       "coverage": 0.646,
+       "meanWidth": 920
+      }
+     },
+     "byTrueBand": {
+      "1400–1599": {
+       "n": 62,
+       "coverage": 0.887,
+       "meanWidth": 1497
+      },
+      "1600–1799": {
+       "n": 67,
+       "coverage": 0.881,
+       "meanWidth": 1456
+      },
+      "1800–1999": {
+       "n": 58,
+       "coverage": 0.724,
+       "meanWidth": 1440
+      },
+      "2000–2199": {
+       "n": 45,
+       "coverage": 0.756,
+       "meanWidth": 1493
+      },
+      "2200–2399": {
+       "n": 71,
+       "coverage": 0.845,
+       "meanWidth": 1530
+      },
+      "2400+": {
+       "n": 55,
+       "coverage": 0.891,
+       "meanWidth": 1277
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 63,
+       "coverage": 0.794,
+       "meanWidth": 1420
+      },
+      "20–34": {
+       "n": 168,
+       "coverage": 0.815,
+       "meanWidth": 1240
+      },
+      "35+": {
+       "n": 127,
+       "coverage": 0.882,
+       "meanWidth": 1749
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 46,
+       "coverage": 0.783,
+       "meanWidth": 1425
+      },
+      "50–79": {
+       "n": 172,
+       "coverage": 0.808,
+       "meanWidth": 1275
+      },
+      "80–119": {
+       "n": 94,
+       "coverage": 0.894,
+       "meanWidth": 1656
+      },
+      "120+": {
+       "n": 46,
+       "coverage": 0.87,
+       "meanWidth": 1728
+      }
+     }
+    }
    },
    "parityCheck": [
     {
      "gameId": "0rQNJzX6",
      "color": "w",
-     "prediction": 1780.9875
+     "prediction": 1768.3563
     },
     {
      "gameId": "0rQNJzX6",
      "color": "b",
-     "prediction": 1814.9698
+     "prediction": 1768.9744
     },
     {
      "gameId": "2DhzQkxp",
      "color": "w",
-     "prediction": 1970.1725
+     "prediction": 1909.3614
     },
     {
      "gameId": "2DhzQkxp",
      "color": "b",
-     "prediction": 2003.0448
+     "prediction": 1980.0526
     },
     {
      "gameId": "2JVFpR8t",
      "color": "w",
-     "prediction": 1954.7087
+     "prediction": 1902.6557
     },
     {
      "gameId": "2JVFpR8t",
      "color": "b",
-     "prediction": 1970.62
+     "prediction": 1902.6557
     },
     {
      "gameId": "2VhbsMzu",
      "color": "w",
-     "prediction": 2078.3991
+     "prediction": 2060.1956
     },
     {
      "gameId": "2VhbsMzu",
      "color": "b",
-     "prediction": 2181.0776
+     "prediction": 2222.6987
     },
     {
      "gameId": "349uk7YQ",
      "color": "w",
-     "prediction": 2115.363
+     "prediction": 2060.1956
     },
     {
      "gameId": "349uk7YQ",
      "color": "b",
-     "prediction": 2106.1588
+     "prediction": 2162.5472
     },
     {
      "gameId": "39DALHGo",
      "color": "w",
-     "prediction": 2434.7353
+     "prediction": 2350.0
     },
     {
      "gameId": "39DALHGo",
      "color": "b",
-     "prediction": 2274.3445
+     "prediction": 2350.0
     },
     {
      "gameId": "3db0N6nu",
      "color": "w",
-     "prediction": 2242.5181
+     "prediction": 2350.0
     },
     {
      "gameId": "3db0N6nu",
      "color": "b",
-     "prediction": 2305.7446
+     "prediction": 2350.0
     },
     {
      "gameId": "41C5XPYX",
      "color": "w",
-     "prediction": 2153.0553
+     "prediction": 2162.5472
     },
     {
      "gameId": "41C5XPYX",
      "color": "b",
-     "prediction": 2113.306
+     "prediction": 2222.6987
     },
     {
      "gameId": "4BO9IQSD",
      "color": "w",
-     "prediction": 1707.8998
+     "prediction": 1692.3902
     },
     {
      "gameId": "4BO9IQSD",
      "color": "b",
-     "prediction": 1805.7648
+     "prediction": 1768.3563
     },
     {
      "gameId": "4j85IIlw",
      "color": "w",
-     "prediction": 1850.3087
+     "prediction": 1768.9744
     },
     {
      "gameId": "4j85IIlw",
      "color": "b",
-     "prediction": 1943.0614
+     "prediction": 1871.2928
     },
     {
      "gameId": "4XrxOqfl",
      "color": "w",
-     "prediction": 2136.1032
+     "prediction": 2162.5472
     },
     {
      "gameId": "4XrxOqfl",
      "color": "b",
-     "prediction": 2147.0342
+     "prediction": 2222.6987
     },
     {
      "gameId": "4ZYDR7um",
      "color": "w",
-     "prediction": 2007.4629
+     "prediction": 1980.0526
     },
     {
      "gameId": "4ZYDR7um",
      "color": "b",
-     "prediction": 2064.4404
+     "prediction": 2060.1956
     },
     {
      "gameId": "54RQxeqQ",
      "color": "w",
-     "prediction": 1768.834
+     "prediction": 1756.0714
     }
    ]
   },
   "rapid": {
-   "splits": {
-    "train+validation": 2006,
-    "test": 464
-   },
-   "players": {
-    "train+validation": 1781,
-    "test": 421
-   },
-   "chosen": {
-    "isotonic": null,
-    "ridge": 30,
-    "gbm": [
-     0.03,
-     400
-    ]
-   },
-   "cvMae": {
-    "isotonic": 359.2,
-    "ridge": 288.3,
-    "gbm": 272.7
+   "dev": {
+    "playerGames": 2006,
+    "players": 1781,
+    "groups": 792
    },
    "test": {
     "constant": {
@@ -767,805 +1303,1671 @@
      "r2": -0.44,
      "bias": -338.6
     },
-    "errmodel": {
-     "n": 464,
-     "mae": 261.0,
-     "medianAe": 217.5,
-     "rmse": 329.5,
-     "r2": 0.375,
-     "bias": -15.6
-    },
-    "isotonic": {
-     "n": 464,
-     "mae": 307.8,
-     "medianAe": 270.9,
-     "rmse": 374.2,
-     "r2": 0.194,
-     "bias": -11.4
-    },
     "ridge": {
      "n": 464,
-     "mae": 249.1,
-     "medianAe": 212.5,
+     "mae": 250.7,
+     "medianAe": 221.3,
      "rmse": 314.7,
      "r2": 0.43,
-     "bias": -14.7
+     "bias": -7.3
     },
-    "gbm": {
+    "ridge-w": {
      "n": 464,
-     "mae": 241.0,
-     "medianAe": 209.6,
-     "rmse": 302.9,
-     "r2": 0.472,
-     "bias": -3.4
+     "mae": 253.4,
+     "medianAe": 220.4,
+     "rmse": 318.1,
+     "r2": 0.417,
+     "bias": -39.3
     },
-    "ridge+opponent (not shipped)": {
+    "shipped": {
      "n": 464,
-     "mae": 238.1,
-     "medianAe": 197.9,
-     "rmse": 301.1,
-     "r2": 0.478,
-     "bias": -17.1
+     "mae": 249.1,
+     "medianAe": 217.1,
+     "rmse": 312.2,
+     "r2": 0.439,
+     "bias": -10.8
     }
    },
-   "maeByBand": {
-    "800–1000": {
-     "constant": 815.8,
-     "heuristic": 243.1,
-     "errmodel": 420.5,
-     "isotonic": 595.4,
-     "ridge": 439.2,
-     "gbm": 439.4,
-     "ridge+opponent (not shipped)": 410.1,
-     "n": 17
+   "ratingDistributionDev": {
+    "800–999": 92,
+    "1000–1199": 209,
+    "1200–1399": 260,
+    "1400–1599": 221,
+    "1600–1799": 242,
+    "1800–1999": 247,
+    "2000–2199": 246,
+    "2200–2399": 262,
+    "2400+": 227
+   },
+   "cv": {
+    "ridge": {
+     "param": 30,
+     "mae": 292.5,
+     "se": 4.6,
+     "medianAe": 263.2,
+     "rmse": 356.8,
+     "r2": 0.444,
+     "bias": 0.7
     },
-    "1000–1200": {
-     "constant": 654.8,
-     "heuristic": 151.4,
-     "errmodel": 324.4,
-     "isotonic": 471.3,
-     "ridge": 365.2,
-     "gbm": 294.2,
-     "ridge+opponent (not shipped)": 303.1,
-     "n": 32
+    "ridge-w": {
+     "param": 30,
+     "mae": 291.4,
+     "se": 4.6,
+     "medianAe": 260.2,
+     "rmse": 358.1,
+     "r2": 0.44,
+     "bias": -31.2
     },
-    "1200–1400": {
-     "constant": 466.1,
-     "heuristic": 158.2,
-     "errmodel": 245.8,
-     "isotonic": 322.9,
-     "ridge": 235.7,
-     "gbm": 189.5,
-     "ridge+opponent (not shipped)": 235.5,
-     "n": 46
-    },
-    "1400–1600": {
-     "constant": 269.1,
-     "heuristic": 207.5,
-     "errmodel": 192.1,
-     "isotonic": 282.2,
-     "ridge": 213.1,
-     "gbm": 212.8,
-     "ridge+opponent (not shipped)": 188.2,
-     "n": 51
-    },
-    "1600–1800": {
-     "constant": 66.5,
-     "heuristic": 323.1,
-     "errmodel": 210.2,
-     "isotonic": 203.5,
-     "ridge": 156.8,
-     "gbm": 198.8,
-     "ridge+opponent (not shipped)": 163.6,
-     "n": 85
-    },
-    "1800–2000": {
-     "constant": 111.0,
-     "heuristic": 376.5,
-     "errmodel": 179.3,
-     "isotonic": 153.4,
-     "ridge": 168.0,
-     "gbm": 210.7,
-     "ridge+opponent (not shipped)": 174.0,
-     "n": 81
-    },
-    "2000–2200": {
-     "constant": 334.3,
-     "heuristic": 546.5,
-     "errmodel": 240.8,
-     "isotonic": 243.5,
-     "ridge": 206.8,
-     "gbm": 199.6,
-     "ridge+opponent (not shipped)": 221.4,
-     "n": 65
-    },
-    "2200–2400": {
-     "constant": 518.2,
-     "heuristic": 736.9,
-     "errmodel": 350.7,
-     "isotonic": 431.0,
-     "ridge": 320.5,
-     "gbm": 273.4,
-     "ridge+opponent (not shipped)": 298.6,
-     "n": 50
-    },
-    "2400+": {
-     "constant": 704.8,
-     "heuristic": 863.7,
-     "errmodel": 456.1,
-     "isotonic": 575.2,
-     "ridge": 495.1,
-     "gbm": 399.0,
-     "ridge+opponent (not shipped)": 434.6,
-     "n": 37
+    "constant": {
+     "mae": 413.0
     }
    },
-   "maeByDecisions": {
-    "<15": {
-     "constant": 382.4,
-     "heuristic": 347.2,
-     "errmodel": 331.5,
-     "isotonic": 356.8,
-     "ridge": 302.8,
-     "gbm": 255.2,
-     "ridge+opponent (not shipped)": 316.2,
-     "n": 55
-    },
-    "15–24": {
-     "constant": 359.8,
-     "heuristic": 325.3,
-     "errmodel": 250.2,
-     "isotonic": 303.1,
-     "ridge": 245.6,
-     "gbm": 256.7,
-     "ridge+opponent (not shipped)": 223.8,
-     "n": 137
-    },
-    "25–39": {
-     "constant": 316.0,
-     "heuristic": 438.8,
-     "errmodel": 254.8,
-     "isotonic": 301.6,
-     "ridge": 238.8,
-     "gbm": 235.8,
-     "ridge+opponent (not shipped)": 224.9,
-     "n": 177
-    },
-    "40+": {
-     "constant": 337.8,
-     "heuristic": 503.2,
-     "errmodel": 247.1,
-     "isotonic": 297.8,
-     "ridge": 242.2,
-     "gbm": 219.8,
-     "ridge+opponent (not shipped)": 238.3,
-     "n": 95
-    }
-   },
-   "maeByResult": {
-    "win": {
-     "constant": 334.4,
-     "heuristic": 383.8,
-     "errmodel": 262.3,
-     "isotonic": 302.0,
-     "ridge": 248.2,
-     "gbm": 237.3,
-     "ridge+opponent (not shipped)": 240.2,
-     "n": 225
-    },
-    "draw": {
-     "constant": 283.5,
-     "heuristic": 356.2,
-     "errmodel": 150.9,
-     "isotonic": 196.3,
-     "ridge": 211.5,
-     "gbm": 219.9,
-     "ridge+opponent (not shipped)": 216.2,
-     "n": 14
-    },
-    "loss": {
-     "constant": 351.7,
-     "heuristic": 434.6,
-     "errmodel": 266.5,
-     "isotonic": 320.5,
-     "ridge": 252.4,
-     "gbm": 246.1,
-     "ridge+opponent (not shipped)": 237.4,
-     "n": 225
-    }
-   },
-   "maeByPhaseComposition": {
-    "no endgame": {
-     "constant": 346.6,
-     "heuristic": 406.8,
-     "errmodel": 276.9,
-     "isotonic": 313.0,
-     "ridge": 255.8,
-     "gbm": 242.6,
-     "ridge+opponent (not shipped)": 244.0,
-     "n": 222
-    },
-    "some endgame": {
-     "constant": 282.0,
-     "heuristic": 426.6,
-     "errmodel": 248.4,
-     "isotonic": 283.4,
-     "ridge": 228.7,
-     "gbm": 259.4,
-     "ridge+opponent (not shipped)": 229.9,
-     "n": 112
-    },
-    "endgame-heavy": {
-     "constant": 383.1,
-     "heuristic": 392.7,
-     "errmodel": 244.5,
-     "isotonic": 320.0,
-     "ridge": 255.2,
-     "gbm": 222.5,
-     "ridge+opponent (not shipped)": 235.2,
-     "n": 130
-    }
-   },
-   "maeBySource": {
-    "lichess-datasnaek": {
-     "constant": 348.4,
-     "heuristic": 219.2,
-     "errmodel": 244.0,
-     "isotonic": 296.8,
-     "ridge": 242.0,
-     "gbm": 229.9,
-     "ridge+opponent (not shipped)": 229.6,
-     "n": 206
-    },
-    "lichess-puzzle-db": {
-     "constant": 335.6,
-     "heuristic": 558.1,
-     "errmodel": 274.5,
-     "isotonic": 316.6,
-     "ridge": 254.8,
-     "gbm": 249.9,
-     "ridge+opponent (not shipped)": 244.9,
-     "n": 258
-    }
-   },
-   "intervals": {
-    "heuristic": {
-     "coverage80": 0.552,
-     "meanWidth": 775,
-     "byDecisions": {
-      "<15": {
-       "n": 55,
-       "coverage": 0.745,
-       "meanWidth": 945
-      },
-      "15–24": {
-       "n": 137,
-       "coverage": 0.701,
-       "meanWidth": 830
-      },
-      "25–39": {
-       "n": 177,
-       "coverage": 0.492,
-       "meanWidth": 750
-      },
-      "40+": {
-       "n": 95,
-       "coverage": 0.337,
-       "meanWidth": 644
-      }
+   "oofBiasByTrueBand": {
+    "ridge": {
+     "800–999": {
+      "n": 92,
+      "mae": 454.5,
+      "bias": 443.7
      },
-     "byBand": {
-      "800–1000": {
-       "n": 17,
-       "coverage": 0.824,
-       "meanWidth": 741
-      },
-      "1000–1200": {
-       "n": 32,
-       "coverage": 1.0,
-       "meanWidth": 761
-      },
-      "1200–1400": {
-       "n": 46,
-       "coverage": 0.978,
-       "meanWidth": 811
-      },
-      "1400–1600": {
-       "n": 51,
-       "coverage": 0.882,
-       "meanWidth": 750
-      },
-      "1600–1800": {
-       "n": 85,
-       "coverage": 0.576,
-       "meanWidth": 769
-      },
-      "1800–2000": {
-       "n": 81,
-       "coverage": 0.58,
-       "meanWidth": 778
-      },
-      "2000–2200": {
-       "n": 65,
-       "coverage": 0.262,
-       "meanWidth": 787
-      },
-      "2200–2400": {
-       "n": 50,
-       "coverage": 0.12,
-       "meanWidth": 772
-      },
-      "2400+": {
-       "n": 37,
-       "coverage": 0.027,
-       "meanWidth": 781
-      }
+     "1000–1199": {
+      "n": 209,
+      "mae": 363.6,
+      "bias": 327.7
+     },
+     "1200–1399": {
+      "n": 260,
+      "mae": 337.4,
+      "bias": 285.7
+     },
+     "1400–1599": {
+      "n": 221,
+      "mae": 254.0,
+      "bias": 170.3
+     },
+     "1600–1799": {
+      "n": 242,
+      "mae": 199.7,
+      "bias": 64.6
+     },
+     "1800–1999": {
+      "n": 247,
+      "mae": 175.1,
+      "bias": -63.1
+     },
+     "2000–2199": {
+      "n": 246,
+      "mae": 217.0,
+      "bias": -182.2
+     },
+     "2200–2399": {
+      "n": 262,
+      "mae": 315.3,
+      "bias": -298.2
+     },
+     "2400+": {
+      "n": 227,
+      "mae": 429.2,
+      "bias": -426.7
      }
     },
-    "errmodel": {
-     "coverage80": 0.841,
-     "meanWidth": 906,
-     "byDecisions": {
-      "<15": {
-       "n": 55,
+    "ridge-w": {
+     "800–999": {
+      "n": 92,
+      "mae": 405.1,
+      "bias": 384.7
+     },
+     "1000–1199": {
+      "n": 209,
+      "mae": 326.2,
+      "bias": 276.2
+     },
+     "1200–1399": {
+      "n": 260,
+      "mae": 311.8,
+      "bias": 243.4
+     },
+     "1400–1599": {
+      "n": 221,
+      "mae": 246.2,
+      "bias": 132.4
+     },
+     "1600–1799": {
+      "n": 242,
+      "mae": 203.5,
+      "bias": 30.1
+     },
+     "1800–1999": {
+      "n": 247,
+      "mae": 190.2,
+      "bias": -91.4
+     },
+     "2000–2199": {
+      "n": 246,
+      "mae": 240.9,
+      "bias": -205.4
+     },
+     "2200–2399": {
+      "n": 262,
+      "mae": 335.0,
+      "bias": -316.4
+     },
+     "2400+": {
+      "n": 227,
+      "mae": 441.9,
+      "bias": -438.8
+     }
+    }
+   },
+   "oofCalibration": {
+    "ridge": {
+     "bins": [
+      {
+       "predicted": "<1000",
+       "n": 29,
+       "meanPredicted": 874,
+       "meanActual": 1179,
+       "gap": 306
+      },
+      {
+       "predicted": "1000–1199",
+       "n": 68,
+       "meanPredicted": 1114,
+       "meanActual": 1145,
+       "gap": 30
+      },
+      {
+       "predicted": "1200–1399",
+       "n": 161,
+       "meanPredicted": 1313,
+       "meanActual": 1326,
+       "gap": 13
+      },
+      {
+       "predicted": "1400–1599",
+       "n": 309,
+       "meanPredicted": 1513,
+       "meanActual": 1444,
+       "gap": -69
+      },
+      {
+       "predicted": "1600–1799",
+       "n": 436,
+       "meanPredicted": 1706,
+       "meanActual": 1640,
+       "gap": -66
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 504,
+       "meanPredicted": 1900,
+       "meanActual": 1927,
+       "gap": 27
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 369,
+       "meanPredicted": 2084,
+       "meanActual": 2153,
+       "gap": 69
+      },
+      {
+       "predicted": "2200+",
+       "n": 130,
+       "meanPredicted": 2315,
+       "meanActual": 2292,
+       "gap": -23
+      }
+     ],
+     "calibrationError": 52.4,
+     "slopeActualOnPredicted": 1.012
+    },
+    "ridge-w": {
+     "bins": [
+      {
+       "predicted": "<1000",
+       "n": 53,
+       "meanPredicted": 894,
+       "meanActual": 1164,
+       "gap": 270
+      },
+      {
+       "predicted": "1000–1199",
+       "n": 76,
+       "meanPredicted": 1114,
+       "meanActual": 1189,
+       "gap": 75
+      },
+      {
+       "predicted": "1200–1399",
+       "n": 187,
+       "meanPredicted": 1305,
+       "meanActual": 1349,
+       "gap": 44
+      },
+      {
+       "predicted": "1400–1599",
+       "n": 318,
+       "meanPredicted": 1502,
+       "meanActual": 1487,
+       "gap": -15
+      },
+      {
+       "predicted": "1600–1799",
+       "n": 446,
+       "meanPredicted": 1701,
+       "meanActual": 1676,
+       "gap": -25
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 466,
+       "meanPredicted": 1900,
+       "meanActual": 1962,
+       "gap": 62
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 329,
+       "meanPredicted": 2084,
+       "meanActual": 2159,
+       "gap": 75
+      },
+      {
+       "predicted": "2200+",
+       "n": 131,
+       "meanPredicted": 2321,
+       "meanActual": 2296,
+       "gap": -25
+      }
+     ],
+     "calibrationError": 50.3,
+     "slopeActualOnPredicted": 0.954
+    }
+   },
+   "chosen": "ridge-w",
+   "extremeBiasDiagnosis": {
+    "oofBiasByBandAndDecisions": {
+     "800–999 | <20": {
+      "n": 47,
+      "bias": 293.4
+     },
+     "800–999 | 20–34": {
+      "n": 29,
+      "bias": 399.7
+     },
+     "800–999 | 35+": {
+      "n": 16,
+      "bias": 625.9
+     },
+     "1000–1199 | <20": {
+      "n": 105,
+      "bias": 162.1
+     },
+     "1000–1199 | 20–34": {
+      "n": 76,
+      "bias": 342.1
+     },
+     "1000–1199 | 35+": {
+      "n": 28,
+      "bias": 525.2
+     },
+     "1200–1399 | <20": {
+      "n": 128,
+      "bias": 185.1
+     },
+     "1200–1399 | 20–34": {
+      "n": 94,
+      "bias": 278.8
+     },
+     "1200–1399 | 35+": {
+      "n": 38,
+      "bias": 352.5
+     },
+     "1400–1599 | <20": {
+      "n": 92,
+      "bias": 40.3
+     },
+     "1400–1599 | 20–34": {
+      "n": 85,
+      "bias": 130.8
+     },
+     "1400–1599 | 35+": {
+      "n": 44,
+      "bias": 327.8
+     },
+     "1600–1799 | <20": {
+      "n": 77,
+      "bias": -72.7
+     },
+     "1600–1799 | 20–34": {
+      "n": 92,
+      "bias": 30.3
+     },
+     "1600–1799 | 35+": {
+      "n": 73,
+      "bias": 138.2
+     },
+     "1800–1999 | <20": {
+      "n": 52,
+      "bias": -225.9
+     },
+     "1800–1999 | 20–34": {
+      "n": 109,
+      "bias": -108.3
+     },
+     "1800–1999 | 35+": {
+      "n": 86,
+      "bias": 11.3
+     },
+     "2000–2199 | <20": {
+      "n": 44,
+      "bias": -269.0
+     },
+     "2000–2199 | 20–34": {
+      "n": 114,
+      "bias": -242.8
+     },
+     "2000–2199 | 35+": {
+      "n": 88,
+      "bias": -125.1
+     },
+     "2200–2399 | <20": {
+      "n": 49,
+      "bias": -442.6
+     },
+     "2200–2399 | 20–34": {
+      "n": 109,
+      "bias": -336.2
+     },
+     "2200–2399 | 35+": {
+      "n": 104,
+      "bias": -236.2
+     },
+     "2400+ | <20": {
+      "n": 28,
+      "bias": -597.2
+     },
+     "2400+ | 20–34": {
+      "n": 92,
+      "bias": -484.8
+     },
+     "2400+ | 35+": {
+      "n": 107,
+      "bias": -357.8
+     }
+    },
+    "attenuationSlopePredictedOnActual": 0.467
+   },
+   "calibrationLayer": {
+    "without": {
+     "mae": 291.4,
+     "bins": [
+      {
+       "predicted": "<1000",
+       "n": 53,
+       "meanPredicted": 894,
+       "meanActual": 1164,
+       "gap": 270
+      },
+      {
+       "predicted": "1000–1199",
+       "n": 76,
+       "meanPredicted": 1114,
+       "meanActual": 1189,
+       "gap": 75
+      },
+      {
+       "predicted": "1200–1399",
+       "n": 187,
+       "meanPredicted": 1305,
+       "meanActual": 1349,
+       "gap": 44
+      },
+      {
+       "predicted": "1400–1599",
+       "n": 318,
+       "meanPredicted": 1502,
+       "meanActual": 1487,
+       "gap": -15
+      },
+      {
+       "predicted": "1600–1799",
+       "n": 446,
+       "meanPredicted": 1701,
+       "meanActual": 1676,
+       "gap": -25
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 466,
+       "meanPredicted": 1900,
+       "meanActual": 1962,
+       "gap": 62
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 329,
+       "meanPredicted": 2084,
+       "meanActual": 2159,
+       "gap": 75
+      },
+      {
+       "predicted": "2200+",
+       "n": 131,
+       "meanPredicted": 2321,
+       "meanActual": 2296,
+       "gap": -25
+      }
+     ],
+     "calibrationError": 50.3,
+     "slopeActualOnPredicted": 0.954
+    },
+    "withIsotonic": {
+     "mae": 284.1,
+     "bins": [
+      {
+       "predicted": "1000–1199",
+       "n": 90,
+       "meanPredicted": 1158,
+       "meanActual": 1182,
+       "gap": 24
+      },
+      {
+       "predicted": "1200–1399",
+       "n": 202,
+       "meanPredicted": 1299,
+       "meanActual": 1297,
+       "gap": -2
+      },
+      {
+       "predicted": "1400–1599",
+       "n": 404,
+       "meanPredicted": 1492,
+       "meanActual": 1513,
+       "gap": 21
+      },
+      {
+       "predicted": "1600–1799",
+       "n": 346,
+       "meanPredicted": 1693,
+       "meanActual": 1675,
+       "gap": -19
+      },
+      {
+       "predicted": "1800–1999",
+       "n": 384,
+       "meanPredicted": 1923,
+       "meanActual": 1919,
+       "gap": -3
+      },
+      {
+       "predicted": "2000–2199",
+       "n": 397,
+       "meanPredicted": 2117,
+       "meanActual": 2129,
+       "gap": 12
+      },
+      {
+       "predicted": "2200+",
+       "n": 183,
+       "meanPredicted": 2281,
+       "meanActual": 2233,
+       "gap": -48
+      }
+     ],
+     "calibrationError": 16.1,
+     "slopeActualOnPredicted": 0.972
+    },
+    "used": true
+   },
+   "intervalsDev": {
+    "mondrian": {
+     "coverage": 0.806,
+     "meanWidth": 927,
+     "byPredictedBand": {
+      "1000–1199": {
+       "n": 90,
+       "coverage": 0.956,
+       "meanWidth": 756
+      },
+      "1200–1399": {
+       "n": 202,
+       "coverage": 0.738,
+       "meanWidth": 754
+      },
+      "1400–1599": {
+       "n": 404,
        "coverage": 0.8,
-       "meanWidth": 1053
+       "meanWidth": 1006
       },
-      "15–24": {
-       "n": 137,
-       "coverage": 0.891,
-       "meanWidth": 965
+      "1600–1799": {
+       "n": 346,
+       "coverage": 0.795,
+       "meanWidth": 1049
       },
-      "25–39": {
-       "n": 177,
-       "coverage": 0.853,
-       "meanWidth": 879
+      "1800–1999": {
+       "n": 384,
+       "coverage": 0.82,
+       "meanWidth": 1017
       },
-      "40+": {
-       "n": 95,
-       "coverage": 0.768,
-       "meanWidth": 788
+      "2000–2199": {
+       "n": 397,
+       "coverage": 0.796,
+       "meanWidth": 828
+      },
+      "2200+": {
+       "n": 183,
+       "coverage": 0.831,
+       "meanWidth": 823
       }
      },
-     "byBand": {
-      "800–1000": {
-       "n": 17,
-       "coverage": 0.647,
-       "meanWidth": 931
+     "byTrueBand": {
+      "800–999": {
+       "n": 92,
+       "coverage": 0.315,
+       "meanWidth": 853
       },
-      "1000–1200": {
-       "n": 32,
-       "coverage": 0.75,
-       "meanWidth": 942
+      "1000–1199": {
+       "n": 209,
+       "coverage": 0.732,
+       "meanWidth": 898
       },
-      "1200–1400": {
-       "n": 46,
-       "coverage": 0.87,
-       "meanWidth": 976
+      "1200–1399": {
+       "n": 260,
+       "coverage": 0.862,
+       "meanWidth": 951
       },
-      "1400–1600": {
-       "n": 51,
-       "coverage": 0.941,
-       "meanWidth": 908
+      "1400–1599": {
+       "n": 221,
+       "coverage": 0.882,
+       "meanWidth": 954
       },
-      "1600–1800": {
-       "n": 85,
-       "coverage": 0.941,
-       "meanWidth": 914
+      "1600–1799": {
+       "n": 242,
+       "coverage": 0.888,
+       "meanWidth": 960
       },
-      "1800–2000": {
-       "n": 81,
-       "coverage": 0.963,
-       "meanWidth": 893
+      "1800–1999": {
+       "n": 247,
+       "coverage": 0.955,
+       "meanWidth": 960
       },
-      "2000–2200": {
-       "n": 65,
-       "coverage": 0.908,
-       "meanWidth": 887
+      "2000–2199": {
+       "n": 246,
+       "coverage": 0.919,
+       "meanWidth": 933
       },
-      "2200–2400": {
-       "n": 50,
-       "coverage": 0.62,
-       "meanWidth": 870
+      "2200–2399": {
+       "n": 262,
+       "coverage": 0.844,
+       "meanWidth": 904
       },
       "2400+": {
-       "n": 37,
-       "coverage": 0.514,
+       "n": 227,
+       "coverage": 0.515,
+       "meanWidth": 878
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 622,
+       "coverage": 0.789,
+       "meanWidth": 910
+      },
+      "20–34": {
+       "n": 800,
+       "coverage": 0.824,
+       "meanWidth": 954
+      },
+      "35+": {
+       "n": 584,
+       "coverage": 0.798,
+       "meanWidth": 908
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 540,
+       "coverage": 0.796,
+       "meanWidth": 909
+      },
+      "50–79": {
+       "n": 750,
+       "coverage": 0.812,
+       "meanWidth": 954
+      },
+      "80–119": {
+       "n": 490,
+       "coverage": 0.794,
+       "meanWidth": 931
+      },
+      "120+": {
+       "n": 226,
+       "coverage": 0.832,
        "meanWidth": 869
       }
      }
     },
-    "isotonic": {
-     "coverage80": 0.862,
-     "meanWidth": 1112,
-     "byDecisions": {
-      "<15": {
-       "n": 55,
-       "coverage": 0.764,
-       "meanWidth": 1207
+    "scale(previous)": {
+     "coverage": 0.8,
+     "meanWidth": 894,
+     "byPredictedBand": {
+      "1000–1199": {
+       "n": 90,
+       "coverage": 0.956,
+       "meanWidth": 954
       },
-      "15–24": {
-       "n": 137,
-       "coverage": 0.891,
-       "meanWidth": 1127
+      "1200–1399": {
+       "n": 202,
+       "coverage": 0.866,
+       "meanWidth": 924
       },
-      "25–39": {
-       "n": 177,
-       "coverage": 0.864,
-       "meanWidth": 1092
+      "1400–1599": {
+       "n": 404,
+       "coverage": 0.76,
+       "meanWidth": 901
       },
-      "40+": {
-       "n": 95,
-       "coverage": 0.874,
-       "meanWidth": 1069
+      "1600–1799": {
+       "n": 346,
+       "coverage": 0.72,
+       "meanWidth": 888
+      },
+      "1800–1999": {
+       "n": 384,
+       "coverage": 0.755,
+       "meanWidth": 885
+      },
+      "2000–2199": {
+       "n": 397,
+       "coverage": 0.856,
+       "meanWidth": 878
+      },
+      "2200+": {
+       "n": 183,
+       "coverage": 0.858,
+       "meanWidth": 877
       }
      },
-     "byBand": {
-      "800–1000": {
+     "byTrueBand": {
+      "800–999": {
+       "n": 92,
+       "coverage": 0.576,
+       "meanWidth": 912
+      },
+      "1000–1199": {
+       "n": 209,
+       "coverage": 0.751,
+       "meanWidth": 910
+      },
+      "1200–1399": {
+       "n": 260,
+       "coverage": 0.812,
+       "meanWidth": 914
+      },
+      "1400–1599": {
+       "n": 221,
+       "coverage": 0.842,
+       "meanWidth": 904
+      },
+      "1600–1799": {
+       "n": 242,
+       "coverage": 0.876,
+       "meanWidth": 893
+      },
+      "1800–1999": {
+       "n": 247,
+       "coverage": 0.899,
+       "meanWidth": 886
+      },
+      "2000–2199": {
+       "n": 246,
+       "coverage": 0.829,
+       "meanWidth": 881
+      },
+      "2200–2399": {
+       "n": 262,
+       "coverage": 0.809,
+       "meanWidth": 880
+      },
+      "2400+": {
+       "n": 227,
+       "coverage": 0.648,
+       "meanWidth": 875
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 622,
+       "coverage": 0.799,
+       "meanWidth": 940
+      },
+      "20–34": {
+       "n": 800,
+       "coverage": 0.786,
+       "meanWidth": 882
+      },
+      "35+": {
+       "n": 584,
+       "coverage": 0.818,
+       "meanWidth": 861
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 540,
+       "coverage": 0.8,
+       "meanWidth": 944
+      },
+      "50–79": {
+       "n": 750,
+       "coverage": 0.78,
+       "meanWidth": 886
+      },
+      "80–119": {
+       "n": 490,
+       "coverage": 0.808,
+       "meanWidth": 867
+      },
+      "120+": {
+       "n": 226,
+       "coverage": 0.845,
+       "meanWidth": 856
+      }
+     }
+    }
+   },
+   "conformalGroups": [
+    {
+     "predLow": null,
+     "predHigh": 1400,
+     "decisionsLow": 0,
+     "decisionsHigh": null,
+     "qLow": -328.2,
+     "qHigh": 436.8,
+     "n": 292
+    },
+    {
+     "predLow": 1400,
+     "predHigh": 1600,
+     "decisionsLow": 0,
+     "decisionsHigh": 20,
+     "qLow": -394.9,
+     "qHigh": 667.6,
+     "n": 164
+    },
+    {
+     "predLow": 1400,
+     "predHigh": 1600,
+     "decisionsLow": 20,
+     "decisionsHigh": null,
+     "qLow": -427.5,
+     "qHigh": 564.7,
+     "n": 240
+    },
+    {
+     "predLow": 1600,
+     "predHigh": 1800,
+     "decisionsLow": 0,
+     "decisionsHigh": null,
+     "qLow": -540.4,
+     "qHigh": 521.0,
+     "n": 346
+    },
+    {
+     "predLow": 1800,
+     "predHigh": 2000,
+     "decisionsLow": 0,
+     "decisionsHigh": null,
+     "qLow": -533.4,
+     "qHigh": 479.7,
+     "n": 384
+    },
+    {
+     "predLow": 2000,
+     "predHigh": 2200,
+     "decisionsLow": 0,
+     "decisionsHigh": 35,
+     "qLow": -485.7,
+     "qHigh": 367.1,
+     "n": 213
+    },
+    {
+     "predLow": 2000,
+     "predHigh": 2200,
+     "decisionsLow": 35,
+     "decisionsHigh": null,
+     "qLow": -408.7,
+     "qHigh": 376.7,
+     "n": 184
+    },
+    {
+     "predLow": 2200,
+     "predHigh": null,
+     "decisionsLow": 0,
+     "decisionsHigh": null,
+     "qLow": -592.6,
+     "qHigh": 272.1,
+     "n": 183
+    }
+   ],
+   "neymanBelt": {
+    "0": {
+     "0.1": [
+      0.2425,
+      884.6
+     ],
+     "0.9": [
+      0.4567,
+      1243.9
+     ]
+    },
+    "1": {
+     "0.1": [
+      0.3279,
+      873.6
+     ],
+     "0.9": [
+      0.3997,
+      1337.9
+     ]
+    },
+    "2": {
+     "0.1": [
+      0.4082,
+      917.3
+     ],
+     "0.9": [
+      0.2388,
+      1733.2
+     ]
+    }
+   },
+   "testByTrueBand": {
+    "constant": {
+     "800–999": {
+      "n": 17,
+      "mae": 815.8,
+      "bias": 815.8
+     },
+     "1000–1199": {
+      "n": 32,
+      "mae": 654.8,
+      "bias": 654.8
+     },
+     "1200–1399": {
+      "n": 46,
+      "mae": 466.1,
+      "bias": 466.1
+     },
+     "1400–1599": {
+      "n": 51,
+      "mae": 269.1,
+      "bias": 269.1
+     },
+     "1600–1799": {
+      "n": 85,
+      "mae": 66.5,
+      "bias": 61.8
+     },
+     "1800–1999": {
+      "n": 81,
+      "mae": 111.0,
+      "bias": -111.0
+     },
+     "2000–2199": {
+      "n": 65,
+      "mae": 334.3,
+      "bias": -334.3
+     },
+     "2200–2399": {
+      "n": 50,
+      "mae": 518.2,
+      "bias": -518.2
+     },
+     "2400+": {
+      "n": 37,
+      "mae": 704.8,
+      "bias": -704.8
+     }
+    },
+    "heuristic": {
+     "800–999": {
+      "n": 17,
+      "mae": 243.1,
+      "bias": 196.0
+     },
+     "1000–1199": {
+      "n": 32,
+      "mae": 151.4,
+      "bias": 121.0
+     },
+     "1200–1399": {
+      "n": 46,
+      "mae": 158.2,
+      "bias": -13.5
+     },
+     "1400–1599": {
+      "n": 51,
+      "mae": 207.5,
+      "bias": -120.2
+     },
+     "1600–1799": {
+      "n": 85,
+      "mae": 323.1,
+      "bias": -286.8
+     },
+     "1800–1999": {
+      "n": 81,
+      "mae": 376.5,
+      "bias": -362.8
+     },
+     "2000–2199": {
+      "n": 65,
+      "mae": 546.5,
+      "bias": -538.6
+     },
+     "2200–2399": {
+      "n": 50,
+      "mae": 736.9,
+      "bias": -736.9
+     },
+     "2400+": {
+      "n": 37,
+      "mae": 863.7,
+      "bias": -863.7
+     }
+    },
+    "ridge": {
+     "800–999": {
+      "n": 17,
+      "mae": 445.9,
+      "bias": 413.1
+     },
+     "1000–1199": {
+      "n": 32,
+      "mae": 372.6,
+      "bias": 358.2
+     },
+     "1200–1399": {
+      "n": 46,
+      "mae": 239.5,
+      "bias": 197.6
+     },
+     "1400–1599": {
+      "n": 51,
+      "mae": 230.4,
+      "bias": 201.2
+     },
+     "1600–1799": {
+      "n": 85,
+      "mae": 166.6,
+      "bias": 33.6
+     },
+     "1800–1999": {
+      "n": 81,
+      "mae": 160.4,
+      "bias": -12.8
+     },
+     "2000–2199": {
+      "n": 65,
+      "mae": 212.4,
+      "bias": -160.2
+     },
+     "2200–2399": {
+      "n": 50,
+      "mae": 307.7,
+      "bias": -298.1
+     },
+     "2400+": {
+      "n": 37,
+      "mae": 478.7,
+      "bias": -478.7
+     }
+    },
+    "ridge-w": {
+     "800–999": {
+      "n": 17,
+      "mae": 403.0,
+      "bias": 353.5
+     },
+     "1000–1199": {
+      "n": 32,
+      "mae": 333.6,
+      "bias": 310.3
+     },
+     "1200–1399": {
+      "n": 46,
+      "mae": 225.6,
+      "bias": 149.6
+     },
+     "1400–1599": {
+      "n": 51,
+      "mae": 206.5,
+      "bias": 159.6
+     },
+     "1600–1799": {
+      "n": 85,
+      "mae": 175.1,
+      "bias": -1.0
+     },
+     "1800–1999": {
+      "n": 81,
+      "mae": 175.8,
+      "bias": -41.0
+     },
+     "2000–2199": {
+      "n": 65,
+      "mae": 237.8,
+      "bias": -180.7
+     },
+     "2200–2399": {
+      "n": 50,
+      "mae": 325.0,
+      "bias": -314.3
+     },
+     "2400+": {
+      "n": 37,
+      "mae": 495.6,
+      "bias": -495.6
+     }
+    },
+    "shipped": {
+     "800–999": {
+      "n": 17,
+      "mae": 430.3,
+      "bias": 430.3
+     },
+     "1000–1199": {
+      "n": 32,
+      "mae": 324.4,
+      "bias": 322.6
+     },
+     "1200–1399": {
+      "n": 46,
+      "mae": 205.7,
+      "bias": 161.8
+     },
+     "1400–1599": {
+      "n": 51,
+      "mae": 209.3,
+      "bias": 169.9
+     },
+     "1600–1799": {
+      "n": 85,
+      "mae": 204.8,
+      "bias": 12.2
+     },
+     "1800–1999": {
+      "n": 81,
+      "mae": 195.0,
+      "bias": -10.4
+     },
+     "2000–2199": {
+      "n": 65,
+      "mae": 225.2,
+      "bias": -148.3
+     },
+     "2200–2399": {
+      "n": 50,
+      "mae": 276.4,
+      "bias": -264.6
+     },
+     "2400+": {
+      "n": 37,
+      "mae": 435.2,
+      "bias": -435.2
+     }
+    }
+   },
+   "testCalibration": {
+    "bins": [
+     {
+      "predicted": "1200–1399",
+      "n": 37,
+      "meanPredicted": 1297,
+      "meanActual": 1371,
+      "gap": 74
+     },
+     {
+      "predicted": "1400–1599",
+      "n": 96,
+      "meanPredicted": 1493,
+      "meanActual": 1519,
+      "gap": 26
+     },
+     {
+      "predicted": "1600–1799",
+      "n": 101,
+      "meanPredicted": 1693,
+      "meanActual": 1726,
+      "gap": 32
+     },
+     {
+      "predicted": "1800–1999",
+      "n": 105,
+      "meanPredicted": 1931,
+      "meanActual": 1934,
+      "gap": 3
+     },
+     {
+      "predicted": "2000–2199",
+      "n": 96,
+      "meanPredicted": 2141,
+      "meanActual": 2141,
+      "gap": 0
+     }
+    ],
+    "calibrationError": 20.2,
+    "slopeActualOnPredicted": 0.916
+   },
+   "testIntervals": {
+    "mondrian": {
+     "coverage": 0.877,
+     "meanWidth": 955,
+     "byPredictedBand": {
+      "1000–1199": {
+       "n": 12,
+       "coverage": 1.0,
+       "meanWidth": 765
+      },
+      "1200–1399": {
+       "n": 37,
+       "coverage": 0.838,
+       "meanWidth": 765
+      },
+      "1400–1599": {
+       "n": 96,
+       "coverage": 0.823,
+       "meanWidth": 1022
+      },
+      "1600–1799": {
+       "n": 101,
+       "coverage": 0.891,
+       "meanWidth": 1061
+      },
+      "1800–1999": {
+       "n": 105,
+       "coverage": 0.876,
+       "meanWidth": 1013
+      },
+      "2000–2199": {
+       "n": 96,
+       "coverage": 0.906,
+       "meanWidth": 823
+      },
+      "2200+": {
        "n": 17,
-       "coverage": 0.588,
-       "meanWidth": 1127
-      },
-      "1000–1200": {
-       "n": 32,
-       "coverage": 0.781,
-       "meanWidth": 1141
-      },
-      "1200–1400": {
-       "n": 46,
-       "coverage": 0.826,
-       "meanWidth": 1147
-      },
-      "1400–1600": {
-       "n": 51,
        "coverage": 0.941,
-       "meanWidth": 1109
+       "meanWidth": 865
+      }
+     },
+     "byTrueBand": {
+      "800–999": {
+       "n": 17,
+       "coverage": 0.412,
+       "meanWidth": 885
       },
-      "1600–1800": {
+      "1000–1199": {
+       "n": 32,
+       "coverage": 0.75,
+       "meanWidth": 927
+      },
+      "1200–1399": {
+       "n": 46,
+       "coverage": 0.935,
+       "meanWidth": 931
+      },
+      "1400–1599": {
+       "n": 51,
+       "coverage": 1.0,
+       "meanWidth": 1028
+      },
+      "1600–1799": {
        "n": 85,
-       "coverage": 1.0,
-       "meanWidth": 1113
+       "coverage": 0.976,
+       "meanWidth": 998
       },
-      "1800–2000": {
+      "1800–1999": {
        "n": 81,
-       "coverage": 1.0,
-       "meanWidth": 1102
+       "coverage": 0.975,
+       "meanWidth": 972
       },
-      "2000–2200": {
+      "2000–2199": {
        "n": 65,
-       "coverage": 0.908,
-       "meanWidth": 1103
+       "coverage": 0.923,
+       "meanWidth": 926
       },
-      "2200–2400": {
+      "2200–2399": {
        "n": 50,
-       "coverage": 0.74,
-       "meanWidth": 1094
+       "coverage": 0.86,
+       "meanWidth": 918
       },
       "2400+": {
        "n": 37,
        "coverage": 0.459,
-       "meanWidth": 1093
+       "meanWidth": 902
       }
      },
-     "model": {
-      "a": 153611.695,
-      "b": 578210.743,
-      "qLow": -1.359,
-      "qHigh": 1.268
+     "byDecisions": {
+      "<20": {
+       "n": 125,
+       "coverage": 0.872,
+       "meanWidth": 955
+      },
+      "20–34": {
+       "n": 206,
+       "coverage": 0.874,
+       "meanWidth": 964
+      },
+      "35+": {
+       "n": 133,
+       "coverage": 0.887,
+       "meanWidth": 939
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 100,
+       "coverage": 0.86,
+       "meanWidth": 953
+      },
+      "50–79": {
+       "n": 186,
+       "coverage": 0.855,
+       "meanWidth": 965
+      },
+      "80–119": {
+       "n": 144,
+       "coverage": 0.91,
+       "meanWidth": 955
+      },
+      "120+": {
+       "n": 34,
+       "coverage": 0.912,
+       "meanWidth": 902
+      }
      }
     },
-    "ridge": {
-     "coverage80": 0.856,
-     "meanWidth": 913,
-     "byDecisions": {
-      "<15": {
-       "n": 55,
-       "coverage": 0.818,
-       "meanWidth": 974
+    "scale(previous)": {
+     "coverage": 0.845,
+     "meanWidth": 888,
+     "byPredictedBand": {
+      "1000–1199": {
+       "n": 12,
+       "coverage": 1.0,
+       "meanWidth": 931
       },
-      "15–24": {
-       "n": 137,
-       "coverage": 0.854,
-       "meanWidth": 923
+      "1200–1399": {
+       "n": 37,
+       "coverage": 0.892,
+       "meanWidth": 918
       },
-      "25–39": {
-       "n": 177,
-       "coverage": 0.859,
-       "meanWidth": 901
+      "1400–1599": {
+       "n": 96,
+       "coverage": 0.792,
+       "meanWidth": 900
       },
-      "40+": {
-       "n": 95,
-       "coverage": 0.874,
-       "meanWidth": 887
+      "1600–1799": {
+       "n": 101,
+       "coverage": 0.812,
+       "meanWidth": 882
+      },
+      "1800–1999": {
+       "n": 105,
+       "coverage": 0.81,
+       "meanWidth": 879
+      },
+      "2000–2199": {
+       "n": 96,
+       "coverage": 0.927,
+       "meanWidth": 876
+      },
+      "2200+": {
+       "n": 17,
+       "coverage": 0.882,
+       "meanWidth": 888
       }
      },
-     "byBand": {
-      "800–1000": {
+     "byTrueBand": {
+      "800–999": {
        "n": 17,
        "coverage": 0.529,
-       "meanWidth": 923
+       "meanWidth": 899
       },
-      "1000–1200": {
+      "1000–1199": {
        "n": 32,
-       "coverage": 0.625,
-       "meanWidth": 932
-      },
-      "1200–1400": {
-       "n": 46,
-       "coverage": 0.87,
-       "meanWidth": 936
-      },
-      "1400–1600": {
-       "n": 51,
-       "coverage": 0.98,
-       "meanWidth": 911
-      },
-      "1600–1800": {
-       "n": 85,
-       "coverage": 0.976,
-       "meanWidth": 914
-      },
-      "1800–2000": {
-       "n": 81,
-       "coverage": 0.963,
-       "meanWidth": 907
-      },
-      "2000–2200": {
-       "n": 65,
-       "coverage": 0.938,
+       "coverage": 0.75,
        "meanWidth": 908
       },
-      "2200–2400": {
-       "n": 50,
-       "coverage": 0.8,
-       "meanWidth": 902
-      },
-      "2400+": {
-       "n": 37,
-       "coverage": 0.432,
-       "meanWidth": 901
-      }
-     },
-     "model": {
-      "a": 108995.92,
-      "b": 301509.439,
-      "qLow": -1.323,
-      "qHigh": 1.288
-     }
-    },
-    "gbm": {
-     "coverage80": 0.877,
-     "meanWidth": 872,
-     "byDecisions": {
-      "<15": {
-       "n": 55,
-       "coverage": 0.836,
-       "meanWidth": 878
-      },
-      "15–24": {
-       "n": 137,
-       "coverage": 0.854,
-       "meanWidth": 873
-      },
-      "25–39": {
-       "n": 177,
-       "coverage": 0.904,
-       "meanWidth": 871
-      },
-      "40+": {
-       "n": 95,
-       "coverage": 0.884,
-       "meanWidth": 869
-      }
-     },
-     "byBand": {
-      "800–1000": {
-       "n": 17,
-       "coverage": 0.588,
-       "meanWidth": 873
-      },
-      "1000–1200": {
-       "n": 32,
-       "coverage": 0.875,
-       "meanWidth": 874
-      },
-      "1200–1400": {
+      "1200–1399": {
        "n": 46,
-       "coverage": 0.848,
-       "meanWidth": 874
+       "coverage": 0.87,
+       "meanWidth": 913
       },
-      "1400–1600": {
+      "1400–1599": {
        "n": 51,
-       "coverage": 0.98,
-       "meanWidth": 872
+       "coverage": 0.941,
+       "meanWidth": 886
       },
-      "1600–1800": {
+      "1600–1799": {
        "n": 85,
        "coverage": 0.941,
-       "meanWidth": 872
+       "meanWidth": 889
       },
-      "1800–2000": {
+      "1800–1999": {
        "n": 81,
-       "coverage": 0.926,
-       "meanWidth": 871
+       "coverage": 0.938,
+       "meanWidth": 882
       },
-      "2000–2200": {
+      "2000–2199": {
        "n": 65,
-       "coverage": 0.892,
-       "meanWidth": 871
+       "coverage": 0.831,
+       "meanWidth": 882
       },
-      "2200–2400": {
+      "2200–2399": {
        "n": 50,
-       "coverage": 0.84,
-       "meanWidth": 871
+       "coverage": 0.82,
+       "meanWidth": 876
       },
       "2400+": {
        "n": 37,
-       "coverage": 0.676,
-       "meanWidth": 871
+       "coverage": 0.541,
+       "meanWidth": 875
       }
      },
-     "model": {
-      "a": 111863.558,
-      "b": 27626.552,
-      "qLow": -1.274,
-      "qHigh": 1.318
+     "byDecisions": {
+      "<20": {
+       "n": 125,
+       "coverage": 0.832,
+       "meanWidth": 927
+      },
+      "20–34": {
+       "n": 206,
+       "coverage": 0.85,
+       "meanWidth": 882
+      },
+      "35+": {
+       "n": 133,
+       "coverage": 0.85,
+       "meanWidth": 862
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 100,
+       "coverage": 0.81,
+       "meanWidth": 930
+      },
+      "50–79": {
+       "n": 186,
+       "coverage": 0.844,
+       "meanWidth": 886
+      },
+      "80–119": {
+       "n": 144,
+       "coverage": 0.854,
+       "meanWidth": 868
+      },
+      "120+": {
+       "n": 34,
+       "coverage": 0.912,
+       "meanWidth": 857
+      }
+     }
+    },
+    "neymanBelt(research)": {
+     "coverage": 0.834,
+     "meanWidth": 1354,
+     "byPredictedBand": {
+      "1000–1199": {
+       "n": 12,
+       "coverage": 0.417,
+       "meanWidth": 480
+      },
+      "1200–1399": {
+       "n": 37,
+       "coverage": 0.595,
+       "meanWidth": 917
+      },
+      "1400–1599": {
+       "n": 96,
+       "coverage": 0.927,
+       "meanWidth": 1496
+      },
+      "1600–1799": {
+       "n": 101,
+       "coverage": 0.941,
+       "meanWidth": 1626
+      },
+      "1800–1999": {
+       "n": 105,
+       "coverage": 0.933,
+       "meanWidth": 1565
+      },
+      "2000–2199": {
+       "n": 96,
+       "coverage": 0.781,
+       "meanWidth": 1103
+      },
+      "2200+": {
+       "n": 17,
+       "coverage": 0.176,
+       "meanWidth": 620
+      }
+     },
+     "byTrueBand": {
+      "800–999": {
+       "n": 17,
+       "coverage": 0.824,
+       "meanWidth": 933
+      },
+      "1000–1199": {
+       "n": 32,
+       "coverage": 0.844,
+       "meanWidth": 1172
+      },
+      "1200–1399": {
+       "n": 46,
+       "coverage": 0.804,
+       "meanWidth": 1294
+      },
+      "1400–1599": {
+       "n": 51,
+       "coverage": 0.941,
+       "meanWidth": 1546
+      },
+      "1600–1799": {
+       "n": 85,
+       "coverage": 0.847,
+       "meanWidth": 1473
+      },
+      "1800–1999": {
+       "n": 81,
+       "coverage": 0.765,
+       "meanWidth": 1426
+      },
+      "2000–2199": {
+       "n": 65,
+       "coverage": 0.785,
+       "meanWidth": 1336
+      },
+      "2200–2399": {
+       "n": 50,
+       "coverage": 0.88,
+       "meanWidth": 1283
+      },
+      "2400+": {
+       "n": 37,
+       "coverage": 0.865,
+       "meanWidth": 1212
+      }
+     },
+     "byDecisions": {
+      "<20": {
+       "n": 125,
+       "coverage": 0.824,
+       "meanWidth": 1510
+      },
+      "20–34": {
+       "n": 206,
+       "coverage": 0.835,
+       "meanWidth": 1283
+      },
+      "35+": {
+       "n": 133,
+       "coverage": 0.842,
+       "meanWidth": 1318
+      }
+     },
+     "byGameLength": {
+      "<50 plies": {
+       "n": 100,
+       "coverage": 0.8,
+       "meanWidth": 1499
+      },
+      "50–79": {
+       "n": 186,
+       "coverage": 0.844,
+       "meanWidth": 1323
+      },
+      "80–119": {
+       "n": 144,
+       "coverage": 0.847,
+       "meanWidth": 1316
+      },
+      "120+": {
+       "n": 34,
+       "coverage": 0.824,
+       "meanWidth": 1259
+      }
      }
     }
-   },
-   "ridgeCoefficients": {
-    "logMeanLoss": 163.2,
-    "logMedianLoss": 18.8,
-    "logP75Loss": 37.7,
-    "logP90Loss": 21.6,
-    "logComplexityWeightedLoss": -247.9,
-    "blunderRate": -35.5,
-    "mistakeRate": -50.1,
-    "inaccuracyRate": -36.5,
-    "top1Agreement": 112.1,
-    "top3Agreement": 71.5,
-    "criticalAccuracy": -2.7,
-    "onlyMoveSuccess": 0.0,
-    "opportunityConversion": 63.0,
-    "defensiveAccuracy": -9.2,
-    "conversionAccuracy": -11.1,
-    "middlegameAccuracy": 17.0,
-    "endgameAccuracy": -11.7,
-    "logMeaningfulDecisions": 35.1,
-    "logGameLength": 85.5,
-    "missing:criticalAccuracy": -21.9,
-    "missing:onlyMoveSuccess": 7.5,
-    "missing:opportunityConversion": -6.0,
-    "missing:defensiveAccuracy": -23.4,
-    "missing:conversionAccuracy": 81.0,
-    "missing:middlegameAccuracy": 16.6,
-    "missing:endgameAccuracy": 45.8
    },
    "parityCheck": [
     {
      "gameId": "0ims0W0G",
      "color": "w",
-     "prediction": 1956.1912
+     "prediction": 1944.5349
     },
     {
      "gameId": "0ims0W0G",
      "color": "b",
-     "prediction": 1892.2219
+     "prediction": 1854.973
     },
     {
      "gameId": "0KgsUgHe",
      "color": "w",
-     "prediction": 2226.4395
+     "prediction": 2194.6333
     },
     {
      "gameId": "0KgsUgHe",
      "color": "b",
-     "prediction": 1926.3665
+     "prediction": 1961.5934
     },
     {
      "gameId": "1heLxxHy",
      "color": "w",
-     "prediction": 1943.0865
+     "prediction": 1927.2571
     },
     {
      "gameId": "1heLxxHy",
      "color": "b",
-     "prediction": 2081.9261
+     "prediction": 1961.5934
     },
     {
      "gameId": "1yuc7dGu",
      "color": "w",
-     "prediction": 1876.6346
+     "prediction": 1927.2571
     },
     {
      "gameId": "1yuc7dGu",
      "color": "b",
-     "prediction": 1711.6542
+     "prediction": 1693.775
     },
     {
      "gameId": "1zRjgcqm",
      "color": "w",
-     "prediction": 1821.3255
+     "prediction": 1612.2121
     },
     {
      "gameId": "1zRjgcqm",
      "color": "b",
-     "prediction": 1743.7456
+     "prediction": 1693.775
     },
     {
      "gameId": "2cQpPQh8",
      "color": "w",
-     "prediction": 1605.9751
+     "prediction": 1557.1739
     },
     {
      "gameId": "2cQpPQh8",
      "color": "b",
-     "prediction": 1824.0714
+     "prediction": 1612.2121
     },
     {
      "gameId": "2FpFvoMt",
      "color": "w",
-     "prediction": 1689.8082
+     "prediction": 1550.3065
     },
     {
      "gameId": "2FpFvoMt",
      "color": "b",
-     "prediction": 1709.313
+     "prediction": 1655.4792
     },
     {
      "gameId": "2JLvTLrM",
      "color": "w",
-     "prediction": 1471.2698
+     "prediction": 1460.4262
     },
     {
      "gameId": "2JLvTLrM",
      "color": "b",
-     "prediction": 1434.3171
+     "prediction": 1320.2545
     },
     {
      "gameId": "2JS7Df08",
      "color": "w",
-     "prediction": 2032.9499
+     "prediction": 2120.25
     },
     {
      "gameId": "2JS7Df08",
      "color": "b",
-     "prediction": 1907.3715
+     "prediction": 1944.5349
     },
     {
      "gameId": "2LX2IAdw",
      "color": "w",
-     "prediction": 2108.4519
+     "prediction": 2197.7636
     },
     {
      "gameId": "2LX2IAdw",
      "color": "b",
-     "prediction": 2046.7362
+     "prediction": 1961.5934
     },
     {
      "gameId": "2tn4UTF3",
      "color": "w",
-     "prediction": 1761.8757
+     "prediction": 1854.973
     },
     {
      "gameId": "2tn4UTF3",
      "color": "b",
-     "prediction": 2096.2257
+     "prediction": 2197.7636
     },
     {
      "gameId": "2YUbUpWZ",
      "color": "w",
-     "prediction": 1933.4637
+     "prediction": 1961.5934
     },
     {
      "gameId": "2YUbUpWZ",
      "color": "b",
-     "prediction": 1719.7976
+     "prediction": 1722.8957
     },
     {
      "gameId": "3j0kRr01",
      "color": "w",
-     "prediction": 1542.1053
+     "prediction": 1460.4262
     }
    ]
   }

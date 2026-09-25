@@ -123,74 +123,147 @@ if (validationAfter || ratingCorpusStats) {
   writeDistribution("Rated-game corpus (Quick preset), by player rating", ratingCorpusStats, null);
 }
 
-// 4–7. Rating.
-const summary = read("data/rating-corpus/dataset-summary.json");
-const filters = read("data/rating-corpus/FILTERS.json");
-const bench = read("data/rating-corpus/benchmark.json");
-if (summary && bench) {
+// 4–7. Rating (the newest corpus that has a benchmark).
+const CORPUS = existsSync("data/rating-corpus-v2/benchmark.json") ? "data/rating-corpus-v2" : "data/rating-corpus";
+const summary = read(`${CORPUS}/dataset-summary.json`);
+const manifest = read(`${CORPUS}/MANIFEST.json`) ?? read(`${CORPUS}/FILTERS.json`);
+const bench = read(`${CORPUS}/benchmark.json`);
+const coverageRows = (report) => [
+  ["overall", "", String(report.coverage), String(report.meanWidth)],
+  ...Object.entries(report.byPredictedBand).map(([key, v]) => [`predicted ${key}`, String(v.n), String(v.coverage), String(v.meanWidth)]),
+  ...Object.entries(report.byTrueBand).map(([key, v]) => [`true ${key}`, String(v.n), String(v.coverage), String(v.meanWidth)]),
+  ...Object.entries(report.byDecisions).map(([key, v]) => [`${key} decisions`, String(v.n), String(v.coverage), String(v.meanWidth)]),
+  ...Object.entries(report.byGameLength).map(([key, v]) => [key, String(v.n), String(v.coverage), String(v.meanWidth)]),
+];
+if (summary && bench?.timeControls?.blitz?.cv) {
   out("## 4. Rating dataset");
   out();
-  out(`${summary.games} rated Lichess games → ${summary.samples} game-sides from ${summary.players} players (analyzed at the ${summary.preset} preset, ${summary.engine}).`);
+  out(`Corpus \`${CORPUS}\`: ${summary.games} rated Lichess games → ${summary.samples} player-games from ${summary.players} players (analyzed at the ${summary.preset} preset, ${summary.engine}).`);
   out();
-  table(["Time control", ...Object.keys(summary.byTimeControlAndBand.blitz)], ["blitz", "rapid"].map((tc) => [tc, ...Object.values(summary.byTimeControlAndBand[tc]).map(String)]));
-  if (filters) {
-    out(`Sources: ${Object.entries(summary.bySource).map(([source, count]) => `${source} ${count}`).join(", ")}. Filters (games dropped): ${Object.values(filters.filters).map((filter) => `${filter.description}: ${filter.dropped}`).join("; ")}. Per-player cap ${filters.perPlayerCap} games; stratified by the players' mean rating band, up to ${filters.perStratum} games per (time control, band).`);
+  if (manifest?.month) {
+    out(`Source: ${manifest.source} (${manifest.license}), month ${manifest.month}, seed ${manifest.seed}; ${manifest.gamesRead.toLocaleString()} games streamed, ${manifest.eligible.toLocaleString()} eligible, ${manifest.selected} selected (${manifest.perStratum} per stratum, at most ${manifest.perPlayerCap} per player). ${manifest.selection}.`);
     out();
+    table(["Filter", "Dropped"], Object.values(manifest.filters).map((filter) => [filter.description, String(filter.dropped)]));
   }
+  table(["Time control", ...Object.keys(summary.byTimeControlAndBand.blitz)], ["blitz", "rapid"].map((tc) => [tc, ...Object.values(summary.byTimeControlAndBand[tc]).map(String)]));
   out("## 5. Split");
   out();
-  out(`${summary.splitMethod[0].toUpperCase()}${summary.splitMethod.slice(1)}. Train ${summary.splits.train}, validation ${summary.splits.validation}, test ${summary.splits.test} game-sides; players appearing in more than one split: **${summary.leakingPlayers}**. ${bench.protocol}`);
+  out(`${summary.splitMethod[0].toUpperCase()}${summary.splitMethod.slice(1)}. Players appearing in more than one split: **${summary.leakingPlayers}**.`);
   out();
-  out("## 6. Held-out accuracy");
+  if (summary.splitDetail) {
+    table(["Split", "Player-games", "Players", "Connected groups", "Games", "Blitz", "Rapid"], Object.entries(summary.splitDetail).map(([split, v]) => [split, String(v.playerGames), String(v.players), String(v.connectedGroups), String(v.games), String(v.byTimeControl.blitz), String(v.byTimeControl.rapid)]));
+  }
+  out("Every choice (model family, hyperparameters, weighting, calibration layer, interval model) was made by 5-fold player-grouped cross-validation on train + validation. Test was scored once, after those choices were frozen.");
+  out();
+  out("## 6. Held-out accuracy, calibration and intervals");
   out();
   for (const [tc, report] of Object.entries(bench.timeControls)) {
-    out(`### ${tc} (test n = ${report.splits.test})`);
+    out(`### ${tc}: chosen model \`${report.chosen}\`${report.calibrationLayer?.used ? " + isotonic calibration" : ""}`);
     out();
-    table(["Model", "MAE", "Median AE", "RMSE", "R²", "Bias"], Object.entries(report.test).map(([name, m]) => [name, String(m.mae), String(m.medianAe), String(m.rmse), String(m.r2), String(m.bias)]));
-    const breakdowns = [["rating band", report.maeByBand], ["meaningful decisions", report.maeByDecisions], ["game result", report.maeByResult], ["phase composition", report.maeByPhaseComposition], ["source", report.maeBySource]];
-    for (const [label, data] of breakdowns) {
-      const models = Object.keys(report.test);
-      out(`MAE by ${label}:`);
+    out("Cross-validated (train + validation, out-of-fold):");
+    out();
+    table(["Model", "Param", "MAE", "± SE", "Median AE", "RMSE", "R²"], Object.entries(report.cv).map(([name, m]) => [name, JSON.stringify(m.param ?? ""), String(m.mae), String(m.se ?? ""), String(m.medianAe ?? ""), String(m.rmse ?? ""), String(m.r2 ?? "")]));
+    if (report.test) {
+      out(`Test (n = ${report.test.shipped.n}):`);
       out();
-      table([label, "n", ...models], Object.entries(data).map(([key, value]) => [key, String(value.n), ...models.map((model) => String(Math.round(value[model])))]));
+      table(["Model", "MAE", "Median AE", "RMSE", "R²", "Bias"], Object.entries(report.test).map(([name, m]) => [name, String(m.mae), String(m.medianAe), String(m.rmse), String(m.r2), String(m.bias)]));
+      const models = Object.keys(report.testByTrueBand);
+      out("Test MAE (bias) by true rating band:");
+      out();
+      table(["Band", "n", ...models], Object.keys(report.testByTrueBand.shipped).map((band) => [band, String(report.testByTrueBand.shipped[band].n), ...models.map((model) => { const v = report.testByTrueBand[model][band]; return v ? `${v.mae} (${v.bias > 0 ? "+" : ""}${v.bias})` : ""; })]));
+    }
+    out("Why the extremes are biased (out-of-fold, chosen model): bias by true band × meaningful decisions. If more decisions shrink the bias, the cause is missing information in one game rather than model form.");
+    out();
+    table(["Band | decisions", "n", "Bias"], Object.entries(report.extremeBiasDiagnosis.oofBiasByBandAndDecisions).map(([key, v]) => [key, String(v.n), String(v.bias)]));
+    out(`Attenuation: slope of the estimate on the true rating = ${report.extremeBiasDiagnosis.attenuationSlopePredictedOnActual} (1 would mean no shrinkage).`);
+    out();
+    out(`#### ${tc}: calibration of the point estimate (out-of-fold)`);
+    out();
+    const layer = report.calibrationLayer;
+    out(`Mean actual rating by predicted range. Calibration error (weighted mean |gap|): ${layer.without.calibrationError} without, ${layer.withIsotonic.calibrationError} with the isotonic layer; OOF MAE ${layer.without.mae} → ${layer.withIsotonic.mae}. Layer used: **${layer.used ? "yes" : "no"}**. Slope of actual on predicted: ${layer.without.slopeActualOnPredicted}.`);
+    out();
+    table(["Predicted", "n", "Mean predicted", "Mean actual", "Gap"], layer.without.bins.map((b) => [b.predicted, String(b.n), String(b.meanPredicted), String(b.meanActual), String(b.gap)]));
+    if (report.testIntervals) {
+      out(`#### ${tc}: interval coverage (test, nominal ${bench.level * 100}%)`);
+      out();
+      for (const [name, value] of Object.entries(report.testIntervals)) {
+        out(`**${name}**`);
+        out();
+        table(["Subgroup", "n", "Coverage", "Mean width"], coverageRows(value));
+      }
     }
   }
-  const preset = read("data/rating-corpus/preset-check.json");
-  if (preset) {
-    out("### Analysis preset (Quick-trained model, Balanced in the app)");
+}
+
+// Outcome model.
+const outcome = read(`${CORPUS}/outcome-model.json`) ?? read("data/rating-corpus/outcome-model.json");
+if (outcome) {
+  out("## 7. Rating-conditioned outcome model E[result | cp, rating, time control]");
+  out();
+  out(`Positions (side to move, own-engine cp, final score): train ${outcome.positions.train}, validation ${outcome.positions.validation}, test ${outcome.positions.test}. Chosen on validation: **${outcome.chosen}** (simplest model not significantly worse than the best, by a player-grouped bootstrap).`);
+  out();
+  table(["Model", "Val log loss", "Brier", "Calibration error", "Constraints"], Object.entries(outcome.models).map(([name, m]) => [name, String(m.validation.logLoss), String(m.validation.brier), String(m.validation.ece), m.constraints ? (m.constraints.monotoneAndNeutral ? `monotone, neutral; E(+3000 cp) ≥ ${m.constraints.minTailAt3000cp}` : "VIOLATED") : ""]));
+  out(`Log-loss improvement over the fixed Lichess curve (validation, 95% CI): ${JSON.stringify(outcome.chosenVsBaselineCI)}.`);
+  out();
+  if (outcome.test) {
+    out(`Test: chosen ${JSON.stringify(outcome.test.chosen)}, baseline ${JSON.stringify(outcome.test.baseline)}.`);
     out();
-    out(`${preset.pairs} test game-sides re-analyzed at Balanced; same shipped model on both feature sets.`);
-    out();
-    table(["Time control", "n", "MAE Quick", "MAE Balanced", "Coverage Quick", "Coverage Balanced", "Mean shift (Balanced − Quick)", "Mean absolute shift"],
-      Object.entries(preset.byTimeControl).map(([tc, v]) => [tc, String(v.n), String(v.quick.mae), String(v.balanced.mae), String(v.quick.coverage80), String(v.balanced.coverage80), String(v.meanShiftBalancedMinusQuick), String(v.meanAbsShift)]));
   }
-  out("## 7. 80% interval calibration (test)");
+  out("Expected score at fixed cp by rating band (chosen model):");
   out();
-  out("Coverage is close to 80% overall and by game length. By *true* rating band it is not: the estimate is a conditional mean, so it is pulled toward the population average, and players at the extremes (under 1200, over 2400) fall outside their range more often while mid-range players are over-covered. That is the honest limit of what one game reveals; the range is calibrated for a player whose rating you do not already know.");
+  const cps = Object.keys(outcome.curves.baseline);
+  table(["tc | band", ...cps.map((cp) => `+${cp}`)], Object.entries(outcome.curves).map(([key, v]) => [key, ...cps.map((cp) => String(v[cp]))]));
+  out("Validation log loss by rating band, chosen vs baseline:");
   out();
-  for (const [tc, report] of Object.entries(bench.timeControls)) {
-    out(`### ${tc}`);
+  table(["Band", "n", "Chosen", "Baseline"], Object.entries(outcome.validationByBand.chosen).map(([band, v]) => [band, String(v.n), String(v.logLoss), String(outcome.validationByBand.baseline[band]?.logLoss)]));
+}
+const regrade = read(`${CORPUS}/regrade.json`);
+if (regrade) {
+  out("### Would the rating-conditioned curve change displayed grades? (test players)");
+  out();
+  table(["Band", "Moves", "Blunder base → true / est", "Mistake base → true / est", "Inaccuracy base → true / est", "Grades changed (true / est)"],
+    Object.entries(regrade.bands).map(([band, v]) => [band, String(v.moves),
+      `${v.baseline.blunder} → ${v.ratedAtTrueRating.blunder} / ${v.ratedAtEstimate.blunder}`,
+      `${v.baseline.mistake} → ${v.ratedAtTrueRating.mistake} / ${v.ratedAtEstimate.mistake}`,
+      `${v.baseline.inaccuracy} → ${v.ratedAtTrueRating.inaccuracy} / ${v.ratedAtEstimate.inaccuracy}`,
+      `${Math.round(v.changedShare.trueRating * 100)}% / ${Math.round(v.changedShare.estimate * 100)}%`]));
+}
+const scale = read("data/golden/engine-scale.json");
+if (scale) {
+  out("### Lite vs Full centipawn scale");
+  out();
+  out(`${scale.summary.compared} positions at ${scale.summary.nodes} nodes: slope of Lite cp on Full cp ${scale.summary.slopeLiteOnFull}, median ratio ${scale.summary.medianRatioLiteOverFull}, mean |cp| Lite ${scale.summary.meanAbsCp.lite} vs Full ${scale.summary.meanAbsCp.full}, sign agreement ${scale.summary.signAgreement}.`);
+  out();
+}
+
+// Brilliant validation.
+const brilliantVal = read("data/brilliant-suite/validation-report.json");
+if (brilliantVal) {
+  out("## 8. Brilliant validation (expanded)");
+  out();
+  const a = brilliantVal.all;
+  out(`Labels come from Lichess's puzzle generator (positives) and Lichess's own game analysis / the actual game (negatives), never from KnightScope's rule. ${a.positives} positives, ${a.negatives} negatives.`);
+  out();
+  table(["Metric", "Value", "95% CI (Wilson)"], [
+    ["Precision", String(a.precision), JSON.stringify(a.precisionCI95)],
+    ["Recall", String(a.recall), JSON.stringify(a.recallCI95)],
+    ["False-positive rate", String(a.falsePositiveRate), JSON.stringify(a.falsePositiveRateCI95)],
+  ]);
+  table(["Category", "Label", "Brilliant / n", "Grades"], Object.entries(a.byCategory).map(([category, v]) => [category, v.label, `${v.brilliant}/${v.n}`, Object.entries(v.grades).map(([g, n]) => `${g} ${n}`).join(", ")]));
+  out("Why positives were not Brilliant:");
+  out();
+  table(["Decision", "Count"], Object.entries(a.positiveRejections).sort((x, y) => y[1] - x[1]).map(([k, v]) => [k, String(v)]));
+  if (a.falsePositiveCases.length) {
+    out("False positives:");
     out();
-    table(["Model", "Coverage of the 80% range", "Mean width"], Object.entries(report.intervals).map(([name, value]) => [name, String(value.coverage80), String(value.meanWidth)]));
-    if (report.intervals.ridge.model) {
-      const m = report.intervals.ridge.model;
-      out(`Shipped interval model: s(n) = sqrt(${Math.round(m.a)} + ${Math.round(m.b)}/n), bounds at ${m.qLow}·s and +${m.qHigh}·s (10th/90th percentiles of out-of-fold standardized residuals).`);
-      out();
-    }
-    const ridge = report.intervals.ridge;
-    out("Ridge (shipped) by meaningful decisions:");
-    out();
-    table(["Decisions", "n", "Coverage", "Mean width"], Object.entries(ridge.byDecisions).map(([key, value]) => [key, String(value.n), String(value.coverage), String(value.meanWidth)]));
-    out("Ridge (shipped) by rating band:");
-    out();
-    table(["Band", "n", "Coverage", "Mean width"], Object.entries(ridge.byBand).map(([key, value]) => [key, String(value.n), String(value.coverage), String(value.meanWidth)]));
+    table(["Case", "Move", "Source"], a.falsePositiveCases.map((c) => [c.id, c.move, c.source ?? ""]));
   }
 }
 
 // 8. Engine.
 const liteFull = read("data/golden/lite-vs-full.json");
 if (liteFull) {
-  out("## 8. Lite vs Full engine");
+  out("## 9. Lite vs Full engine");
   out();
   out(liteFull.note);
   out();

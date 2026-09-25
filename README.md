@@ -9,7 +9,13 @@ KnightScope is a private, browser-based chess game review. Paste or upload a PGN
 - calculate per-side accuracy (overall and by game phase); and
 - estimate a **Lichess-equivalent game performance** with an 80% range calibrated on held-out rated games.
 
-All engine work runs locally in Web Workers. PGNs are not uploaded or stored.
+**Privacy: chess analysis runs locally in your browser; game data is not uploaded.** Precisely: no PGN, move, FEN,
+engine line, classification, accuracy, rating estimate or anything else derived from a game leaves the device. The page
+does make network requests. It loads its own static files, including the Lite engine, and it makes the one-time opt-in
+download of the Full engine. All of these are plain `GET` requests for fixed, same-origin files, and none carries game
+data. There is no telemetry, analytics or error reporting. `tests/engine-assets.test.mjs` audits the source for every
+network API, and the browser end-to-end check in `docs/validation-report.md` recorded zero non-GET or cross-origin
+requests during a review.
 
 ## Run locally
 
@@ -92,7 +98,7 @@ In the app, **Engine: Auto / Lite / Full**:
 To host it:
 1. Bind an R2 bucket as `ENGINE_ASSETS`. For this template, set `"r2": "ENGINE_ASSETS"` in `.openai/hosting.json`, or add the binding to your Wrangler config.
 2. Run `npm run vendor:stockfish`.
-3. Upload the file: `npx wrangler r2 object put <bucket>/engine-assets/stockfish-19-single-8725c2657627.wasm --file .engine-assets/stockfish-19-single-8725c2657627.wasm --content-type application/wasm --remote`.
+3. Upload the file: `npx wrangler r2 object put <bucket>/engine-assets/stockfish-19-single-8725c2657276.wasm --file .engine-assets/stockfish-19-single-8725c2657276.wasm --content-type application/wasm --remote`.
 
 **UCI configuration** (`lib/uci-engine.ts`):
 - `Threads 1`, one engine per Web Worker. Parallelism comes from a pool of up to 4 workers (cores − 1, and 1 on low-memory devices).
@@ -141,24 +147,30 @@ Every threshold lives in `lib/review-config.ts`. Every reviewed move stores the 
 
 ### Evaluation and expected score
 
-Each `Evaluation` (`lib/evaluation.ts`) is always from one side's point of view. It keeps two scales apart:
+Every probability-like number in the model is an **expected score**, E[result] with win = 1, draw = ½, loss = 0. None of them is a win probability, and no field is called one. Each `Evaluation` (`lib/evaluation.ts`) is always from one side's point of view and keeps two scales apart:
 
 | Field | Scale | Used for |
 | --- | --- | --- |
 | `engineWdl`, `engineExpectedScore` | Stockfish 19's own WDL (`UCI_ShowWDL`). Fitted by the Stockfish project on engine self-play at fixed material, where +1.00 ≈ 50% wins. | Diagnostics, and the "objective" result class (win / draw / loss) in the Great rule |
-| `humanWinProbability`, `humanExpectedScore` | Lichess's published curve `1 / (1 + e^(−0.00368208·cp))` (lila `WinPercent`), on Stockfish 19's normalized centipawns | **Every user-facing classification** |
+| `baselineExpectedScore` | A **fixed, rating-independent** curve: Lichess's published `1 / (1 + e^(−0.00368208·cp))` (lila `WinPercent` ÷ 100), on Stockfish 19's normalized centipawns | **Every user-facing classification** |
 
-`humanExpectedScore` is the curve value, or exactly 1 / 0 for mates and tablebase results. Played moves are always graded
+`baselineExpectedScore` is the curve value, or exactly 1 / 0 for mates and tablebase results. Played moves are always graded
 from the mover's side, including Black.
 
-**What the human curve is, and isn't.** Lichess fitted it to real rated Lichess games between players rated around 2300,
-as a function of an older, pre-normalization Stockfish's evaluation. Despite the name it counts draws as half, so it
-works as an expected score. It is a population-average conversion for *strong* players. It is **not** an Elo-specific
-model: a 1000-rated player converts +3 far less reliably, and a 2700 more reliably. Applying it to Stockfish 19's
-normalized scale is an approximation. It is still used for grading because the engine scale grades human games far too
-harshly: under Stockfish WDL a ¾-pawn opening slip is a "Blunder". Both are kept; the old `EXPECTED_SCORE.model` switch is gone.
+**What the baseline curve is, and isn't.** Lichess fitted it to real rated Lichess games between players rated around 2300,
+as a function of an older, pre-normalization Stockfish's evaluation. Lichess calls it "Win%", but it was fitted with draws
+counted as half, so it is an expected score. It is a population-average conversion for *strong* players, **not** a
+rating-conditioned model. Applying it to Stockfish 19's normalized scale is an approximation. It is still used for grading
+because the engine scale grades human games far too harshly: under Stockfish WDL a ¾-pawn opening slip is a "Blunder".
 
-Grading uses **expected points lost** (`bestHumanExpectedScore − playedHumanExpectedScore`), not centipawn loss.
+**This is our own hybrid, not Chess.com's model.** The expected-points-loss bands below (Excellent < 0.02, Good < 0.05,
+Inaccuracy < 0.10, Mistake < 0.20, Blunder ≥ 0.20) are Chess.com's published Classification V2 thresholds. Chess.com
+applies them to its own Expected Points model, which conditions on the player's rating and is not public. We apply them
+to the fixed Lichess curve instead, so a move gets the same grade whoever plays it. Our own rating-conditioned model,
+E[result | cp, rating, time control], and whether it should replace the baseline curve, is covered under
+[Outcome model](#rating-conditioned-outcome-model).
+
+Grading uses **expected points lost** (`bestBaselineExpectedScore − playedBaselineExpectedScore`), not centipawn loss.
 
 The difference in practice: the same 150 cp loss is a **Mistake** from +0.2 → −1.3, but only **Good** from +9.0 → +7.5.
 
@@ -183,7 +195,7 @@ The EP bands start from Chess.com's public Classification V2 bands, as a baselin
 - Allowing a forced mate: Blunder (Mistake only when already lost and the mate is long).
 
 **Great** separates **uniqueness** from **importance**. Both are measured on the candidate (MultiPV 3) or verification lines:
-- `moveUniqueness`: how much better the move is than the best alternative, in human expected score (EP).
+- `moveUniqueness`: how much better the move is than the best alternative, in baseline expected score (EP).
 - `outcomeImportance`: the same gap after clamping both scores to the undecided range [0.15, 0.85]. Choosing between two winning continuations therefore has zero importance, however large the centipawn gap. Example: +8.6 vs +6.5 has importance 0; 0.00 vs −3.00 has importance 0.25.
 
 A move is Great when all of these hold:
@@ -322,7 +334,7 @@ Results are in [`docs/validation-report.md`](docs/validation-report.md) §4–7:
 - **Maia-3** ([CSSLab/maia3](https://github.com/CSSLab/maia3), ICLR 2026 "Chessformer") is **AGPL-3.0**.
   - Its only interface is Python/PyTorch, a UCI engine conditioned on `SelfElo`/`OppoElo` (Lichess ratings).
   - It has no ONNX or JS export, and its weights live on Hugging Face.
-  - Running it would mean server-side inference, which breaks KnightScope's "nothing leaves your device" design, and AGPL's network-use clause would then apply to that service.
+  - Running it would mean server-side inference, which would send game positions to a server and break KnightScope's "game data is not uploaded" design, and AGPL's network-use clause would then apply to that service.
 - **Maia-2** ([CSSLab/maia2](https://github.com/CSSLab/maia2)) is **MIT** and has separate Rapid/Blitz models conditioned on self/opponent Elo. It is also PyTorch-only.
 - **What shipped**: neither model, because neither can run in the browser today without a separate ONNX export and runtime port. The adapter interface is in place. The most direct path is exporting Maia-2 to ONNX and serving P(move | fen, R) through an optional, explicitly opt-in adapter.
 

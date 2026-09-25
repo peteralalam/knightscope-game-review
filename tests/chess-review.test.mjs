@@ -15,7 +15,7 @@ import {
   parseInfoLine,
   stockfishWdl,
 } from "../lib/evaluation.ts";
-import { HUMAN_CURVE } from "../lib/review-config.ts";
+import { BASELINE_CURVE } from "../lib/review-config.ts";
 
 const SIMPLE_PGN = `[Event "Test"]
 [White "Ada"]
@@ -38,7 +38,7 @@ const MISSED_MATE_PGN = `1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6 4. d3 g6 *`;
 
 /** An evaluation whose grading expected score is exactly `expected`. */
 function withE(expected, pv) {
-  const cp = Math.log(expected / (1 - expected)) / HUMAN_CURVE.slopePerCp;
+  const cp = Math.log(expected / (1 - expected)) / BASELINE_CURVE.slopePerCp;
   return makeEvaluation({ cp, pv, depth: 20, nodes: 150_000 });
 }
 
@@ -97,15 +97,15 @@ test("UCI parsing ignores aspiration bound lines and normalizes WDL", () => {
 
 test("mate and tablebase scores are decisive, never giant centipawns", () => {
   const mating = makeEvaluation({ mate: 3, pv: [] });
-  assert.equal(mating.humanExpectedScore, 1);
-  assert.equal(makeEvaluation({ mate: -2, pv: [] }).humanExpectedScore, 0);
+  assert.equal(mating.baselineExpectedScore, 1);
+  assert.equal(makeEvaluation({ mate: -2, pv: [] }).baselineExpectedScore, 0);
   const tb = makeEvaluation({ cp: 19_950, pv: [] });
   assert.deepEqual(tb.tablebase, { win: true, plies: 50 });
   assert.equal(tb.cp, undefined);
-  assert.equal(tb.humanExpectedScore, 1);
+  assert.equal(tb.baselineExpectedScore, 1);
   const lostTb = invertEvaluation(tb);
   assert.equal(lostTb.tablebase.win, false);
-  assert.equal(lostTb.humanExpectedScore, 0);
+  assert.equal(lostTb.baselineExpectedScore, 0);
 });
 
 test("perspective flips swap win/loss, cp and mate signs", () => {
@@ -113,7 +113,7 @@ test("perspective flips swap win/loss, cp and mate signs", () => {
   const black = invertEvaluation(white);
   assert.equal(black.cp, -120);
   assert.equal(black.engineWdl.win, white.engineWdl.loss);
-  assert.ok(Math.abs(black.humanExpectedScore + white.humanExpectedScore - 1) < 1e-12);
+  assert.ok(Math.abs(black.baselineExpectedScore + white.baselineExpectedScore - 1) < 1e-12);
   assert.ok(Math.abs(black.engineExpectedScore + white.engineExpectedScore - 1) < 1e-12);
   assert.equal(invertEvaluation(makeEvaluation({ mate: 4, pv: [] })).mate, -4);
 });

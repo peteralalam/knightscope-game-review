@@ -1695,3 +1695,7 @@ a:focus-visible {
   margin: 0;
   overflow-wrap: anywhere;
 }
+
+.grade-evidence__note {
+  margin: 8px 0 0;
+}

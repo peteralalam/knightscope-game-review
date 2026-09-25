@@ -4,15 +4,41 @@
  * - Nothing is fetched unless the user asks (or has already downloaded it).
  * - The download is a plain GET of a static, content-addressed file; no game
  *   data is ever sent anywhere. Analysis stays in this browser's Web Workers.
- * - The bytes are verified against the SHA-256 pinned in ENGINE_BUILDS before
- *   they are cached, and again every time they are loaded from the cache.
+ * - The bytes are verified against the SHA-256 pinned in ENGINE_BUILDS – i.e.
+ *   compiled into this application's own JavaScript – before they are cached,
+ *   and again every time they are loaded from the cache. No hash is ever
+ *   fetched from the asset host: a hash stored next to the binary could be
+ *   replaced together with it, and would then only detect accidental corruption.
+ *   The trust root is the deployed application itself.
  * - Cache Storage (not a service worker) keeps the file across visits; it is
  *   readable from the page, needs no extra headers and survives reloads.
  */
 import { ENGINE_BUILDS } from "./review-config.ts";
 
-const CACHE_NAME = "knightscope-engine-v19";
 const FULL = ENGINE_BUILDS.full;
+const CACHE_PREFIX = "knightscope-engine";
+
+/**
+ * Versioned by engine, port, network and binary hash, so an engine upgrade can
+ * never be served an older cached binary (and the old one is pruned).
+ */
+export function engineCacheName(build: { engine: string; port: string; network: string; wasmSha256: string } = FULL) {
+  const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
+  return [CACHE_PREFIX, slug(build.engine), slug(build.port), slug(build.network.split(" ")[0]), build.wasmSha256.slice(0, 16)].join(":");
+}
+
+const CACHE_NAME = engineCacheName();
+
+/** Drop engine caches written by any other build. */
+async function pruneStaleCaches() {
+  try {
+    for (const name of await caches.keys()) {
+      if (name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME) await caches.delete(name);
+    }
+  } catch {
+    // Pruning is best-effort.
+  }
+}
 
 export type FullEngineStatus =
   | { state: "ready" }
@@ -93,6 +119,7 @@ export async function downloadFullEngine(onProgress?: (fraction: number) => void
   if (hash !== FULL.wasmSha256) {
     throw new Error("The downloaded engine failed its integrity check and was discarded.");
   }
+  await pruneStaleCaches();
   const cache = await caches.open(CACHE_NAME);
   await cache.put(
     FULL.wasmUrl,
@@ -115,6 +142,6 @@ export async function fullEngineBlobUrl() {
 
 export async function deleteFullEngine() {
   if (!cacheAvailable()) return;
-  const cache = await caches.open(CACHE_NAME);
-  await cache.delete(FULL.wasmUrl);
+  await pruneStaleCaches();
+  await caches.delete(CACHE_NAME);
 }

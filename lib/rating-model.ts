@@ -2,9 +2,9 @@
  * Single-game performance estimation.
  *
  * Default path (when REGRESSION_MODELS has parameters for the time control):
- * a ridge regression on interpretable per-game features, calibrated on public
- * rated Lichess games with player-disjoint splits, and an 80 % interval derived
- * from held-out residuals. The output is a *Lichess-equivalent* blitz / rapid
+ * a ridge regression on interpretable, rating-independent per-game features,
+ * calibrated on rated Lichess games with player-disjoint splits, and an
+ * approximate range from Mondrian split-conformal out-of-fold residuals. The output is a *Lichess-equivalent* blitz / rapid
  * game performance – see scripts/corpus/rating_benchmark.py and
  * docs/validation-report.md for how it was fitted and how well it generalizes.
  *
@@ -202,14 +202,19 @@ export function posteriorQuantile(posterior: Posterior, q: number) {
 
 // --- Calibrated regression (the default when parameters exist) -------------
 //
-// A ridge regression from interpretable per-game features to the player's
-// Lichess rating, fitted separately for blitz and rapid on public rated Lichess
-// games with player-disjoint train / validation / test splits
-// (scripts/corpus/rating_benchmark.py). The 80 % interval comes from held-out
-// residuals: residual spread is modelled as s(n) = sqrt(a + b / n) in the number
-// of meaningful decisions n, and the 10th / 90th percentiles of the
-// standardized validation residuals set the bounds. Short games therefore get
-// wider ranges because they measurably are less predictable – not by fiat.
+// A ridge regression from interpretable, rating-independent per-game features
+// to the player's Lichess rating, fitted separately for blitz and rapid on
+// rated Lichess games with player-disjoint splits
+// (scripts/corpus/rating_benchmark.py). Optionally followed by a monotone
+// (isotonic) calibration layer fitted on out-of-fold predictions.
+//
+// The range is a Mondrian split-conformal interval: the out-of-fold residuals
+// of players with a similar ESTIMATE and a similar number of meaningful
+// decisions (both known here – never the true rating) give its 10th / 90th
+// percentiles. It is therefore calibrated conditional on the estimate, not on
+// the player's true rating: at the rating extremes the estimate regresses
+// toward the middle and the range covers the true rating less often. The UI
+// calls it an "approximate performance range" for that reason.
 
 /** Raw regression inputs, in order. `null` = not measurable in this game. */
 export const RATING_FEATURES = [
@@ -218,14 +223,14 @@ export const RATING_FEATURES = [
   "logP75Loss",
   "logP90Loss",
   "logComplexityWeightedLoss",
-  "blunderRate",
-  "mistakeRate",
-  "inaccuracyRate",
+  "severeLossRate",
+  "largeLossRate",
+  "moderateLossRate",
   "top1Agreement",
   "top3Agreement",
   "criticalAccuracy",
   "onlyMoveSuccess",
-  "opportunityConversion",
+  "punishRate",
   "defensiveAccuracy",
   "conversionAccuracy",
   "middlegameAccuracy",
@@ -244,14 +249,14 @@ export function ratingFeatureVector(features: PerformanceFeatures): Array<number
     Math.log(features.p75Loss + LOSS_FLOOR),
     Math.log(features.p90Loss + LOSS_FLOOR),
     Math.log(features.complexityWeightedLoss + LOSS_FLOOR),
-    features.blunderRate,
-    features.mistakeRate,
-    features.inaccuracyRate,
+    features.severeLossRate,
+    features.largeLossRate,
+    features.moderateLossRate,
     features.top1Agreement,
     features.topNAgreement,
     percentOrNull(features.criticalAccuracy),
     features.onlyMoveSuccess,
-    features.opportunityConversion,
+    features.punishRate,
     percentOrNull(features.defensiveAccuracy),
     percentOrNull(features.conversionAccuracy),
     percentOrNull(features.middlegameAccuracy),
@@ -270,32 +275,76 @@ export interface RegressionModelParams {
   imputation: number[];
   /** Raw features that get a 0/1 "was missing" indicator appended, by index. */
   missingIndicators: number[];
+  /** Optional second-order terms: squares of the standardized raw features and their products with one feature. */
+  expansion: { rawMean: number[]; rawScale: number[]; interactWith: number } | null;
   mean: number[];
   scale: number[];
   coefficients: number[];
   intercept: number;
-  interval: { a: number; b: number; qLow: number; qHigh: number };
+  /** Monotone calibration map (isotonic knots, linear in between, clipped at the ends). */
+  calibration: { x: number[]; y: number[] } | null;
   clamp: [number, number];
-  heldOut: { mae: number; coverage80: number; samples: number };
+  conformal: { level: number; groups: ConformalGroup[] };
+  heldOut: { mae: number; coverage80: number; samples: number } | null;
 }
 
-/** Imputed raw features followed by the 0/1 missing indicators the model uses. */
+export interface ConformalGroup {
+  /** Calibration cell on the (calibrated) estimate and the meaningful-decision count; null = open. */
+  predLow: number | null;
+  predHigh: number | null;
+  decisionsLow: number;
+  decisionsHigh: number | null;
+  /** Residual (true − estimate) quantiles of this cell. */
+  qLow: number;
+  qHigh: number;
+  n: number;
+}
+
+/** Imputed raw features, the 0/1 missing indicators, then any second-order terms. */
 export function expandedFeatures(raw: Array<number | null>, params: RegressionModelParams) {
-  const values = raw.map((value, index) => value ?? params.imputation[index]);
+  const filled = raw.map((value, index) => value ?? params.imputation[index]);
+  const values = [...filled];
   for (const index of params.missingIndicators) values.push(raw[index] === null ? 1 : 0);
+  if (params.expansion) {
+    const { rawMean, rawScale, interactWith } = params.expansion;
+    const z = filled.map((value, index) => (value - rawMean[index]) / rawScale[index]);
+    for (const value of z) values.push(value * value);
+    for (const value of z) values.push(value * z[interactWith]);
+  }
   return values;
 }
 
-/** Estimate and 80 % interval from a raw feature vector (see ratingFeatureVector). */
+/** Piecewise-linear evaluation of the isotonic calibration knots. */
+export function applyCalibration(value: number, calibration: RegressionModelParams["calibration"]) {
+  if (!calibration || calibration.x.length === 0) return value;
+  const { x, y } = calibration;
+  if (value <= x[0]) return y[0];
+  if (value >= x[x.length - 1]) return y[y.length - 1];
+  let index = 1;
+  while (x[index] < value) index += 1;
+  const t = (value - x[index - 1]) / (x[index] - x[index - 1] || 1);
+  return y[index - 1] + t * (y[index] - y[index - 1]);
+}
+
+export function conformalGroup(center: number, meaningfulMoves: number, groups: ConformalGroup[]) {
+  return groups.find((group) =>
+    (group.predLow === null || center >= group.predLow) &&
+    (group.predHigh === null || center < group.predHigh) &&
+    meaningfulMoves >= group.decisionsLow &&
+    (group.decisionsHigh === null || meaningfulMoves < group.decisionsHigh)) ?? groups[groups.length - 1];
+}
+
+/** Estimate and conformal range from a raw feature vector (see ratingFeatureVector). */
 export function regressionFromVector(raw: Array<number | null>, meaningfulMoves: number, params: RegressionModelParams) {
   const values = expandedFeatures(raw, params);
   let prediction = params.intercept;
   values.forEach((value, index) => {
     prediction += params.coefficients[index] * ((value - params.mean[index]) / params.scale[index]);
   });
-  const center = Math.min(params.clamp[1], Math.max(params.clamp[0], prediction));
-  const spread = Math.sqrt(Math.max(1, params.interval.a + params.interval.b / Math.max(1, meaningfulMoves)));
-  return { center, low: center + params.interval.qLow * spread, high: center + params.interval.qHigh * spread };
+  const clamped = Math.min(params.clamp[1], Math.max(params.clamp[0], prediction));
+  const center = applyCalibration(clamped, params.calibration);
+  const group = conformalGroup(center, meaningfulMoves, params.conformal.groups);
+  return { center, low: center + group.qLow, high: center + group.qHigh };
 }
 
 export function regressionEstimate(features: PerformanceFeatures, params: RegressionModelParams) {
@@ -343,8 +392,8 @@ export function estimatePerformance(
       model: regression.params.id,
       calibrated: true,
       extrapolated: regression.extrapolated,
-      heldOutMae: regression.params.heldOut.mae,
-      heldOutCoverage: regression.params.heldOut.coverage80,
+      heldOutMae: regression.params.heldOut?.mae,
+      heldOutCoverage: regression.params.heldOut?.coverage80,
     };
   }
 

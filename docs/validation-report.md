@@ -196,214 +196,332 @@ Brilliant candidates (near-best moves that give up material):
 
 ## 4. Rating dataset
 
-2140 rated Lichess games → 4271 game-sides from 3963 players (analyzed at the quick preset, Stockfish 19 Lite WASM [stockfish.js npm lite-single]).
+Corpus `data/rating-corpus`: 2140 rated Lichess games → 4271 player-games from 3963 players (analyzed at the quick preset, Stockfish 19 Lite WASM [stockfish.js npm lite-single]).
 
 | Time control | 800–1000 | 1000–1200 | 1200–1400 | 1400–1600 | 1600–1800 | 1800–2000 | 2000–2200 | 2200–2400 | 2400+ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | blitz | 0 | 1 | 0 | 294 | 329 | 303 | 251 | 308 | 315 |
 | rapid | 109 | 241 | 306 | 272 | 327 | 328 | 311 | 312 | 264 |
 
-Sources: lichess-datasnaek 1116, lichess-puzzle-db 3155. Filters (games dropped): casual (unrated) game: 3904; non-standard variant or custom start position: 0; anonymous player or missing rating: 0; provisional rating (fewer than ~20 rated games in that pool): 5629; cheat detection, abandonment ('timeout' = opponent left), aborted or unknown finish: 475; time class other than blitz / rapid (bullet, classical, correspondence): 7018; fewer than 12 plies (no meaningful sample of decisions): 464; more than 240 plies (the reviewer's limit): 17; move list does not replay legally: 0; same game id (or same players and moves) already seen: 558; a player outside 800–3200: 8. Per-player cap 3 games; stratified by the players' mean rating band, up to 150 games per (time control, band).
-
 ## 5. Split
 
-Connected components of the player-game graph, hashed to 60/20/20 train/validation/test. Train 2660, validation 789, test 822 game-sides; players appearing in more than one split: **0**. Model choice, hyperparameters and the interval model use 5-fold player-grouped cross-validation on train+validation; the final model is refit on train+validation; every held-out number is on test.
+Connected components of the player-game graph, hashed to 60/20/20 train/validation/test. Players appearing in more than one split: **0**.
 
-## 6. Held-out accuracy
+Every choice (model family, hyperparameters, weighting, calibration layer, interval model) was made by 5-fold player-grouped cross-validation on train + validation. Test was scored once, after those choices were frozen.
 
-### blitz (test n = 358)
+## 6. Held-out accuracy, calibration and intervals
+
+### blitz: chosen model `ridge` + isotonic calibration
+
+Cross-validated (train + validation, out-of-fold):
+
+| Model | Param | MAE | ± SE | Median AE | RMSE | R² |
+| --- | --- | --- | --- | --- | --- | --- |
+| ridge | 300 | 255.3 | 3.3 | 243 | 304.5 | 0.253 |
+| ridge-w | 1000 | 269.4 | 5.3 | 254.1 | 325.6 | 0.145 |
+| constant | "" | 307.1 |  |  |  |  |
+
+Test (n = 358):
 
 | Model | MAE | Median AE | RMSE | R² | Bias |
 | --- | --- | --- | --- | --- | --- |
 | constant | 301.3 | 309 | 343.8 | -0.001 | 10.8 |
 | heuristic | 476.4 | 438 | 558.8 | -1.644 | -458.5 |
-| errmodel | 287.5 | 302 | 327.9 | 0.089 | -3.1 |
-| isotonic | 260.4 | 240.6 | 305.5 | 0.21 | 4.1 |
-| ridge | 242.8 | 231.6 | 284.7 | 0.314 | 5.6 |
-| gbm | 235.1 | 217.6 | 282.7 | 0.323 | 8.8 |
-| ridge+opponent (not shipped) | 233.8 | 209.1 | 276.6 | 0.352 | 5.3 |
+| ridge | 243.4 | 228.7 | 284.7 | 0.314 | 6.6 |
+| ridge-w | 264.9 | 242.4 | 314.2 | 0.164 | -53 |
+| shipped | 239.1 | 223.8 | 283 | 0.322 | 2.6 |
 
-MAE by rating band:
+Test MAE (bias) by true rating band:
 
-| rating band | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1400–1600 | 62 | 457 | 227 | 422 | 373 | 342 | 327 | 322 |
-| 1600–1800 | 67 | 323 | 284 | 294 | 247 | 250 | 239 | 246 |
-| 1800–2000 | 58 | 101 | 373 | 90 | 145 | 130 | 141 | 134 |
-| 2000–2200 | 45 | 77 | 566 | 95 | 142 | 135 | 146 | 144 |
-| 2200–2400 | 71 | 286 | 671 | 287 | 232 | 210 | 199 | 203 |
-| 2400+ | 55 | 514 | 777 | 495 | 406 | 372 | 346 | 338 |
+| Band | n | constant | heuristic | ridge | ridge-w | shipped |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1400–1599 | 62 | 456.8 (+456.8) | 226.7 (-157.5) | 339.8 (+339.8) | 299.4 (+287.5) | 325.6 (+325.6) |
+| 1600–1799 | 67 | 323.2 (+323.2) | 283.6 (-259) | 253.6 (+238.3) | 218.8 (+205.2) | 227.8 (+223.7) |
+| 1800–1999 | 58 | 101.3 (+101.3) | 373.1 (-364.7) | 130.3 (+66.6) | 125.5 (+25.7) | 144.4 (+56.5) |
+| 2000–2199 | 45 | 77 (-76.3) | 565.8 (-565.8) | 139.1 (-83.5) | 176.4 (-125.5) | 176.8 (-100.2) |
+| 2200–2399 | 71 | 285.7 (-285.7) | 671.1 (-671.1) | 211.2 (-204.6) | 293.5 (-293.2) | 205.4 (-194.2) |
+| 2400+ | 55 | 514 (-514) | 777.3 (-777.3) | 368.5 (-368.5) | 464.8 (-464.8) | 349.3 (-349.3) |
 
-MAE by meaningful decisions:
+Why the extremes are biased (out-of-fold, chosen model): bias by true band × meaningful decisions. If more decisions shrink the bias, the cause is missing information in one game rather than model form.
 
-| meaningful decisions | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| <15 | 18 | 239 | 461 | 217 | 176 | 200 | 191 | 193 |
-| 15–24 | 109 | 316 | 439 | 302 | 275 | 240 | 246 | 228 |
-| 25–39 | 139 | 305 | 502 | 294 | 269 | 262 | 251 | 258 |
-| 40+ | 92 | 291 | 486 | 275 | 248 | 225 | 208 | 214 |
+| Band | decisions | n | Bias |
+| --- | --- | --- |
+| 1400–1599 | <20 | 51 | 305.8 |
+| 1400–1599 | 20–34 | 106 | 344.5 |
+| 1400–1599 | 35+ | 75 | 426.3 |
+| 1600–1799 | <20 | 61 | 181.8 |
+| 1600–1799 | 20–34 | 111 | 213.6 |
+| 1600–1799 | 35+ | 90 | 309.4 |
+| 1800–1999 | <20 | 51 | 15.5 |
+| 1800–1999 | 20–34 | 115 | 73.5 |
+| 1800–1999 | 35+ | 79 | 149.2 |
+| 2000–2199 | <20 | 33 | -100.5 |
+| 2000–2199 | 20–34 | 94 | -75.7 |
+| 2000–2199 | 35+ | 79 | -2.5 |
+| 2200–2399 | <20 | 36 | -261.3 |
+| 2200–2399 | 20–34 | 98 | -244.6 |
+| 2200–2399 | 35+ | 103 | -211.4 |
+| 2400+ | <20 | 27 | -381.6 |
+| 2400+ | 20–34 | 90 | -400.7 |
+| 2400+ | 35+ | 143 | -383.6 |
 
-MAE by game result:
+Attenuation: slope of the estimate on the true rating = 0.237 (1 would mean no shrinkage).
 
-| game result | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| win | 172 | 312 | 436 | 298 | 275 | 251 | 249 | 247 |
-| draw | 14 | 357 | 566 | 347 | 302 | 251 | 214 | 206 |
-| loss | 172 | 286 | 510 | 272 | 243 | 234 | 223 | 223 |
+#### blitz: calibration of the point estimate (out-of-fold)
 
-MAE by phase composition:
+Mean actual rating by predicted range. Calibration error (weighted mean |gap|): 27.9 without, 11.8 with the isotonic layer; OOF MAE 255.3 → 252.5. Layer used: **yes**. Slope of actual on predicted: 1.073.
 
-| phase composition | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| no endgame | 173 | 298 | 484 | 286 | 256 | 243 | 242 | 237 |
-| some endgame | 88 | 297 | 492 | 281 | 258 | 235 | 229 | 228 |
-| endgame-heavy | 97 | 310 | 449 | 296 | 271 | 249 | 228 | 234 |
+| Predicted | n | Mean predicted | Mean actual | Gap |
+| --- | --- | --- | --- | --- |
+| 1600–1799 | 125 | 1740 | 1746 | 6 |
+| 1800–1999 | 522 | 1908 | 1866 | -42 |
+| 2000–2199 | 581 | 2088 | 2109 | 21 |
+| 2200+ | 206 | 2276 | 2301 | 25 |
 
-MAE by source:
+#### blitz: interval coverage (test, nominal 80%)
 
-| source | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| lichess-puzzle-db | 358 | 301 | 476 | 288 | 260 | 243 | 235 | 234 |
+**mondrian**
 
-### rapid (test n = 464)
+| Subgroup | n | Coverage | Mean width |
+| --- | --- | --- | --- |
+| overall |  | 0.846 | 805 |
+| predicted 1600–1799 | 59 | 0.915 | 618 |
+| predicted 1800–1999 | 115 | 0.774 | 792 |
+| predicted 2000–2199 | 119 | 0.84 | 872 |
+| predicted 2200+ | 65 | 0.923 | 873 |
+| true 1400–1599 | 62 | 0.565 | 747 |
+| true 1600–1799 | 67 | 0.97 | 774 |
+| true 1800–1999 | 58 | 1 | 788 |
+| true 2000–2199 | 45 | 1 | 807 |
+| true 2200–2399 | 71 | 0.901 | 850 |
+| true 2400+ | 55 | 0.655 | 865 |
+| <20 decisions | 63 | 0.841 | 753 |
+| 20–34 decisions | 168 | 0.863 | 777 |
+| 35+ decisions | 127 | 0.827 | 867 |
+| <50 plies | 46 | 0.783 | 735 |
+| 50–79 | 172 | 0.86 | 780 |
+| 80–119 | 94 | 0.83 | 847 |
+| 120+ | 46 | 0.891 | 878 |
+
+**scale(previous)**
+
+| Subgroup | n | Coverage | Mean width |
+| --- | --- | --- | --- |
+| overall |  | 0.832 | 783 |
+| predicted 1600–1799 | 59 | 0.949 | 783 |
+| predicted 1800–1999 | 115 | 0.817 | 783 |
+| predicted 2000–2199 | 119 | 0.756 | 783 |
+| predicted 2200+ | 65 | 0.892 | 783 |
+| true 1400–1599 | 62 | 0.645 | 783 |
+| true 1600–1799 | 67 | 0.836 | 783 |
+| true 1800–1999 | 58 | 0.966 | 783 |
+| true 2000–2199 | 45 | 1 | 783 |
+| true 2200–2399 | 71 | 0.887 | 783 |
+| true 2400+ | 55 | 0.691 | 783 |
+| <20 decisions | 63 | 0.825 | 783 |
+| 20–34 decisions | 168 | 0.845 | 783 |
+| 35+ decisions | 127 | 0.819 | 783 |
+| <50 plies | 46 | 0.804 | 783 |
+| 50–79 | 172 | 0.826 | 783 |
+| 80–119 | 94 | 0.862 | 783 |
+| 120+ | 46 | 0.826 | 783 |
+
+**neymanBelt(research)**
+
+| Subgroup | n | Coverage | Mean width |
+| --- | --- | --- | --- |
+| overall |  | 0.835 | 1453 |
+| predicted 1600–1799 | 59 | 0.559 | 1121 |
+| predicted 1800–1999 | 115 | 0.957 | 1608 |
+| predicted 2000–2199 | 119 | 0.958 | 1758 |
+| predicted 2200+ | 65 | 0.646 | 920 |
+| true 1400–1599 | 62 | 0.887 | 1497 |
+| true 1600–1799 | 67 | 0.881 | 1456 |
+| true 1800–1999 | 58 | 0.724 | 1440 |
+| true 2000–2199 | 45 | 0.756 | 1493 |
+| true 2200–2399 | 71 | 0.845 | 1530 |
+| true 2400+ | 55 | 0.891 | 1277 |
+| <20 decisions | 63 | 0.794 | 1420 |
+| 20–34 decisions | 168 | 0.815 | 1240 |
+| 35+ decisions | 127 | 0.882 | 1749 |
+| <50 plies | 46 | 0.783 | 1425 |
+| 50–79 | 172 | 0.808 | 1275 |
+| 80–119 | 94 | 0.894 | 1656 |
+| 120+ | 46 | 0.87 | 1728 |
+
+### rapid: chosen model `ridge-w` + isotonic calibration
+
+Cross-validated (train + validation, out-of-fold):
+
+| Model | Param | MAE | ± SE | Median AE | RMSE | R² |
+| --- | --- | --- | --- | --- | --- | --- |
+| ridge | 30 | 292.5 | 4.6 | 263.2 | 356.8 | 0.444 |
+| ridge-w | 30 | 291.4 | 4.6 | 260.2 | 358.1 | 0.44 |
+| constant | "" | 413 |  |  |  |  |
+
+Test (n = 464):
 
 | Model | MAE | Median AE | RMSE | R² | Bias |
 | --- | --- | --- | --- | --- | --- |
 | constant | 341.3 | 324 | 417 | -0.001 | -16.1 |
 | heuristic | 407.6 | 360.5 | 500.2 | -0.44 | -338.6 |
-| errmodel | 261 | 217.5 | 329.5 | 0.375 | -15.6 |
-| isotonic | 307.8 | 270.9 | 374.2 | 0.194 | -11.4 |
-| ridge | 249.1 | 212.5 | 314.7 | 0.43 | -14.7 |
-| gbm | 241 | 209.6 | 302.9 | 0.472 | -3.4 |
-| ridge+opponent (not shipped) | 238.1 | 197.9 | 301.1 | 0.478 | -17.1 |
+| ridge | 250.7 | 221.3 | 314.7 | 0.43 | -7.3 |
+| ridge-w | 253.4 | 220.4 | 318.1 | 0.417 | -39.3 |
+| shipped | 249.1 | 217.1 | 312.2 | 0.439 | -10.8 |
 
-MAE by rating band:
+Test MAE (bias) by true rating band:
 
-| rating band | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 800–1000 | 17 | 816 | 243 | 421 | 595 | 439 | 439 | 410 |
-| 1000–1200 | 32 | 655 | 151 | 324 | 471 | 365 | 294 | 303 |
-| 1200–1400 | 46 | 466 | 158 | 246 | 323 | 236 | 190 | 236 |
-| 1400–1600 | 51 | 269 | 208 | 192 | 282 | 213 | 213 | 188 |
-| 1600–1800 | 85 | 67 | 323 | 210 | 204 | 157 | 199 | 164 |
-| 1800–2000 | 81 | 111 | 377 | 179 | 153 | 168 | 211 | 174 |
-| 2000–2200 | 65 | 334 | 547 | 241 | 244 | 207 | 200 | 221 |
-| 2200–2400 | 50 | 518 | 737 | 351 | 431 | 321 | 273 | 299 |
-| 2400+ | 37 | 705 | 864 | 456 | 575 | 495 | 399 | 435 |
+| Band | n | constant | heuristic | ridge | ridge-w | shipped |
+| --- | --- | --- | --- | --- | --- | --- |
+| 800–999 | 17 | 815.8 (+815.8) | 243.1 (+196) | 445.9 (+413.1) | 403 (+353.5) | 430.3 (+430.3) |
+| 1000–1199 | 32 | 654.8 (+654.8) | 151.4 (+121) | 372.6 (+358.2) | 333.6 (+310.3) | 324.4 (+322.6) |
+| 1200–1399 | 46 | 466.1 (+466.1) | 158.2 (-13.5) | 239.5 (+197.6) | 225.6 (+149.6) | 205.7 (+161.8) |
+| 1400–1599 | 51 | 269.1 (+269.1) | 207.5 (-120.2) | 230.4 (+201.2) | 206.5 (+159.6) | 209.3 (+169.9) |
+| 1600–1799 | 85 | 66.5 (+61.8) | 323.1 (-286.8) | 166.6 (+33.6) | 175.1 (-1) | 204.8 (+12.2) |
+| 1800–1999 | 81 | 111 (-111) | 376.5 (-362.8) | 160.4 (-12.8) | 175.8 (-41) | 195 (-10.4) |
+| 2000–2199 | 65 | 334.3 (-334.3) | 546.5 (-538.6) | 212.4 (-160.2) | 237.8 (-180.7) | 225.2 (-148.3) |
+| 2200–2399 | 50 | 518.2 (-518.2) | 736.9 (-736.9) | 307.7 (-298.1) | 325 (-314.3) | 276.4 (-264.6) |
+| 2400+ | 37 | 704.8 (-704.8) | 863.7 (-863.7) | 478.7 (-478.7) | 495.6 (-495.6) | 435.2 (-435.2) |
 
-MAE by meaningful decisions:
+Why the extremes are biased (out-of-fold, chosen model): bias by true band × meaningful decisions. If more decisions shrink the bias, the cause is missing information in one game rather than model form.
 
-| meaningful decisions | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| <15 | 55 | 382 | 347 | 332 | 357 | 303 | 255 | 316 |
-| 15–24 | 137 | 360 | 325 | 250 | 303 | 246 | 257 | 224 |
-| 25–39 | 177 | 316 | 439 | 255 | 302 | 239 | 236 | 225 |
-| 40+ | 95 | 338 | 503 | 247 | 298 | 242 | 220 | 238 |
-
-MAE by game result:
-
-| game result | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| win | 225 | 334 | 384 | 262 | 302 | 248 | 237 | 240 |
-| draw | 14 | 284 | 356 | 151 | 196 | 212 | 220 | 216 |
-| loss | 225 | 352 | 435 | 267 | 321 | 252 | 246 | 237 |
-
-MAE by phase composition:
-
-| phase composition | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| no endgame | 222 | 347 | 407 | 277 | 313 | 256 | 243 | 244 |
-| some endgame | 112 | 282 | 427 | 248 | 283 | 229 | 259 | 230 |
-| endgame-heavy | 130 | 383 | 393 | 245 | 320 | 255 | 223 | 235 |
-
-MAE by source:
-
-| source | n | constant | heuristic | errmodel | isotonic | ridge | gbm | ridge+opponent (not shipped) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| lichess-datasnaek | 206 | 348 | 219 | 244 | 297 | 242 | 230 | 230 |
-| lichess-puzzle-db | 258 | 336 | 558 | 275 | 317 | 255 | 250 | 245 |
-
-### Analysis preset (Quick-trained model, Balanced in the app)
-
-240 test game-sides re-analyzed at Balanced; same shipped model on both feature sets.
-
-| Time control | n | MAE Quick | MAE Balanced | Coverage Quick | Coverage Balanced | Mean shift (Balanced − Quick) | Mean absolute shift |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| blitz | 98 | 273.2 | 271.1 | 0.827 | 0.888 | -10.7 | 35.2 |
-| rapid | 142 | 235.3 | 225.7 | 0.852 | 0.859 | 16.2 | 69.7 |
-
-## 7. 80% interval calibration (test)
-
-Coverage is close to 80% overall and by game length. By *true* rating band it is not: the estimate is a conditional mean, so it is pulled toward the population average, and players at the extremes (under 1200, over 2400) fall outside their range more often while mid-range players are over-covered. That is the honest limit of what one game reveals; the range is calibrated for a player whose rating you do not already know.
-
-### blitz
-
-| Model | Coverage of the 80% range | Mean width |
+| Band | decisions | n | Bias |
 | --- | --- | --- |
-| heuristic | 0.43 | 757 |
-| errmodel | 0.816 | 872 |
-| isotonic | 0.832 | 847 |
-| ridge | 0.841 | 806 |
-| gbm | 0.849 | 802 |
+| 800–999 | <20 | 47 | 293.4 |
+| 800–999 | 20–34 | 29 | 399.7 |
+| 800–999 | 35+ | 16 | 625.9 |
+| 1000–1199 | <20 | 105 | 162.1 |
+| 1000–1199 | 20–34 | 76 | 342.1 |
+| 1000–1199 | 35+ | 28 | 525.2 |
+| 1200–1399 | <20 | 128 | 185.1 |
+| 1200–1399 | 20–34 | 94 | 278.8 |
+| 1200–1399 | 35+ | 38 | 352.5 |
+| 1400–1599 | <20 | 92 | 40.3 |
+| 1400–1599 | 20–34 | 85 | 130.8 |
+| 1400–1599 | 35+ | 44 | 327.8 |
+| 1600–1799 | <20 | 77 | -72.7 |
+| 1600–1799 | 20–34 | 92 | 30.3 |
+| 1600–1799 | 35+ | 73 | 138.2 |
+| 1800–1999 | <20 | 52 | -225.9 |
+| 1800–1999 | 20–34 | 109 | -108.3 |
+| 1800–1999 | 35+ | 86 | 11.3 |
+| 2000–2199 | <20 | 44 | -269 |
+| 2000–2199 | 20–34 | 114 | -242.8 |
+| 2000–2199 | 35+ | 88 | -125.1 |
+| 2200–2399 | <20 | 49 | -442.6 |
+| 2200–2399 | 20–34 | 109 | -336.2 |
+| 2200–2399 | 35+ | 104 | -236.2 |
+| 2400+ | <20 | 28 | -597.2 |
+| 2400+ | 20–34 | 92 | -484.8 |
+| 2400+ | 35+ | 107 | -357.8 |
 
-Shipped interval model: s(n) = sqrt(104717 + 0/n), bounds at -1.209·s and +1.282·s (10th/90th percentiles of out-of-fold standardized residuals).
+Attenuation: slope of the estimate on the true rating = 0.467 (1 would mean no shrinkage).
 
-Ridge (shipped) by meaningful decisions:
+#### rapid: calibration of the point estimate (out-of-fold)
 
-| Decisions | n | Coverage | Mean width |
+Mean actual rating by predicted range. Calibration error (weighted mean |gap|): 50.3 without, 16.1 with the isotonic layer; OOF MAE 291.4 → 284.1. Layer used: **yes**. Slope of actual on predicted: 0.954.
+
+| Predicted | n | Mean predicted | Mean actual | Gap |
+| --- | --- | --- | --- | --- |
+| <1000 | 53 | 894 | 1164 | 270 |
+| 1000–1199 | 76 | 1114 | 1189 | 75 |
+| 1200–1399 | 187 | 1305 | 1349 | 44 |
+| 1400–1599 | 318 | 1502 | 1487 | -15 |
+| 1600–1799 | 446 | 1701 | 1676 | -25 |
+| 1800–1999 | 466 | 1900 | 1962 | 62 |
+| 2000–2199 | 329 | 2084 | 2159 | 75 |
+| 2200+ | 131 | 2321 | 2296 | -25 |
+
+#### rapid: interval coverage (test, nominal 80%)
+
+**mondrian**
+
+| Subgroup | n | Coverage | Mean width |
 | --- | --- | --- | --- |
-| <15 | 18 | 0.833 | 806 |
-| 15–24 | 109 | 0.853 | 806 |
-| 25–39 | 139 | 0.784 | 806 |
-| 40+ | 92 | 0.913 | 806 |
+| overall |  | 0.877 | 955 |
+| predicted 1000–1199 | 12 | 1 | 765 |
+| predicted 1200–1399 | 37 | 0.838 | 765 |
+| predicted 1400–1599 | 96 | 0.823 | 1022 |
+| predicted 1600–1799 | 101 | 0.891 | 1061 |
+| predicted 1800–1999 | 105 | 0.876 | 1013 |
+| predicted 2000–2199 | 96 | 0.906 | 823 |
+| predicted 2200+ | 17 | 0.941 | 865 |
+| true 800–999 | 17 | 0.412 | 885 |
+| true 1000–1199 | 32 | 0.75 | 927 |
+| true 1200–1399 | 46 | 0.935 | 931 |
+| true 1400–1599 | 51 | 1 | 1028 |
+| true 1600–1799 | 85 | 0.976 | 998 |
+| true 1800–1999 | 81 | 0.975 | 972 |
+| true 2000–2199 | 65 | 0.923 | 926 |
+| true 2200–2399 | 50 | 0.86 | 918 |
+| true 2400+ | 37 | 0.459 | 902 |
+| <20 decisions | 125 | 0.872 | 955 |
+| 20–34 decisions | 206 | 0.874 | 964 |
+| 35+ decisions | 133 | 0.887 | 939 |
+| <50 plies | 100 | 0.86 | 953 |
+| 50–79 | 186 | 0.855 | 965 |
+| 80–119 | 144 | 0.91 | 955 |
+| 120+ | 34 | 0.912 | 902 |
 
-Ridge (shipped) by rating band:
+**scale(previous)**
 
-| Band | n | Coverage | Mean width |
+| Subgroup | n | Coverage | Mean width |
 | --- | --- | --- | --- |
-| 1400–1600 | 62 | 0.565 | 806 |
-| 1600–1800 | 67 | 0.925 | 806 |
-| 1800–2000 | 58 | 0.983 | 806 |
-| 2000–2200 | 45 | 1 | 806 |
-| 2200–2400 | 71 | 0.915 | 806 |
-| 2400+ | 55 | 0.673 | 806 |
+| overall |  | 0.845 | 888 |
+| predicted 1000–1199 | 12 | 1 | 931 |
+| predicted 1200–1399 | 37 | 0.892 | 918 |
+| predicted 1400–1599 | 96 | 0.792 | 900 |
+| predicted 1600–1799 | 101 | 0.812 | 882 |
+| predicted 1800–1999 | 105 | 0.81 | 879 |
+| predicted 2000–2199 | 96 | 0.927 | 876 |
+| predicted 2200+ | 17 | 0.882 | 888 |
+| true 800–999 | 17 | 0.529 | 899 |
+| true 1000–1199 | 32 | 0.75 | 908 |
+| true 1200–1399 | 46 | 0.87 | 913 |
+| true 1400–1599 | 51 | 0.941 | 886 |
+| true 1600–1799 | 85 | 0.941 | 889 |
+| true 1800–1999 | 81 | 0.938 | 882 |
+| true 2000–2199 | 65 | 0.831 | 882 |
+| true 2200–2399 | 50 | 0.82 | 876 |
+| true 2400+ | 37 | 0.541 | 875 |
+| <20 decisions | 125 | 0.832 | 927 |
+| 20–34 decisions | 206 | 0.85 | 882 |
+| 35+ decisions | 133 | 0.85 | 862 |
+| <50 plies | 100 | 0.81 | 930 |
+| 50–79 | 186 | 0.844 | 886 |
+| 80–119 | 144 | 0.854 | 868 |
+| 120+ | 34 | 0.912 | 857 |
 
-### rapid
+**neymanBelt(research)**
 
-| Model | Coverage of the 80% range | Mean width |
-| --- | --- | --- |
-| heuristic | 0.552 | 775 |
-| errmodel | 0.841 | 906 |
-| isotonic | 0.862 | 1112 |
-| ridge | 0.856 | 913 |
-| gbm | 0.877 | 872 |
-
-Shipped interval model: s(n) = sqrt(108996 + 301509/n), bounds at -1.323·s and +1.288·s (10th/90th percentiles of out-of-fold standardized residuals).
-
-Ridge (shipped) by meaningful decisions:
-
-| Decisions | n | Coverage | Mean width |
+| Subgroup | n | Coverage | Mean width |
 | --- | --- | --- | --- |
-| <15 | 55 | 0.818 | 974 |
-| 15–24 | 137 | 0.854 | 923 |
-| 25–39 | 177 | 0.859 | 901 |
-| 40+ | 95 | 0.874 | 887 |
+| overall |  | 0.834 | 1354 |
+| predicted 1000–1199 | 12 | 0.417 | 480 |
+| predicted 1200–1399 | 37 | 0.595 | 917 |
+| predicted 1400–1599 | 96 | 0.927 | 1496 |
+| predicted 1600–1799 | 101 | 0.941 | 1626 |
+| predicted 1800–1999 | 105 | 0.933 | 1565 |
+| predicted 2000–2199 | 96 | 0.781 | 1103 |
+| predicted 2200+ | 17 | 0.176 | 620 |
+| true 800–999 | 17 | 0.824 | 933 |
+| true 1000–1199 | 32 | 0.844 | 1172 |
+| true 1200–1399 | 46 | 0.804 | 1294 |
+| true 1400–1599 | 51 | 0.941 | 1546 |
+| true 1600–1799 | 85 | 0.847 | 1473 |
+| true 1800–1999 | 81 | 0.765 | 1426 |
+| true 2000–2199 | 65 | 0.785 | 1336 |
+| true 2200–2399 | 50 | 0.88 | 1283 |
+| true 2400+ | 37 | 0.865 | 1212 |
+| <20 decisions | 125 | 0.824 | 1510 |
+| 20–34 decisions | 206 | 0.835 | 1283 |
+| 35+ decisions | 133 | 0.842 | 1318 |
+| <50 plies | 100 | 0.8 | 1499 |
+| 50–79 | 186 | 0.844 | 1323 |
+| 80–119 | 144 | 0.847 | 1316 |
+| 120+ | 34 | 0.824 | 1259 |
 
-Ridge (shipped) by rating band:
-
-| Band | n | Coverage | Mean width |
-| --- | --- | --- | --- |
-| 800–1000 | 17 | 0.529 | 923 |
-| 1000–1200 | 32 | 0.625 | 932 |
-| 1200–1400 | 46 | 0.87 | 936 |
-| 1400–1600 | 51 | 0.98 | 911 |
-| 1600–1800 | 85 | 0.976 | 914 |
-| 1800–2000 | 81 | 0.963 | 907 |
-| 2000–2200 | 65 | 0.938 | 908 |
-| 2200–2400 | 50 | 0.8 | 902 |
-| 2400+ | 37 | 0.432 | 901 |
-
-## 8. Lite vs Full engine
+## 9. Lite vs Full engine
 
 Measured in this project's 4-core container while four corpus-analysis processes were also running, so absolute times are pessimistic; the ratios are what matter. Browser = headless Chromium against the production build; Node = the same UciEngine and pipeline.
 

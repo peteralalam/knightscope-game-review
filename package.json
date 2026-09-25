@@ -9,7 +9,7 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/chess-review.test.mjs tests/rating-model.test.mjs tests/engine-pipeline.test.mjs tests/brilliant-suite.test.mjs tests/rendered-html.test.mjs tests/stockfish-smoke.test.mjs",
+    "test": "npm run build && node --test tests/chess-review.test.mjs tests/rating-model.test.mjs tests/engine-pipeline.test.mjs tests/brilliant-suite.test.mjs tests/engine-assets.test.mjs tests/sampler.test.mjs tests/outcome-model.test.mjs tests/rendered-html.test.mjs tests/stockfish-smoke.test.mjs",
     "vendor:stockfish": "node scripts/vendor-stockfish.mjs",
     "build:opening-book": "node scripts/build-opening-book.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern public/stockfish",

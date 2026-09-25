@@ -4,11 +4,16 @@
  * Every Evaluation is expressed from the point of view of ONE side (whoever
  * the producer says – the UCI side to move for raw engine output, the moving
  * player after `invert` for played-move evaluations). Callers never compare
- * raw centipawns across sides; they compare `humanExpectedScore`.
+ * raw centipawns across sides; they compare `baselineExpectedScore`.
  *
- * Two scales are kept apart on purpose (see HUMAN_CURVE in review-config.ts):
- *   engineWdl / engineExpectedScore           – Stockfish's own WDL, diagnostics only
- *   humanWinProbability / humanExpectedScore  – Lichess's human curve, used for grading
+ * Every probability-like number here is an EXPECTED SCORE, E[result] with
+ * win = 1, draw = ½, loss = 0 – never a win probability. Two scales are kept
+ * apart on purpose (see BASELINE_CURVE in review-config.ts):
+ *   engineWdl / engineExpectedScore – Stockfish's own WDL model, diagnostics only
+ *   baselineExpectedScore           – a FIXED, rating-independent curve (Lichess's
+ *                                     published "Win%" constant), used for grading
+ * The rating-conditioned human model E[result | cp, rating, time control] lives
+ * in outcome-model.ts and is applied on top of `cp`, not stored here.
  */
 
 export interface Wdl {
@@ -24,7 +29,7 @@ export interface TablebaseScore {
   plies: number;
 }
 
-import { HUMAN_CURVE } from "./review-config.ts";
+import { BASELINE_CURVE } from "./review-config.ts";
 
 export interface Evaluation {
   /** Stockfish-normalized centipawns (100 = 50 % win chance in engine play). */
@@ -37,15 +42,12 @@ export interface Evaluation {
   /** Engine WDL expected score: P(win) + ½·P(draw). Diagnostics only. */
   engineExpectedScore: number;
   /**
-   * Lichess's human curve on the centipawn score (undefined for mate / tablebase
-   * scores, where the curve is not defined). Counts draws as half a point.
+   * The value every classification uses: the fixed baseline curve
+   * `baselineCurveExpectedScore(cp)`, or exactly 0 / 1 for mates and tablebase
+   * results (and ½ for a drawn terminal position). An expected score (draws
+   * count ½), not a win probability, and independent of the players' ratings.
    */
-  humanWinProbability?: number;
-  /**
-   * The value every classification uses: humanWinProbability, or exactly 0 / 1
-   * for mates and tablebase results (and ½ for a drawn terminal position).
-   */
-  humanExpectedScore: number;
+  baselineExpectedScore: number;
   depth: number;
   seldepth?: number;
   nodes: number;
@@ -75,9 +77,14 @@ export function expectedFromWdl(wdl: Wdl) {
   return clamp01(wdl.win + wdl.draw / 2);
 }
 
-/** Human-calibrated expected score for Stockfish-normalized centipawns. */
-export function humanWinProbability(cp: number) {
-  return 1 / (1 + Math.exp(-HUMAN_CURVE.slopePerCp * cp));
+/**
+ * Fixed, rating-independent expected score for Stockfish-normalized
+ * centipawns: Lichess's published "Win%" curve divided by 100. Lichess calls it
+ * a win percentage, but it was fitted to game results with draws counted as ½,
+ * so it is an expected score.
+ */
+export function baselineCurveExpectedScore(cp: number) {
+  return 1 / (1 + Math.exp(-BASELINE_CURVE.slopePerCp * cp));
 }
 
 function materialCount(fen: string) {
@@ -149,15 +156,14 @@ export function makeEvaluation(input: {
     wdl = DRAW_WDL;
   }
   const engineExpectedScore = expectedFromWdl(wdl);
-  const human = !decisive && input.cp !== undefined ? humanWinProbability(input.cp) : undefined;
+  const baseline = !decisive && input.cp !== undefined ? baselineCurveExpectedScore(input.cp) : undefined;
   return {
     cp: tablebase ? undefined : input.cp,
     mate: input.mate,
     tablebase,
     engineWdl: wdl,
     engineExpectedScore,
-    humanWinProbability: human,
-    humanExpectedScore: human ?? engineExpectedScore,
+    baselineExpectedScore: baseline ?? engineExpectedScore,
     depth: input.depth ?? 0,
     seldepth: input.seldepth,
     nodes: input.nodes ?? 0,
@@ -196,8 +202,7 @@ export function invertEvaluation(evaluation: Evaluation): Evaluation {
       : undefined,
     engineWdl: { win: evaluation.engineWdl.loss, draw: evaluation.engineWdl.draw, loss: evaluation.engineWdl.win },
     engineExpectedScore: 1 - evaluation.engineExpectedScore,
-    humanWinProbability: evaluation.humanWinProbability === undefined ? undefined : 1 - evaluation.humanWinProbability,
-    humanExpectedScore: 1 - evaluation.humanExpectedScore,
+    baselineExpectedScore: 1 - evaluation.baselineExpectedScore,
   };
 }
 
@@ -206,7 +211,7 @@ export function matingIn(evaluation: Evaluation | undefined) {
   if (!evaluation || evaluation.mate === undefined) return undefined;
   if (evaluation.mate > 0) return evaluation.mate;
   // A flipped `mate 0` means this side has just delivered mate.
-  if (evaluation.mate === 0 && evaluation.humanExpectedScore === 1) return 0;
+  if (evaluation.mate === 0 && evaluation.baselineExpectedScore === 1) return 0;
   return undefined;
 }
 
@@ -214,7 +219,7 @@ export function matingIn(evaluation: Evaluation | undefined) {
 export function matedIn(evaluation: Evaluation | undefined) {
   if (!evaluation || evaluation.mate === undefined) return undefined;
   if (evaluation.mate < 0) return -evaluation.mate;
-  if (evaluation.mate === 0 && evaluation.humanExpectedScore === 0) return 0;
+  if (evaluation.mate === 0 && evaluation.baselineExpectedScore === 0) return 0;
   return undefined;
 }
 

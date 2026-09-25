@@ -11,6 +11,7 @@ import {
   ratingFeatureVector,
   ratingGrid,
   regressionFromVector,
+  applyCalibration,
 } from "../lib/rating-model.ts";
 
 /** Deterministic PRNG so synthetic data is reproducible. */
@@ -142,7 +143,7 @@ test("calibration recovers a known model from synthetic rated games", () => {
   assert.ok(Math.abs(result.holdout.coverage80 - 0.8) < 0.15, `coverage ${result.holdout.coverage80}`);
 });
 
-test("calibrated regression: interval is residual-derived and widens for short games", () => {
+test("calibrated regression: conformal range by estimate and decisions, calibration layer applied", () => {
   const params = {
     id: "test-ridge",
     calibrated: true,
@@ -152,10 +153,19 @@ test("calibrated regression: interval is residual-derived and widens for short g
     missingIndicators: [9],
     mean: [...RATING_FEATURES.map(() => 0), 0],
     scale: [...RATING_FEATURES.map(() => 1), 1],
-    coefficients: [-300, ...RATING_FEATURES.slice(1).map(() => 0), 0],
-    intercept: 1500,
-    interval: { a: 40_000, b: 2_000_000, qLow: -1.3, qHigh: 1.3 },
+    coefficients: [-100, ...RATING_FEATURES.slice(1).map(() => 0), 0],
+    intercept: 1000,
+    expansion: null,
+    calibration: { x: [1000, 2000], y: [1100, 1900] },
     clamp: [800, 2800],
+    conformal: {
+      level: 0.8,
+      groups: [
+        { predLow: null, predHigh: 1500, decisionsLow: 0, decisionsHigh: 20, qLow: -300, qHigh: 600, n: 200 },
+        { predLow: null, predHigh: 1500, decisionsLow: 20, decisionsHigh: null, qLow: -200, qHigh: 400, n: 200 },
+        { predLow: 1500, predHigh: null, decisionsLow: 0, decisionsHigh: null, qLow: -500, qHigh: 250, n: 200 },
+      ],
+    },
     heldOut: { mae: 250, coverage80: 0.8, samples: 100 },
   };
   const raw = RATING_FEATURES.map(() => 0);
@@ -166,16 +176,25 @@ test("calibrated regression: interval is residual-derived and widens for short g
   assert.ok(better.center > worse.center, "lower loss → higher estimate");
   const short = regressionFromVector(raw, 8, params);
   const long = regressionFromVector(raw, 60, params);
-  assert.ok(short.high - short.low > (long.high - long.low) * 1.5, "fewer decisions → wider range");
   assert.equal(short.center, long.center);
+  assert.ok(short.center < 1500);
+  assert.equal(short.high - short.low, 900, "the <20-decision cell's residual quantiles");
+  assert.equal(long.high - long.low, 600);
+  // Asymmetric: a low estimate's range reaches further up (regression to the mean).
+  assert.ok(short.high - short.center > short.center - short.low);
+  // The isotonic layer maps the clamped ridge output (1000 → 1100).
+  raw[0] = 0;
+  assert.equal(regressionFromVector(raw, 30, params).center, 1100);
+  assert.equal(applyCalibration(900, params.calibration), 1100);
+  assert.equal(applyCalibration(1250, params.calibration), 1300);
 });
 
 test("feature vector: log-loss transforms and nulls for unmeasurable features", () => {
   const vector = ratingFeatureVector({
     meaningfulMoves: 20, effectiveMoves: 18, gameLength: 60, meanLoss: 0.03, medianLoss: 0.01, p75Loss: 0.03, p90Loss: 0.08,
-    complexityWeightedLoss: 0.035, blunderRate: 0.05, mistakeRate: 0.05, inaccuracyRate: 0.1, top1Agreement: 0.4,
+    complexityWeightedLoss: 0.035, severeLossRate: 0.05, largeLossRate: 0.05, moderateLossRate: 0.1, top1Agreement: 0.4,
     topNAgreement: 0.7, criticalAccuracy: null, onlyMoveSuccess: null, conversionAccuracy: 80, defensiveAccuracy: null,
-    opportunityConversion: 0.5, openingAccuracy: 90, middlegameAccuracy: 75, endgameAccuracy: null,
+    punishRate: 0.5, openingAccuracy: 90, middlegameAccuracy: 75, endgameAccuracy: null,
   });
   assert.equal(vector.length, RATING_FEATURES.length);
   assert.ok(Math.abs(vector[0] - Math.log(0.035)) < 1e-12);
@@ -187,8 +206,10 @@ test("feature vector: log-loss transforms and nulls for unmeasurable features", 
 test("shipped regression parameters reproduce the offline benchmark's predictions", async () => {
   const { REGRESSION_MODELS } = await import("../lib/rating-params.ts");
   const { readFileSync, existsSync } = await import("node:fs");
-  const benchmarkPath = new URL("../data/rating-corpus/benchmark.json", import.meta.url);
-  const samplesPath = new URL("../data/rating-corpus/samples.jsonl", import.meta.url);
+  // The newest corpus that has a benchmark is the one the shipped parameters came from.
+  const corpus = existsSync(new URL("../data/rating-corpus-v2/benchmark.json", import.meta.url)) ? "rating-corpus-v2" : "rating-corpus";
+  const benchmarkPath = new URL(`../data/${corpus}/benchmark.json`, import.meta.url);
+  const samplesPath = new URL(`../data/${corpus}/samples.jsonl`, import.meta.url);
   if (!Object.keys(REGRESSION_MODELS).length || !existsSync(benchmarkPath)) return;
   const benchmark = JSON.parse(readFileSync(benchmarkPath, "utf8"));
   const samples = new Map(

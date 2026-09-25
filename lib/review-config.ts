@@ -2,13 +2,22 @@
  * Every tunable number in the KnightScope review model lives here.
  *
  * Units: "expected points" (EP) are the moving player's expected game score in
- * [0, 1] (win = 1, draw = ½). A loss of 0.10 EP means the move converted, on
- * average, a tenth of a game point into nothing.
+ * [0, 1] (win = 1, draw = ½, loss = 0). A loss of 0.10 EP means the move
+ * converted, on average, a tenth of a game point into nothing.
  *
- * The EP-loss bands start from Chess.com's publicly documented Classification
- * V2 bands. They are a researched starting point, not a specification: tune them
- * with the corpus tools in `scripts/corpus/` and the metadata stored on every
- * reviewed move (expectedPointsLost, cpLoss, classificationReason, …).
+ * THIS IS OUR OWN HYBRID, NOT CHESS.COM'S MODEL. Two published ingredients are
+ * combined that were never designed together:
+ *   - the EP-loss bands (Excellent < 0.02, Good < 0.05, Inaccuracy < 0.10,
+ *     Mistake < 0.20, Blunder ≥ 0.20) are Chess.com's documented Classification
+ *     V2 thresholds, but Chess.com applies them to an Expected Points model that
+ *     is conditioned on the player's rating, which is not public;
+ *   - the EP values they are applied to come from BASELINE_CURVE below, Lichess's
+ *     rating-independent curve fitted on ~2300-rated games.
+ * So the same move gets the same grade whoever plays it. The bands are a
+ * researched starting point, not a specification: tune them with the corpus
+ * tools in `scripts/corpus/` and the metadata stored on every reviewed move
+ * (expectedPointsLost, cpLoss, classificationReason, …). The rating-conditioned
+ * alternative is evaluated in outcome-model.ts / docs/validation-report.md.
  */
 
 export const REVIEW_MODEL_VERSION = "ks-review-2.1";
@@ -58,7 +67,7 @@ export const ENGINE_BUILDS = {
      * served by worker/index.ts from an R2 bucket (binding ENGINE_ASSETS), same
      * origin, content-addressed and immutable. Only ever downloaded on request.
      */
-    wasmUrl: "/engine-assets/stockfish-19-single-8725c2657627.wasm",
+    wasmUrl: "/engine-assets/stockfish-19-single-8725c2657276.wasm",
     wasmSha256: "8725c26572762617fd96b2ea83ff130e6640b85815890d682bf8c49db0820721",
     wasmBytes: 99_102_793,
     /** Each worker instantiates its own ~230 MB module; keep memory in check. */
@@ -89,9 +98,9 @@ export const ENGINE_BUILD = {
  *   play this out?" and is objectively right for that question: +1.00 is already
  *   ~50 % wins and +2.00 is close to a certain win.
  *
- * HUMAN (every user-facing classification) – `humanWinProbability` /
- *   `humanExpectedScore`: Lichess's published "win percentage" curve,
- *     P = 1 / (1 + exp(−0.00368208 · cp)),
+ * BASELINE (every user-facing classification) – `baselineExpectedScore`:
+ *   Lichess's published "win percentage" curve, rescaled to [0, 1],
+ *     E = 1 / (1 + exp(−0.00368208 · cp)),
  *   the constant in lila `WinPercent` / `AccuracyPercent`, applied to Stockfish
  *   19's normalized centipawns. Lichess fitted it to the outcomes of real rated
  *   Lichess games between players rated around 2300, as a function of the
@@ -100,15 +109,16 @@ export const ENGINE_BUILD = {
  *   Elo-specific model (a 1000-rated player converts +3 far less reliably than
  *   the curve says, a 2700 more reliably), and applying it to Stockfish 19's
  *   normalized scale is an approximation.
- *   Despite the Lichess name it counts draws as half a point, so it is used as
- *   an expected score. Mates and tablebase results are decisive (0 / 1).
+ *   Despite the Lichess name ("Win%") it was fitted with draws counted as half
+ *   a point, so it is an expected score, never a win probability, and we only
+ *   ever call it that. Mates and tablebase results are decisive (0 / 1).
  *
- * Grading uses the human scale because the engine scale grades human games far
+ * Grading uses the baseline scale because the engine scale grades human games far
  * too harshly (a ¾-pawn opening slip becomes a "Blunder").
  */
-export const HUMAN_CURVE = {
+export const BASELINE_CURVE = {
   slopePerCp: 0.00368208,
-  source: "lichess-org/lila modules/analyse WinPercent (fitted on strong human games)",
+  source: "lichess-org/lila modules/analyse WinPercent (fitted on ~2300-rated human games; rating-independent)",
 } as const;
 
 export const ANALYSIS_PRESETS = {

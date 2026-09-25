@@ -10,8 +10,9 @@
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, basename, join } from "node:path";
+import { extractFeatures, moveAccuracy } from "../../lib/chess-review.ts";
 import { errorCategory, ratingFeatureVector } from "../../lib/rating-model.ts";
-import { bandLabel } from "./prepare-rating-corpus.mjs";
+import { bandLabel } from "./sample-lichess-db.mjs";
 
 function argument(name, fallback) {
   const index = process.argv.indexOf(`--${name}`);
@@ -25,6 +26,26 @@ function expand(pattern) {
 }
 
 export const SPLIT_FRACTIONS = { train: 0.6, validation: 0.2, test: 0.2 };
+
+/**
+ * Rebuild the rating model's features from the compact per-move records, so a
+ * feature change never needs an engine replay. Mirrors extractFeatures' inputs.
+ */
+export function featuresFromCompact(moves, color) {
+  const all = moves.map((move) => ({
+    index: move.i,
+    color: move.c,
+    informativeness: move.inf,
+    expectedPointsLost: move.loss,
+    expectedBefore: move.eb,
+    isTopMove: move.top,
+    playedRank: move.rank ?? null,
+    phase: move.ph,
+    accuracy: move.lm === 1 ? 100 : moveAccuracy(move.loss),
+    criticality: { gap: move.gap ?? undefined, onlyMove: Boolean(move.only) },
+  }));
+  return extractFeatures(all.filter((move) => move.color === color), all);
+}
 
 function unionFind() {
   const parent = new Map();
@@ -81,7 +102,8 @@ function main() {
     for (const color of ["w", "b"]) {
       const side = analysis.sides[color];
       const player = color === "w" ? game.white : game.black;
-      if (!side.features || !side.performance) continue; // too few decisions for any estimate
+      const features = featuresFromCompact(analysis.moves, color);
+      if (!features || !side.performance) continue; // too few decisions for any estimate
       const decisions = analysis.moves.filter((move) => move.c === color && move.inf > 0);
       const phaseShare = (phase) => decisions.filter((move) => move.ph === phase).length / Math.max(1, decisions.length);
       const score = game.result === "1/2-1/2" ? 0.5 : (game.result === "1-0") === (color === "w") ? 1 : 0;
@@ -102,8 +124,8 @@ function main() {
         preset: analysis.meta.preset,
         engine: analysis.meta.engineVersion,
         model: analysis.meta.modelVersion,
-        meaningfulMoves: side.features.meaningfulMoves,
-        x: ratingFeatureVector(side.features).map((value) => (value === null ? null : Math.round(value * 1e6) / 1e6)),
+        meaningfulMoves: features.meaningfulMoves,
+        x: ratingFeatureVector(features).map((value) => (value === null ? null : Math.round(value * 1e6) / 1e6)),
         // Per-decision inputs of the engine-error (ordered-logit) model.
         decisions: decisions.map((move) => ({
           category: errorCategory({ isTopMove: move.top, expectedPointsLost: move.loss }),
@@ -146,7 +168,7 @@ function main() {
   }
   const leaking = [...splitsByPlayer.values()].filter((splits) => splits.size > 1).length;
   const count = (predicate) => rows.filter(predicate).length;
-  const bandOrder = ["800–1000", "1000–1200", "1200–1400", "1400–1600", "1600–1800", "1800–2000", "2000–2200", "2200–2400", "2400+"];
+  const bandOrder = [...new Set(rows.map((row) => row.band))].sort((a, b) => parseInt(a) - parseInt(b));
   const bands = bandOrder.filter((band) => rows.some((row) => row.band === band));
   const summary = {
     games: analyses.length,
@@ -155,6 +177,16 @@ function main() {
     leakingPlayers: leaking,
     splitMethod: "connected components of the player-game graph, hashed to 60/20/20 train/validation/test",
     splits: Object.fromEntries(["train", "validation", "test"].map((split) => [split, count((row) => row.split === split)])),
+    splitDetail: Object.fromEntries(["train", "validation", "test"].map((split) => {
+      const inSplit = rows.filter((row) => row.split === split);
+      return [split, {
+        playerGames: inSplit.length,
+        players: new Set(inSplit.map((row) => row.player)).size,
+        connectedGroups: new Set(inSplit.map((row) => row.group)).size,
+        games: new Set(inSplit.map((row) => row.gameId)).size,
+        byTimeControl: Object.fromEntries(["blitz", "rapid"].map((tc) => [tc, inSplit.filter((row) => row.tc === tc).length])),
+      }];
+    })),
     byTimeControlAndBand: Object.fromEntries(["blitz", "rapid"].map((tc) => [tc, Object.fromEntries(bands.map((band) => [band, count((row) => row.tc === tc && row.band === band)]))])),
     bySource: Object.fromEntries([...new Set(rows.map((row) => row.source))].map((source) => [source, count((row) => row.source === source)])),
     preset: rows[0]?.preset,
@@ -168,6 +200,7 @@ function main() {
     players: splitsByPlayer.size,
     leakingPlayers: leaking,
     splits: Object.fromEntries(["train", "validation", "test"].map((split) => [split, count((row) => row.split === split)])),
+    groups: new Set(rows.map((row) => row.group)).size,
     byTimeControl: Object.fromEntries(["blitz", "rapid"].map((tc) => [tc, count((row) => row.tc === tc)])),
   }, null, 2));
 }

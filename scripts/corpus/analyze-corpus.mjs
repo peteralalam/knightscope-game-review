@@ -11,7 +11,7 @@ import { analyzeGame } from "../../lib/analysis-pipeline.ts";
 import { parsePgn, summarizeSide } from "../../lib/chess-review.ts";
 import { ANALYSIS_PRESETS } from "../../lib/review-config.ts";
 import { classifyTimeControl, DEFAULT_ENGINE_ERROR_MODEL, estimatePerformance } from "../../lib/rating-model.ts";
-import { createNodeEngine } from "../node-engine.mjs";
+import { createNativeEngine, createNodeEngine } from "../node-engine.mjs";
 import { CachedEngine, SearchCache } from "./search-cache.mjs";
 
 function argument(name, fallback) {
@@ -47,6 +47,9 @@ export function compactReview(review) {
     og: review.objectiveGrade,
     loss: round(review.expectedPointsLost),
     eb: round(review.expectedBefore),
+    // Mover's-view engine score of the position before the move (outcome model input).
+    cpb: review.bestEvaluation?.cp,
+    mb: review.bestEvaluation?.mate,
     ea: round(review.expectedAfter),
     top: review.isTopMove,
     rank: review.playedRank,
@@ -81,7 +84,10 @@ async function main() {
   const records = readFileSync(gamesFile, "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
   const mine = records.filter((_, index) => index % shards === shard).slice(0, limit);
   const cache = new SearchCache(cacheDir, { shard: `${presetKey}-${shard}` });
-  const engine = new CachedEngine(cache, () => createNodeEngine());
+  // --engine native: the parity-checked native build of the same source and net
+  // (scripts/corpus/build-native-engine.sh); results are identical, ~2× faster.
+  const engineKind = argument("engine", "wasm");
+  const engine = new CachedEngine(cache, () => (engineKind === "native" ? createNativeEngine() : createNodeEngine()));
   writeFileSync(out, "");
   const started = Date.now();
   let done = 0;
@@ -140,4 +146,4 @@ async function main() {
   process.exit(0);
 }
 
-if (existsSync(argument("games", ""))) await main();
+if (import.meta.url === `file://${process.argv[1]}`) await main();

@@ -19,7 +19,7 @@ Files
   stockfish-19-single.js             loader for the optional full engine
       network nn-1a298aa575a0.nnue (official Stockfish 19 network)
       wasm sha256 8725c26572762617fd96b2ea83ff130e6640b85815890d682bf8c49db0820721
-      wasm served from /engine-assets/stockfish-19-single-8725c2657627.wasm (R2), only on user request
+      wasm served from /engine-assets/stockfish-19-single-8725c2657276.wasm (R2), only on user request
 
 Corresponding Source (GPLv3 section 6)
   source/stockfish.js-19.0.0-source.tar.gz   complete source + build scripts
