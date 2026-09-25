@@ -258,6 +258,39 @@ if (regrade) {
       Object.entries(regrade.byCurrentGrade).map(([grade, v]) => [LABEL[grade] ?? grade, String(v.moves), `${Math.round(v.changedShare.trueRating * 100)}% / ${Math.round(v.changedShare.estimate * 100)}%`]));
   }
 }
+const nativePositions = read("data/golden/native-parity-positions.json");
+const nativeGames = read("data/golden/native-parity-games.json");
+if (nativePositions || nativeGames) {
+  out("### Native vs WASM engine equivalence");
+  out();
+  out("The native build (scripts/corpus/build-native-engine.sh) is the same vendored stockfish.js 19.0.0 source and Lite network the browser runs, compiled to a native binary purely for corpus-analysis speed. Used to generate rating/outcome-model training data only if equivalent to the browser build at the level the models consume.");
+  out();
+  if (nativePositions) {
+    const p = nativePositions.summary;
+    table(["Metric", "Value"], [
+      ["Positions compared", String(p.positions)],
+      ["Nodes / MultiPV", `${p.nodes} / ${p.multiPv}`],
+      ["By phase", JSON.stringify(p.byPhase)],
+      ["Best-move mismatches", `${p.bestMoveMismatchCount} (${p.bestMoveMismatchRate})`],
+      ["Candidate-order mismatches (MultiPV)", `${p.candidateOrderMismatchCount} (${p.candidateOrderMismatchRate})`],
+      ["Root cp diff (max / mean / nonzero)", `${p.cpDiff.max} / ${p.cpDiff.mean} / ${p.cpDiff.nonZeroCount}`],
+      ["Baseline expected-score diff (max / mean / nonzero)", `${p.baselineExpectedScoreDiff.max} / ${p.baselineExpectedScoreDiff.mean} / ${p.baselineExpectedScoreDiff.nonZeroCount}`],
+      ["Mate-field mismatches", String(p.mateFieldMismatches)],
+    ]);
+  }
+  if (nativeGames) {
+    const g = nativeGames.summary;
+    table(["Metric", "Value"], [
+      ["Full games compared (primary + candidate + verification passes)", String(g.gamesCompared)],
+      ["Exact per-move match", `${g.exactMatches}/${g.gamesCompared} (${g.exactMatchRate})`],
+      ["Feature vectors compared (both sides)", String(g.featureVectorsCompared)],
+      ["Max feature-vector diff", `${g.maxFeatureDiff}${g.maxFeatureDiffName ? ` (${g.maxFeatureDiffName})` : ""}`],
+      ["Max root cp diff", String(g.maxRootCpDiff)],
+      ["Native speedup", `${g.speedup}x (wasm ${g.wasmSecondsTotal}s, native ${g.nativeSecondsTotal}s)`],
+    ]);
+  }
+  out();
+}
 const scale = read("data/golden/engine-scale.json");
 if (scale) {
   out("### Lite vs Full centipawn scale");

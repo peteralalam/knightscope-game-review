@@ -119,6 +119,15 @@ To host it:
 
 **Tablebases.** Both browser builds compile Syzygy out (`__NO_SYZYGY__`). Tablebase scores (`cp ±(20000 − plies)` in SF19) are still decoded explicitly as TB wins or losses for native engines, never treated as giant centipawns. Checkmate, stalemate and insufficient material are resolved without the engine.
 
+**Native build for corpus generation only.** `scripts/corpus/build-native-engine.sh` compiles the SAME vendored
+stockfish.js 19.0.0 `src/` and Lite network to a native binary (single-threaded, same `Hash`/`MultiPV`/`UCI_ShowWDL`
+options), used only by the offline corpus-analysis scripts for speed – never in the browser. It is validated against
+the WASM build before being trusted for training data (`scripts/corpus/native-parity-positions.mjs` and
+`native-parity.mjs`): 300 positions (opening/middlegame/endgame, MultiPV=3) with 0 best-move, candidate-order, root-cp
+or baseline-expected-score mismatches, and a 30-game full-pipeline run (every per-move grade/loss fact plus the
+resulting rating-model feature vectors, both sides) with 30/30 exact matches and 0 max feature diff — see
+"Native vs WASM engine equivalence" in `docs/validation-report.md`. About 1.8× faster than WASM in this container.
+
 ### Analysis strategy and budgets
 
 1. **Primary pass**: one MultiPV-1 search per position. This is the authoritative evaluation. The position after a move, flipped to the mover's side, gives the played move's evaluation.

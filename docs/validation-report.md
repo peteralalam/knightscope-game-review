@@ -650,3 +650,28 @@ By CURRENT (baseline) classification — how often does a move shown as each gra
 | Inaccuracy | 2728 | 93% / 93% |
 | Mistake | 1462 | 97% / 97% |
 | Blunder | 1247 | 85% / 85% |
+
+### Native vs WASM engine equivalence
+
+The native build (scripts/corpus/build-native-engine.sh) is the same vendored stockfish.js 19.0.0 source and Lite network the browser runs, compiled to a native binary purely for corpus-analysis speed. Used to generate rating/outcome-model training data only if equivalent to the browser build at the level the models consume.
+
+| Metric | Value |
+| --- | --- |
+| Positions compared | 300 |
+| Nodes / MultiPV | 60000 / 3 |
+| By phase | {"opening":75,"middlegame":150,"endgame":75} |
+| Best-move mismatches | 0 (0) |
+| Candidate-order mismatches (MultiPV) | 0 (0) |
+| Root cp diff (max / mean / nonzero) | 0 / 0 / 0 |
+| Baseline expected-score diff (max / mean / nonzero) | 0 / 0 / 0 |
+| Mate-field mismatches | 0 |
+
+| Metric | Value |
+| --- | --- |
+| Full games compared (primary + candidate + verification passes) | 30 |
+| Exact per-move match | 30/30 (1) |
+| Feature vectors compared (both sides) | 60 |
+| Max feature-vector diff | 0 |
+| Max root cp diff | 0 |
+| Native speedup | 1.81x (wasm 573s, native 317s) |
+
