@@ -537,7 +537,32 @@ Mean actual rating by predicted range. Calibration error (weighted mean |gap|): 
 | 80–119 | 144 | 0.847 | 1316 |
 | 120+ | 34 | 0.824 | 1259 |
 
-## 7. Rating-conditioned outcome model E[result | cp, rating, time control]
+## 7. Single-game noise (within-player estimate consistency)
+
+For players sampled more than once, this session's point estimate is computed independently for EACH of their games and compared. This measures how much a single game's estimate genuinely varies for the SAME player — the true-rating label cannot distinguish this from model error, and it is not something to eliminate.
+
+231 players sampled more than once; 380 same-time-control game pairs, 5 cross-time-control pairs.
+
+|  | Median |diff| | p75 | p90 | Mean |
+| --- | --- | --- | --- | --- |
+| Same time control | 191.4 | 308.4 | 456.2 | 226.6 |
+| Cross time control (reference) | 71.6 | 422.7 | 626.5 | — |
+
+By true rating band (same time control):
+
+| Band | n pairs | Median |diff| | p75 | p90 |
+| --- | --- | --- | --- | --- |
+| 1000–1199 | 102 | 172.6 | 297.8 | 410.1 |
+| 1200–1399 | 91 | 230.1 | 378 | 609.1 |
+| 2400+ | 48 | 170.1 | 278.5 | 376.2 |
+| 1400–1599 | 47 | 233.5 | 336.3 | 473.7 |
+| 800–999 | 30 | 168.2 | 297.8 | 315.2 |
+| 2200–2399 | 33 | 144.2 | 244.6 | 314.3 |
+| 2000–2199 | 9 | 262.5 | 316.5 | 419.8 |
+| 1600–1799 | 13 | 129.4 | 351.4 | 399.4 |
+| 1800–1999 | 7 | 179.6 | 230.9 | 313.8 |
+
+## 8. Rating-conditioned outcome model E[result | cp, rating, time control]
 
 Positions (side to move, own-engine cp, final score): train 96245, validation 29702, test 30132. Chosen on validation: **rating** (simplest model not significantly worse than the best, by a player-grouped bootstrap).
 

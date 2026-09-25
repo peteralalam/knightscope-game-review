@@ -202,10 +202,29 @@ if (summary && bench?.timeControls?.blitz?.cv) {
   }
 }
 
+// Single-game noise: within-player game-to-game estimate variance.
+const consistency = read(`${CORPUS}/consistency.json`);
+if (consistency) {
+  out("## 7. Single-game noise (within-player estimate consistency)");
+  out();
+  out("For players sampled more than once, this session's point estimate is computed independently for EACH of their games and compared. This measures how much a single game's estimate genuinely varies for the SAME player — the true-rating label cannot distinguish this from model error, and it is not something to eliminate.");
+  out();
+  const c = consistency.summary;
+  out(`${c.playersWithMultipleGames} players sampled more than once; ${c.sameTimeControlPairs} same-time-control game pairs, ${c.crossTimeControlPairs} cross-time-control pairs.`);
+  out();
+  table(["", "Median |diff|", "p75", "p90", "Mean"], [
+    ["Same time control", String(c.sameTimeControl.medianAbsDiff), String(c.sameTimeControl.p75AbsDiff), String(c.sameTimeControl.p90AbsDiff), String(c.sameTimeControl.meanAbsDiff)],
+    ["Cross time control (reference)", String(c.crossTimeControl.medianAbsDiff), String(c.crossTimeControl.p75AbsDiff), String(c.crossTimeControl.p90AbsDiff), "—"],
+  ]);
+  out("By true rating band (same time control):");
+  out();
+  table(["Band", "n pairs", "Median |diff|", "p75", "p90"], Object.entries(c.sameTimeControlByTrueRatingBand).map(([band, v]) => [band, String(v.n), String(v.median), String(v.p75), String(v.p90)]));
+}
+
 // Outcome model.
 const outcome = read(`${CORPUS}/outcome-model.json`) ?? read("data/rating-corpus/outcome-model.json");
 if (outcome) {
-  out("## 7. Rating-conditioned outcome model E[result | cp, rating, time control]");
+  out("## 8. Rating-conditioned outcome model E[result | cp, rating, time control]");
   out();
   out(`Positions (side to move, own-engine cp, final score): train ${outcome.positions.train}, validation ${outcome.positions.validation}, test ${outcome.positions.test}. Chosen on validation: **${outcome.chosen}** (simplest model not significantly worse than the best, by a player-grouped bootstrap).`);
   out();
@@ -302,7 +321,7 @@ if (scale) {
 // Brilliant validation.
 const brilliantVal = read("data/brilliant-suite/validation-report.json");
 if (brilliantVal) {
-  out("## 8. Brilliant validation");
+  out("## 9. Brilliant validation");
   out();
   out("Reported separately per the validation protocol: the automatically constructed corpus (labels from Lichess's puzzle generator and Lichess's own game analysis / the actual game, never from KnightScope's rule) and a smaller, hand-audited gold subset (individually selected/constructed positions, including borderline sacrifices scored qualitatively rather than pass/fail). The Brilliant algorithm itself was not modified in response to this validation pass.");
   out();
