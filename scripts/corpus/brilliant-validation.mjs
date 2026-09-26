@@ -64,7 +64,7 @@ export function summarize(results) {
   const rejections = {};
   for (const r of positives) {
     if (r.grade === "brilliant") continue;
-    const reason = r.brilliantDiagnostics?.decision?.split(":")[0] ?? "no sacrifice detected";
+    const reason = r.brilliantDiagnostics?.decision ?? "no sacrifice detected";
     rejections[reason] = (rejections[reason] ?? 0) + 1;
   }
   return {

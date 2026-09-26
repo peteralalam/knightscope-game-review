@@ -235,8 +235,11 @@
    }
   },
   "positiveRejections": {
-   "rejected": 67,
-   "no sacrifice detected": 6
+   "rejected: material regained within 4 plies (pseudo-sacrifice)": 54,
+   "no sacrifice detected": 6,
+   "rejected: check evasion": 9,
+   "rejected: move not confirmed by the candidate search": 2,
+   "rejected: nothing offered on the board, and the line regains the material": 2
   },
   "falsePositiveCases": [
    {
@@ -422,7 +425,9 @@
    }
   },
   "positiveRejections": {
-   "rejected": 60,
+   "rejected: material regained within 4 plies (pseudo-sacrifice)": 49,
+   "rejected: check evasion": 9,
+   "rejected: move not confirmed by the candidate search": 2,
    "no sacrifice detected": 3
   },
   "falsePositiveCases": [
@@ -661,8 +666,9 @@
    }
   },
   "positiveRejections": {
-   "rejected": 7,
-   "no sacrifice detected": 3
+   "rejected: material regained within 4 plies (pseudo-sacrifice)": 5,
+   "no sacrifice detected": 3,
+   "rejected: nothing offered on the board, and the line regains the material": 2
   },
   "falsePositiveCases": [],
   "ambiguousCases": [

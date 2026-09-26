@@ -729,8 +729,10 @@ Why positives were not Brilliant:
 
 | Decision | Count |
 | --- | --- |
-| rejected | 60 |
+| rejected: material regained within 4 plies (pseudo-sacrifice) | 49 |
+| rejected: check evasion | 9 |
 | no sacrifice detected | 3 |
+| rejected: move not confirmed by the candidate search | 2 |
 
 False positives (bestAlternativeExpectedScore: the algorithm's own read of whether an alternative move also kept the win – below 0.95 means the algorithm's analysis disagrees with the label's premise that no sacrifice was needed, i.e. the label is the likely source of error, not the algorithm):
 
@@ -786,8 +788,9 @@ Why positives were not Brilliant:
 
 | Decision | Count |
 | --- | --- |
-| rejected | 7 |
+| rejected: material regained within 4 plies (pseudo-sacrifice) | 5 |
 | no sacrifice detected | 3 |
+| rejected: nothing offered on the board, and the line regains the material | 2 |
 
 Ambiguous / borderline cases (not scored; shown for qualitative review):
 
