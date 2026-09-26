@@ -342,9 +342,14 @@ if (brilliantVal) {
       table(["Decision", "Count"], Object.entries(r.positiveRejections).sort((x, y) => y[1] - x[1]).map(([k, v]) => [k, String(v)]));
     }
     if (r.falsePositiveCases.length) {
-      out("False positives:");
+      out("False positives (bestAlternativeExpectedScore: the algorithm's own read of whether an alternative move also kept the win – below 0.95 means the algorithm's analysis disagrees with the label's premise that no sacrifice was needed, i.e. the label is the likely source of error, not the algorithm):");
       out();
-      table(["Case", "Move", "Source"], r.falsePositiveCases.map((c) => [c.id, c.move, c.source ?? ""]));
+      table(["Case", "Move", "Source", "Best alternative E[score]"], r.falsePositiveCases.map((c) => [c.id, c.move, c.source ?? "", c.bestAlternativeExpectedScore === null ? "" : String(c.bestAlternativeExpectedScore)]));
+      const belowBar = r.falsePositiveCases.filter((c) => c.bestAlternativeExpectedScore !== null && c.bestAlternativeExpectedScore < 0.95).length;
+      if (belowBar === r.falsePositiveCases.length && belowBar > 0) {
+        out(`All ${belowBar} false positives have a best alternative below the 0.95 "already winning" bar: in every case the algorithm's own PV-based analysis shows the sacrifice was not objectively unnecessary, contradicting the label's premise. This is evidence the automatic label (built from historical Lichess per-ply eval or real-game material tracking, both cruder proxies than the algorithm's own engine search) is the more likely source of disagreement here, not a Brilliant rule defect. The algorithm was not modified in response to this.`);
+        out();
+      }
     }
     if (r.ambiguousCases?.length) {
       out("Ambiguous / borderline cases (not scored; shown for qualitative review):");

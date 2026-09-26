@@ -80,7 +80,16 @@ export function summarize(results) {
     falsePositiveRateCI95: wilson(fp, negatives.length),
     byCategory,
     positiveRejections: rejections,
-    falsePositiveCases: negatives.filter((r) => r.grade === "brilliant").map((r) => ({ id: r.id, move: r.move, source: r.source })),
+    // bestAlternativeExpectedScore lets a reader audit whether the label or the
+    // algorithm is likely wrong: if it is well below the "unnecessary" bar
+    // (BRILLIANT.alternativeAlreadyWinning, 0.95), the algorithm's own analysis
+    // disagrees with the label's premise that no sacrifice was needed.
+    falsePositiveCases: negatives.filter((r) => r.grade === "brilliant").map((r) => ({
+      id: r.id,
+      move: r.move,
+      source: r.source,
+      bestAlternativeExpectedScore: r.brilliantDiagnostics?.bestAlternativeExpectedScore ?? null,
+    })),
     ambiguousCases: ambiguous.map((r) => ({ id: r.id, move: r.move, grade: r.grade, reason: r.reason, note: r.source })),
   };
 }

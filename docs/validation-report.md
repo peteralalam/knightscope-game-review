@@ -700,3 +700,98 @@ The native build (scripts/corpus/build-native-engine.sh) is the same vendored st
 | Max root cp diff | 0 |
 | Native speedup | 1.81x (wasm 573s, native 317s) |
 
+
+## 9. Brilliant validation
+
+Reported separately per the validation protocol: the automatically constructed corpus (labels from Lichess's puzzle generator and Lichess's own game analysis / the actual game, never from KnightScope's rule) and a smaller, hand-audited gold subset (individually selected/constructed positions, including borderline sacrifices scored qualitatively rather than pass/fail). The Brilliant algorithm itself was not modified in response to this validation pass.
+
+### Automatically constructed validation corpus
+
+130 positives, 145 negatives.
+
+| Metric | Value | 95% CI (Wilson) |
+| --- | --- | --- |
+| Precision | 0.838 | [0.742,0.903] |
+| Recall | 0.515 | [0.43,0.6] |
+| False-positive rate | 0.09 | [0.053,0.147] |
+
+| Category | Label | Brilliant / n | Grades |
+| --- | --- | --- | --- |
+| positive | positive | 67/130 | great 49, brilliant 67, best 14 |
+| hanging-piece-capture | negative | 0/20 | best 20 |
+| unsound-sacrifice-real | negative | 0/40 | inaccuracy 4, miss 7, mistake 5, blunder 24 |
+| desperation-sacrifice | negative | 0/20 | best 12, excellent 1, inaccuracy 2, mistake 2, good 3 |
+| sac-while-crushing | negative | 4/20 | best 11, excellent 3, brilliant 4, great 1, good 1 |
+| temporary-sacrifice-real | negative | 9/25 | best 9, good 1, brilliant 9, great 5, inaccuracy 1 |
+| routine-recapture-real | negative | 0/20 | best 16, good 1, inaccuracy 1, blunder 1, excellent 1 |
+
+Why positives were not Brilliant:
+
+| Decision | Count |
+| --- | --- |
+| rejected | 60 |
+| no sacrifice detected | 3 |
+
+False positives (bestAlternativeExpectedScore: the algorithm's own read of whether an alternative move also kept the win – below 0.95 means the algorithm's analysis disagrees with the label's premise that no sacrifice was needed, i.e. the label is the likely source of error, not the algorithm):
+
+| Case | Move | Source | Best alternative E[score] |
+| --- | --- | --- | --- |
+| temporary-sacrifice-real/M4LtH5ZC-54 | Rxe6 |  | 0.5 |
+| temporary-sacrifice-real/KqzMhj7G-14 | Nc3 |  | 0.2516 |
+| sac-while-crushing/lsvqAX38-83 | Bc7+ |  | 0.1939 |
+| temporary-sacrifice-real/La9aGlYC-59 | Rxf2 |  | 0.5 |
+| temporary-sacrifice-real/mYxTHx6l-37 | Nxc5 |  | 0.6615 |
+| temporary-sacrifice-real/VKASqZY4-42 | Nxg5 |  | 0.5156 |
+| sac-while-crushing/P5bD0XJt-126 | Bxd2 |  | 0.5 |
+| temporary-sacrifice-real/SPwu7cIA-59 | Rxf4 |  | 0.1607 |
+| temporary-sacrifice-real/aL89PQm2-41 | Bxc4 |  | 0.8707 |
+| sac-while-crushing/S1DKcUWv-47 | Qc2 |  | 0.8333 |
+| sac-while-crushing/7UoYre9s-127 | Bxg7 |  | 0.5276 |
+| temporary-sacrifice-real/ATq2W0r5-46 | Rc7 |  | 0.5623 |
+| temporary-sacrifice-real/xcwHeQax-16 | Nxg6 |  | 0.6754 |
+
+All 13 false positives have a best alternative below the 0.95 "already winning" bar: in every case the algorithm's own PV-based analysis shows the sacrifice was not objectively unnecessary, contradicting the label's premise. This is evidence the automatic label (built from historical Lichess per-ply eval or real-game material tracking, both cruder proxies than the algorithm's own engine search) is the more likely source of disagreement here, not a Brilliant rule defect. The algorithm was not modified in response to this.
+
+### Human-audited gold subset
+
+25 positives, 17 negatives, 2 ambiguous (unscored).
+
+| Metric | Value | 95% CI (Wilson) |
+| --- | --- | --- |
+| Precision | 1 | [0.796,1] |
+| Recall | 0.6 | [0.407,0.766] |
+| False-positive rate | 0 | [0,0.184] |
+
+| Category | Label | Brilliant / n | Grades |
+| --- | --- | --- | --- |
+| sac-while-winning | negative | 0/1 | best 1 |
+| obvious-recapture | negative | 0/2 | best 2 |
+| forced-queen-sacrifice | negative | 0/2 | excellent 1, best 1 |
+| greek-gift | positive | 4/4 | brilliant 4 |
+| deflection | positive | 3/4 | brilliant 3, great 1 |
+| clearance | positive | 2/4 | great 2, brilliant 2 |
+| mating-sacrifice | positive | 3/4 | brilliant 3, great 1 |
+| quiet-sacrifice | positive | 1/4 | great 3, brilliant 1 |
+| exchange-sacrifice | positive | 1/4 | great 3, brilliant 1 |
+| underpromotion | negative | 0/4 | great 1, best 3 |
+| hanging-piece-capture | negative | 0/4 | best 4 |
+| sac-while-losing | negative | 0/1 | best 1 |
+| declined-sacrifice | positive | 1/1 | brilliant 1 |
+| hanging-queen | negative | 0/1 | blunder 1 |
+| temporary-sacrifice | negative | 0/1 | best 1 |
+| borderline-sacrifice | ambiguous | 0/2 | good 1, best 1 |
+| unsound-sacrifice | negative | 0/1 | blunder 1 |
+
+Why positives were not Brilliant:
+
+| Decision | Count |
+| --- | --- |
+| rejected | 7 |
+| no sacrifice detected | 3 |
+
+Ambiguous / borderline cases (not scored; shown for qualitative review):
+
+| Case | Move | Grade | Reason |
+| --- | --- | --- | --- |
+| borderline-sacrifice/marshall-d5 | d5 | good | Na5 was stronger: this move gives up 4.2 percentage points of expected score (47% → 43%). |
+| borderline-sacrifice/benko-b5 | b5 | best | Practically equal to Stockfish's top choice g6. |

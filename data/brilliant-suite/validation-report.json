@@ -1,0 +1,685 @@
+{
+ "all": {
+  "positives": 155,
+  "negatives": 162,
+  "truePositives": 82,
+  "falsePositives": 13,
+  "precision": 0.863,
+  "precisionCI95": [
+   0.78,
+   0.918
+  ],
+  "recall": 0.529,
+  "recallCI95": [
+   0.451,
+   0.606
+  ],
+  "falsePositiveRate": 0.08,
+  "falsePositiveRateCI95": [
+   0.047,
+   0.132
+  ],
+  "byCategory": {
+   "sac-while-winning": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "best": 1
+    }
+   },
+   "obvious-recapture": {
+    "label": "negative",
+    "n": 2,
+    "brilliant": 0,
+    "grades": {
+     "best": 2
+    }
+   },
+   "forced-queen-sacrifice": {
+    "label": "negative",
+    "n": 2,
+    "brilliant": 0,
+    "grades": {
+     "excellent": 1,
+     "best": 1
+    }
+   },
+   "greek-gift": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 4,
+    "grades": {
+     "brilliant": 4
+    }
+   },
+   "deflection": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 3,
+    "grades": {
+     "brilliant": 3,
+     "great": 1
+    }
+   },
+   "clearance": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 2,
+    "grades": {
+     "great": 2,
+     "brilliant": 2
+    }
+   },
+   "mating-sacrifice": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 3,
+    "grades": {
+     "brilliant": 3,
+     "great": 1
+    }
+   },
+   "quiet-sacrifice": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 1,
+    "grades": {
+     "great": 3,
+     "brilliant": 1
+    }
+   },
+   "exchange-sacrifice": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 1,
+    "grades": {
+     "great": 3,
+     "brilliant": 1
+    }
+   },
+   "underpromotion": {
+    "label": "negative",
+    "n": 4,
+    "brilliant": 0,
+    "grades": {
+     "great": 1,
+     "best": 3
+    }
+   },
+   "hanging-piece-capture": {
+    "label": "negative",
+    "n": 24,
+    "brilliant": 0,
+    "grades": {
+     "best": 24
+    }
+   },
+   "positive": {
+    "label": "positive",
+    "n": 130,
+    "brilliant": 67,
+    "grades": {
+     "great": 49,
+     "brilliant": 67,
+     "best": 14
+    }
+   },
+   "unsound-sacrifice-real": {
+    "label": "negative",
+    "n": 40,
+    "brilliant": 0,
+    "grades": {
+     "inaccuracy": 4,
+     "miss": 7,
+     "mistake": 5,
+     "blunder": 24
+    }
+   },
+   "desperation-sacrifice": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 0,
+    "grades": {
+     "best": 12,
+     "excellent": 1,
+     "inaccuracy": 2,
+     "mistake": 2,
+     "good": 3
+    }
+   },
+   "sac-while-crushing": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 4,
+    "grades": {
+     "best": 11,
+     "excellent": 3,
+     "brilliant": 4,
+     "great": 1,
+     "good": 1
+    }
+   },
+   "temporary-sacrifice-real": {
+    "label": "negative",
+    "n": 25,
+    "brilliant": 9,
+    "grades": {
+     "best": 9,
+     "good": 1,
+     "brilliant": 9,
+     "great": 5,
+     "inaccuracy": 1
+    }
+   },
+   "routine-recapture-real": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 0,
+    "grades": {
+     "best": 16,
+     "good": 1,
+     "inaccuracy": 1,
+     "blunder": 1,
+     "excellent": 1
+    }
+   },
+   "sac-while-losing": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "best": 1
+    }
+   },
+   "declined-sacrifice": {
+    "label": "positive",
+    "n": 1,
+    "brilliant": 1,
+    "grades": {
+     "brilliant": 1
+    }
+   },
+   "hanging-queen": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "blunder": 1
+    }
+   },
+   "temporary-sacrifice": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "best": 1
+    }
+   },
+   "borderline-sacrifice": {
+    "label": "ambiguous",
+    "n": 2,
+    "brilliant": 0,
+    "grades": {
+     "good": 1,
+     "best": 1
+    }
+   },
+   "unsound-sacrifice": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "blunder": 1
+    }
+   }
+  },
+  "positiveRejections": {
+   "rejected": 67,
+   "no sacrifice detected": 6
+  },
+  "falsePositiveCases": [
+   {
+    "id": "temporary-sacrifice-real/M4LtH5ZC-54",
+    "move": "Rxe6",
+    "bestAlternativeExpectedScore": 0.5
+   },
+   {
+    "id": "temporary-sacrifice-real/KqzMhj7G-14",
+    "move": "Nc3",
+    "bestAlternativeExpectedScore": 0.2516
+   },
+   {
+    "id": "sac-while-crushing/lsvqAX38-83",
+    "move": "Bc7+",
+    "bestAlternativeExpectedScore": 0.1939
+   },
+   {
+    "id": "temporary-sacrifice-real/La9aGlYC-59",
+    "move": "Rxf2",
+    "bestAlternativeExpectedScore": 0.5
+   },
+   {
+    "id": "temporary-sacrifice-real/mYxTHx6l-37",
+    "move": "Nxc5",
+    "bestAlternativeExpectedScore": 0.6615
+   },
+   {
+    "id": "temporary-sacrifice-real/VKASqZY4-42",
+    "move": "Nxg5",
+    "bestAlternativeExpectedScore": 0.5156
+   },
+   {
+    "id": "sac-while-crushing/P5bD0XJt-126",
+    "move": "Bxd2",
+    "bestAlternativeExpectedScore": 0.5
+   },
+   {
+    "id": "temporary-sacrifice-real/SPwu7cIA-59",
+    "move": "Rxf4",
+    "bestAlternativeExpectedScore": 0.1607
+   },
+   {
+    "id": "temporary-sacrifice-real/aL89PQm2-41",
+    "move": "Bxc4",
+    "bestAlternativeExpectedScore": 0.8707
+   },
+   {
+    "id": "sac-while-crushing/S1DKcUWv-47",
+    "move": "Qc2",
+    "bestAlternativeExpectedScore": 0.8333
+   },
+   {
+    "id": "sac-while-crushing/7UoYre9s-127",
+    "move": "Bxg7",
+    "bestAlternativeExpectedScore": 0.5276
+   },
+   {
+    "id": "temporary-sacrifice-real/ATq2W0r5-46",
+    "move": "Rc7",
+    "bestAlternativeExpectedScore": 0.5623
+   },
+   {
+    "id": "temporary-sacrifice-real/xcwHeQax-16",
+    "move": "Nxg6",
+    "bestAlternativeExpectedScore": 0.6754
+   }
+  ],
+  "ambiguousCases": [
+   {
+    "id": "borderline-sacrifice/marshall-d5",
+    "move": "d5",
+    "grade": "good",
+    "reason": "Na5 was stronger: this move gives up 4.2 percentage points of expected score (47% → 43%).",
+    "note": "Marshall Attack, 8...d5!?: a well-established sound pawn sacrifice for long-term piece activity, not a clear engine-verified win (roughly balanced by modern theory)."
+   },
+   {
+    "id": "borderline-sacrifice/benko-b5",
+    "move": "b5",
+    "grade": "best",
+    "reason": "Practically equal to Stockfish's top choice g6.",
+    "note": "Benko Gambit, 3...b5!?: a well-established sound pawn sacrifice for long-term queenside pressure, not a clear engine-verified win."
+   }
+  ]
+ },
+ "automaticOnly": {
+  "positives": 130,
+  "negatives": 145,
+  "truePositives": 67,
+  "falsePositives": 13,
+  "precision": 0.838,
+  "precisionCI95": [
+   0.742,
+   0.903
+  ],
+  "recall": 0.515,
+  "recallCI95": [
+   0.43,
+   0.6
+  ],
+  "falsePositiveRate": 0.09,
+  "falsePositiveRateCI95": [
+   0.053,
+   0.147
+  ],
+  "byCategory": {
+   "positive": {
+    "label": "positive",
+    "n": 130,
+    "brilliant": 67,
+    "grades": {
+     "great": 49,
+     "brilliant": 67,
+     "best": 14
+    }
+   },
+   "hanging-piece-capture": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 0,
+    "grades": {
+     "best": 20
+    }
+   },
+   "unsound-sacrifice-real": {
+    "label": "negative",
+    "n": 40,
+    "brilliant": 0,
+    "grades": {
+     "inaccuracy": 4,
+     "miss": 7,
+     "mistake": 5,
+     "blunder": 24
+    }
+   },
+   "desperation-sacrifice": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 0,
+    "grades": {
+     "best": 12,
+     "excellent": 1,
+     "inaccuracy": 2,
+     "mistake": 2,
+     "good": 3
+    }
+   },
+   "sac-while-crushing": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 4,
+    "grades": {
+     "best": 11,
+     "excellent": 3,
+     "brilliant": 4,
+     "great": 1,
+     "good": 1
+    }
+   },
+   "temporary-sacrifice-real": {
+    "label": "negative",
+    "n": 25,
+    "brilliant": 9,
+    "grades": {
+     "best": 9,
+     "good": 1,
+     "brilliant": 9,
+     "great": 5,
+     "inaccuracy": 1
+    }
+   },
+   "routine-recapture-real": {
+    "label": "negative",
+    "n": 20,
+    "brilliant": 0,
+    "grades": {
+     "best": 16,
+     "good": 1,
+     "inaccuracy": 1,
+     "blunder": 1,
+     "excellent": 1
+    }
+   }
+  },
+  "positiveRejections": {
+   "rejected": 60,
+   "no sacrifice detected": 3
+  },
+  "falsePositiveCases": [
+   {
+    "id": "temporary-sacrifice-real/M4LtH5ZC-54",
+    "move": "Rxe6",
+    "bestAlternativeExpectedScore": 0.5
+   },
+   {
+    "id": "temporary-sacrifice-real/KqzMhj7G-14",
+    "move": "Nc3",
+    "bestAlternativeExpectedScore": 0.2516
+   },
+   {
+    "id": "sac-while-crushing/lsvqAX38-83",
+    "move": "Bc7+",
+    "bestAlternativeExpectedScore": 0.1939
+   },
+   {
+    "id": "temporary-sacrifice-real/La9aGlYC-59",
+    "move": "Rxf2",
+    "bestAlternativeExpectedScore": 0.5
+   },
+   {
+    "id": "temporary-sacrifice-real/mYxTHx6l-37",
+    "move": "Nxc5",
+    "bestAlternativeExpectedScore": 0.6615
+   },
+   {
+    "id": "temporary-sacrifice-real/VKASqZY4-42",
+    "move": "Nxg5",
+    "bestAlternativeExpectedScore": 0.5156
+   },
+   {
+    "id": "sac-while-crushing/P5bD0XJt-126",
+    "move": "Bxd2",
+    "bestAlternativeExpectedScore": 0.5
+   },
+   {
+    "id": "temporary-sacrifice-real/SPwu7cIA-59",
+    "move": "Rxf4",
+    "bestAlternativeExpectedScore": 0.1607
+   },
+   {
+    "id": "temporary-sacrifice-real/aL89PQm2-41",
+    "move": "Bxc4",
+    "bestAlternativeExpectedScore": 0.8707
+   },
+   {
+    "id": "sac-while-crushing/S1DKcUWv-47",
+    "move": "Qc2",
+    "bestAlternativeExpectedScore": 0.8333
+   },
+   {
+    "id": "sac-while-crushing/7UoYre9s-127",
+    "move": "Bxg7",
+    "bestAlternativeExpectedScore": 0.5276
+   },
+   {
+    "id": "temporary-sacrifice-real/ATq2W0r5-46",
+    "move": "Rc7",
+    "bestAlternativeExpectedScore": 0.5623
+   },
+   {
+    "id": "temporary-sacrifice-real/xcwHeQax-16",
+    "move": "Nxg6",
+    "bestAlternativeExpectedScore": 0.6754
+   }
+  ],
+  "ambiguousCases": []
+ },
+ "goldSubset": {
+  "positives": 25,
+  "negatives": 17,
+  "truePositives": 15,
+  "falsePositives": 0,
+  "precision": 1,
+  "precisionCI95": [
+   0.796,
+   1
+  ],
+  "recall": 0.6,
+  "recallCI95": [
+   0.407,
+   0.766
+  ],
+  "falsePositiveRate": 0,
+  "falsePositiveRateCI95": [
+   0,
+   0.184
+  ],
+  "byCategory": {
+   "sac-while-winning": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "best": 1
+    }
+   },
+   "obvious-recapture": {
+    "label": "negative",
+    "n": 2,
+    "brilliant": 0,
+    "grades": {
+     "best": 2
+    }
+   },
+   "forced-queen-sacrifice": {
+    "label": "negative",
+    "n": 2,
+    "brilliant": 0,
+    "grades": {
+     "excellent": 1,
+     "best": 1
+    }
+   },
+   "greek-gift": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 4,
+    "grades": {
+     "brilliant": 4
+    }
+   },
+   "deflection": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 3,
+    "grades": {
+     "brilliant": 3,
+     "great": 1
+    }
+   },
+   "clearance": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 2,
+    "grades": {
+     "great": 2,
+     "brilliant": 2
+    }
+   },
+   "mating-sacrifice": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 3,
+    "grades": {
+     "brilliant": 3,
+     "great": 1
+    }
+   },
+   "quiet-sacrifice": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 1,
+    "grades": {
+     "great": 3,
+     "brilliant": 1
+    }
+   },
+   "exchange-sacrifice": {
+    "label": "positive",
+    "n": 4,
+    "brilliant": 1,
+    "grades": {
+     "great": 3,
+     "brilliant": 1
+    }
+   },
+   "underpromotion": {
+    "label": "negative",
+    "n": 4,
+    "brilliant": 0,
+    "grades": {
+     "great": 1,
+     "best": 3
+    }
+   },
+   "hanging-piece-capture": {
+    "label": "negative",
+    "n": 4,
+    "brilliant": 0,
+    "grades": {
+     "best": 4
+    }
+   },
+   "sac-while-losing": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "best": 1
+    }
+   },
+   "declined-sacrifice": {
+    "label": "positive",
+    "n": 1,
+    "brilliant": 1,
+    "grades": {
+     "brilliant": 1
+    }
+   },
+   "hanging-queen": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "blunder": 1
+    }
+   },
+   "temporary-sacrifice": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "best": 1
+    }
+   },
+   "borderline-sacrifice": {
+    "label": "ambiguous",
+    "n": 2,
+    "brilliant": 0,
+    "grades": {
+     "good": 1,
+     "best": 1
+    }
+   },
+   "unsound-sacrifice": {
+    "label": "negative",
+    "n": 1,
+    "brilliant": 0,
+    "grades": {
+     "blunder": 1
+    }
+   }
+  },
+  "positiveRejections": {
+   "rejected": 7,
+   "no sacrifice detected": 3
+  },
+  "falsePositiveCases": [],
+  "ambiguousCases": [
+   {
+    "id": "borderline-sacrifice/marshall-d5",
+    "move": "d5",
+    "grade": "good",
+    "reason": "Na5 was stronger: this move gives up 4.2 percentage points of expected score (47% → 43%).",
+    "note": "Marshall Attack, 8...d5!?: a well-established sound pawn sacrifice for long-term piece activity, not a clear engine-verified win (roughly balanced by modern theory)."
+   },
+   {
+    "id": "borderline-sacrifice/benko-b5",
+    "move": "b5",
+    "grade": "best",
+    "reason": "Practically equal to Stockfish's top choice g6.",
+    "note": "Benko Gambit, 3...b5!?: a well-established sound pawn sacrifice for long-term queenside pressure, not a clear engine-verified win."
+   }
+  ]
+ }
+}
