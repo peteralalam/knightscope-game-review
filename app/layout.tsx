@@ -21,14 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: "KnightScope",
     openGraph: {
       title: "KnightScope — See the story behind every move",
-      description: "Private, visual PGN analysis powered by Stockfish 18.",
+      description: "Private, visual PGN analysis powered by Stockfish 19.",
       type: "website",
       images: [{ url: image, width: 1200, height: 630, alt: "KnightScope chess game review" }],
     },
     twitter: {
       card: "summary_large_image",
       title: "KnightScope — Chess Game Review",
-      description: "Private, visual PGN analysis powered by Stockfish 18.",
+      description: "Private, visual PGN analysis powered by Stockfish 19.",
       images: [image],
     },
   };

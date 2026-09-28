@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import initStockfish from "stockfish";
 
-test("Stockfish lite answers the UCI protocol and evaluates a position", { timeout: 30_000 }, async () => {
+test("Stockfish 19 lite answers the UCI protocol and evaluates a position", { timeout: 30_000 }, async () => {
   const engine = await initStockfish("lite-single");
   const output = [];
 
@@ -24,7 +24,7 @@ test("Stockfish lite answers the UCI protocol and evaluates a position", { timeo
     engine.sendCommand("uci");
   });
 
-  assert.ok(output.some((line) => /Stockfish 18/.test(line)));
+  assert.ok(output.some((line) => /^id name Stockfish 19\b/.test(line)));
   assert.ok(output.some((line) => /\bscore (?:cp|mate) -?\d+/.test(line)));
   assert.ok(output.some((line) => /\bwdl \d+ \d+ \d+/.test(line)));
   assert.ok(output.some((line) => /^bestmove [a-h][1-8][a-h][1-8]/.test(line)));

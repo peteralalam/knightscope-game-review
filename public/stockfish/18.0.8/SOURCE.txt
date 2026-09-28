@@ -1,9 +1,0 @@
-Stockfish.js 18.0.8 (lite, single-threaded browser build)
-
-Corresponding source:
-https://github.com/nmrugg/stockfish.js/tree/v18.0.8
-
-Upstream Stockfish source:
-https://github.com/official-stockfish/Stockfish
-
-License: GNU General Public License v3. See COPYING.txt in this directory.

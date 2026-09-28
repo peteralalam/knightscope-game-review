@@ -1,0 +1,43 @@
+{
+  "games": 2140,
+  "samples": 4271,
+  "players": 3963,
+  "leakingPlayers": 0,
+  "splitMethod": "connected components of the player-game graph, hashed to 60/20/20 train/validation/test",
+  "splits": {
+    "train": 2660,
+    "validation": 789,
+    "test": 822
+  },
+  "byTimeControlAndBand": {
+    "blitz": {
+      "800–1000": 0,
+      "1000–1200": 1,
+      "1200–1400": 0,
+      "1400–1600": 294,
+      "1600–1800": 329,
+      "1800–2000": 303,
+      "2000–2200": 251,
+      "2200–2400": 308,
+      "2400+": 315
+    },
+    "rapid": {
+      "800–1000": 109,
+      "1000–1200": 241,
+      "1200–1400": 306,
+      "1400–1600": 272,
+      "1600–1800": 327,
+      "1800–2000": 328,
+      "2000–2200": 311,
+      "2200–2400": 312,
+      "2400+": 264
+    }
+  },
+  "bySource": {
+    "lichess-datasnaek": 1116,
+    "lichess-puzzle-db": 3155
+  },
+  "preset": "quick",
+  "engine": "Stockfish 19 Lite WASM [stockfish.js npm lite-single]",
+  "model": "ks-review-2.1"
+}

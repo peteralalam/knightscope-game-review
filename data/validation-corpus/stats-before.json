@@ -1,0 +1,974 @@
+{
+  "games": 140,
+  "overall": {
+    "moves": 11384,
+    "per1000": {
+      "brilliant": 4.9,
+      "great": 36,
+      "best": 458.2,
+      "excellent": 128.1,
+      "good": 115.5,
+      "book": 73.4,
+      "inaccuracy": 79.2,
+      "mistake": 40,
+      "miss": 22.9,
+      "blunder": 41.7
+    },
+    "counts": {
+      "brilliant": 56,
+      "great": 410,
+      "best": 5216,
+      "excellent": 1458,
+      "good": 1315,
+      "book": 836,
+      "inaccuracy": 902,
+      "mistake": 455,
+      "miss": 261,
+      "blunder": 475
+    }
+  },
+  "byBand": {
+    "<1200": {
+      "moves": 345,
+      "per1000": {
+        "brilliant": 0,
+        "great": 14.5,
+        "best": 344.9,
+        "excellent": 121.7,
+        "good": 124.6,
+        "book": 72.5,
+        "inaccuracy": 115.9,
+        "mistake": 81.2,
+        "miss": 72.5,
+        "blunder": 52.2
+      },
+      "counts": {
+        "brilliant": 0,
+        "great": 5,
+        "best": 119,
+        "excellent": 42,
+        "good": 43,
+        "book": 25,
+        "inaccuracy": 40,
+        "mistake": 28,
+        "miss": 25,
+        "blunder": 18
+      }
+    },
+    "1200–1599": {
+      "moves": 862,
+      "per1000": {
+        "brilliant": 0,
+        "great": 23.2,
+        "best": 433.9,
+        "excellent": 140.4,
+        "good": 117.2,
+        "book": 81.2,
+        "inaccuracy": 88.2,
+        "mistake": 38.3,
+        "miss": 26.7,
+        "blunder": 51
+      },
+      "counts": {
+        "brilliant": 0,
+        "great": 20,
+        "best": 374,
+        "excellent": 121,
+        "good": 101,
+        "book": 70,
+        "inaccuracy": 76,
+        "mistake": 33,
+        "miss": 23,
+        "blunder": 44
+      }
+    },
+    "1600–1999": {
+      "moves": 5790,
+      "per1000": {
+        "brilliant": 4.8,
+        "great": 38.3,
+        "best": 450.8,
+        "excellent": 136.6,
+        "good": 119.3,
+        "book": 64.4,
+        "inaccuracy": 75.6,
+        "mistake": 41.8,
+        "miss": 24.5,
+        "blunder": 43.7
+      },
+      "counts": {
+        "brilliant": 28,
+        "great": 222,
+        "best": 2610,
+        "excellent": 791,
+        "good": 691,
+        "book": 373,
+        "inaccuracy": 438,
+        "mistake": 242,
+        "miss": 142,
+        "blunder": 253
+      }
+    },
+    "2000–2399": {
+      "moves": 2782,
+      "per1000": {
+        "brilliant": 5.4,
+        "great": 41.3,
+        "best": 454.7,
+        "excellent": 111.8,
+        "good": 120.1,
+        "book": 80.2,
+        "inaccuracy": 85.5,
+        "mistake": 36.3,
+        "miss": 20.1,
+        "blunder": 44.6
+      },
+      "counts": {
+        "brilliant": 15,
+        "great": 115,
+        "best": 1265,
+        "excellent": 311,
+        "good": 334,
+        "book": 223,
+        "inaccuracy": 238,
+        "mistake": 101,
+        "miss": 56,
+        "blunder": 124
+      }
+    },
+    "2400+": {
+      "moves": 859,
+      "per1000": {
+        "brilliant": 5.8,
+        "great": 30.3,
+        "best": 476.1,
+        "excellent": 115.3,
+        "good": 93.1,
+        "book": 81.5,
+        "inaccuracy": 92,
+        "mistake": 51.2,
+        "miss": 15.1,
+        "blunder": 39.6
+      },
+      "counts": {
+        "brilliant": 5,
+        "great": 26,
+        "best": 409,
+        "excellent": 99,
+        "good": 80,
+        "book": 70,
+        "inaccuracy": 79,
+        "mistake": 44,
+        "miss": 13,
+        "blunder": 34
+      }
+    },
+    "unrated (master OTB)": {
+      "moves": 746,
+      "per1000": {
+        "brilliant": 10.7,
+        "great": 29.5,
+        "best": 588.5,
+        "excellent": 126,
+        "good": 88.5,
+        "book": 100.5,
+        "inaccuracy": 41.6,
+        "mistake": 9.4,
+        "miss": 2.7,
+        "blunder": 2.7
+      },
+      "counts": {
+        "brilliant": 8,
+        "great": 22,
+        "best": 439,
+        "excellent": 94,
+        "good": 66,
+        "book": 75,
+        "inaccuracy": 31,
+        "mistake": 7,
+        "miss": 2,
+        "blunder": 2
+      }
+    }
+  },
+  "byTag": {
+    "low-rated": {
+      "moves": 421,
+      "per1000": {
+        "brilliant": 0,
+        "great": 11.9,
+        "best": 349.2,
+        "excellent": 135.4,
+        "good": 118.8,
+        "book": 71.3,
+        "inaccuracy": 118.8,
+        "mistake": 64.1,
+        "miss": 68.9,
+        "blunder": 61.8
+      },
+      "counts": {
+        "brilliant": 0,
+        "great": 5,
+        "best": 147,
+        "excellent": 57,
+        "good": 50,
+        "book": 30,
+        "inaccuracy": 50,
+        "mistake": 27,
+        "miss": 29,
+        "blunder": 26
+      }
+    },
+    "short": {
+      "moves": 341,
+      "per1000": {
+        "brilliant": 8.8,
+        "great": 35.2,
+        "best": 307.9,
+        "excellent": 73.3,
+        "good": 93.8,
+        "book": 219.9,
+        "inaccuracy": 96.8,
+        "mistake": 52.8,
+        "miss": 35.2,
+        "blunder": 76.2
+      },
+      "counts": {
+        "brilliant": 3,
+        "great": 12,
+        "best": 105,
+        "excellent": 25,
+        "good": 32,
+        "book": 75,
+        "inaccuracy": 33,
+        "mistake": 18,
+        "miss": 12,
+        "blunder": 26
+      }
+    },
+    "classical-time-control": {
+      "moves": 2140,
+      "per1000": {
+        "brilliant": 2.8,
+        "great": 41.1,
+        "best": 458.4,
+        "excellent": 131.3,
+        "good": 121,
+        "book": 61.7,
+        "inaccuracy": 95.3,
+        "mistake": 33.2,
+        "miss": 18.2,
+        "blunder": 36.9
+      },
+      "counts": {
+        "brilliant": 6,
+        "great": 88,
+        "best": 981,
+        "excellent": 281,
+        "good": 259,
+        "book": 132,
+        "inaccuracy": 204,
+        "mistake": 71,
+        "miss": 39,
+        "blunder": 79
+      }
+    },
+    "club-1200-1800": {
+      "moves": 2990,
+      "per1000": {
+        "brilliant": 3.7,
+        "great": 32.8,
+        "best": 464.9,
+        "excellent": 132.8,
+        "good": 114.4,
+        "book": 71.9,
+        "inaccuracy": 72.6,
+        "mistake": 39.5,
+        "miss": 24.7,
+        "blunder": 42.8
+      },
+      "counts": {
+        "brilliant": 11,
+        "great": 98,
+        "best": 1390,
+        "excellent": 397,
+        "good": 342,
+        "book": 215,
+        "inaccuracy": 217,
+        "mistake": 118,
+        "miss": 74,
+        "blunder": 128
+      }
+    },
+    "winning-conversion": {
+      "moves": 2613,
+      "per1000": {
+        "brilliant": 3.4,
+        "great": 40.2,
+        "best": 474.9,
+        "excellent": 148.5,
+        "good": 117.5,
+        "book": 53.6,
+        "inaccuracy": 73.9,
+        "mistake": 36.7,
+        "miss": 14.9,
+        "blunder": 36.4
+      },
+      "counts": {
+        "brilliant": 9,
+        "great": 105,
+        "best": 1241,
+        "excellent": 388,
+        "good": 307,
+        "book": 140,
+        "inaccuracy": 193,
+        "mistake": 96,
+        "miss": 39,
+        "blunder": 95
+      }
+    },
+    "blunder-heavy": {
+      "moves": 6072,
+      "per1000": {
+        "brilliant": 5.4,
+        "great": 41.3,
+        "best": 456.5,
+        "excellent": 114.3,
+        "good": 110,
+        "book": 56.2,
+        "inaccuracy": 87.3,
+        "mistake": 46.3,
+        "miss": 29.2,
+        "blunder": 53.5
+      },
+      "counts": {
+        "brilliant": 33,
+        "great": 251,
+        "best": 2772,
+        "excellent": 694,
+        "good": 668,
+        "book": 341,
+        "inaccuracy": 530,
+        "mistake": 281,
+        "miss": 177,
+        "blunder": 325
+      }
+    },
+    "real-sacrifice": {
+      "moves": 1347,
+      "per1000": {
+        "brilliant": 12.6,
+        "great": 34.9,
+        "best": 411.3,
+        "excellent": 103.9,
+        "good": 118.8,
+        "book": 78.7,
+        "inaccuracy": 81.7,
+        "mistake": 49.7,
+        "miss": 41.6,
+        "blunder": 66.8
+      },
+      "counts": {
+        "brilliant": 17,
+        "great": 47,
+        "best": 554,
+        "excellent": 140,
+        "good": 160,
+        "book": 106,
+        "inaccuracy": 110,
+        "mistake": 67,
+        "miss": 56,
+        "blunder": 90
+      }
+    },
+    "defensive-save": {
+      "moves": 1238,
+      "per1000": {
+        "brilliant": 2.4,
+        "great": 39.6,
+        "best": 437.8,
+        "excellent": 103.4,
+        "good": 138.1,
+        "book": 84.8,
+        "inaccuracy": 88.9,
+        "mistake": 40.4,
+        "miss": 20.2,
+        "blunder": 44.4
+      },
+      "counts": {
+        "brilliant": 3,
+        "great": 49,
+        "best": 542,
+        "excellent": 128,
+        "good": 171,
+        "book": 105,
+        "inaccuracy": 110,
+        "mistake": 50,
+        "miss": 25,
+        "blunder": 55
+      }
+    },
+    "strong-1800-2400": {
+      "moves": 6470,
+      "per1000": {
+        "brilliant": 5.1,
+        "great": 41,
+        "best": 443.4,
+        "excellent": 126.4,
+        "good": 122.1,
+        "book": 69.9,
+        "inaccuracy": 83.8,
+        "mistake": 40.6,
+        "miss": 22.9,
+        "blunder": 44.8
+      },
+      "counts": {
+        "brilliant": 33,
+        "great": 265,
+        "best": 2869,
+        "excellent": 818,
+        "good": 790,
+        "book": 452,
+        "inaccuracy": 542,
+        "mistake": 263,
+        "miss": 148,
+        "blunder": 290
+      }
+    },
+    "strong-online-2400+": {
+      "moves": 757,
+      "per1000": {
+        "brilliant": 5.3,
+        "great": 26.4,
+        "best": 490.1,
+        "excellent": 121.5,
+        "good": 88.5,
+        "book": 84.5,
+        "inaccuracy": 81.9,
+        "mistake": 52.8,
+        "miss": 10.6,
+        "blunder": 38.3
+      },
+      "counts": {
+        "brilliant": 4,
+        "great": 20,
+        "best": 371,
+        "excellent": 92,
+        "good": 67,
+        "book": 64,
+        "inaccuracy": 62,
+        "mistake": 40,
+        "miss": 8,
+        "blunder": 29
+      }
+    },
+    "long": {
+      "moves": 1677,
+      "per1000": {
+        "brilliant": 2.4,
+        "great": 41.1,
+        "best": 511,
+        "excellent": 153.8,
+        "good": 103.2,
+        "book": 35.2,
+        "inaccuracy": 73.9,
+        "mistake": 35.2,
+        "miss": 12.5,
+        "blunder": 31.6
+      },
+      "counts": {
+        "brilliant": 4,
+        "great": 69,
+        "best": 857,
+        "excellent": 258,
+        "good": 173,
+        "book": 59,
+        "inaccuracy": 124,
+        "mistake": 59,
+        "miss": 21,
+        "blunder": 53
+      }
+    },
+    "drawn-ending": {
+      "moves": 1993,
+      "per1000": {
+        "brilliant": 5,
+        "great": 46.2,
+        "best": 515.3,
+        "excellent": 90.8,
+        "good": 104.9,
+        "book": 42.6,
+        "inaccuracy": 85.3,
+        "mistake": 41.6,
+        "miss": 23.6,
+        "blunder": 44.7
+      },
+      "counts": {
+        "brilliant": 10,
+        "great": 92,
+        "best": 1027,
+        "excellent": 181,
+        "good": 209,
+        "book": 85,
+        "inaccuracy": 170,
+        "mistake": 83,
+        "miss": 47,
+        "blunder": 89
+      }
+    },
+    "quiet-positional": {
+      "moves": 766,
+      "per1000": {
+        "brilliant": 2.6,
+        "great": 28.7,
+        "best": 463.4,
+        "excellent": 199.7,
+        "good": 142.3,
+        "book": 73.1,
+        "inaccuracy": 43.1,
+        "mistake": 19.6,
+        "miss": 11.7,
+        "blunder": 15.7
+      },
+      "counts": {
+        "brilliant": 2,
+        "great": 22,
+        "best": 355,
+        "excellent": 153,
+        "good": 109,
+        "book": 56,
+        "inaccuracy": 33,
+        "mistake": 15,
+        "miss": 9,
+        "blunder": 12
+      }
+    },
+    "master-otb": {
+      "moves": 746,
+      "per1000": {
+        "brilliant": 10.7,
+        "great": 29.5,
+        "best": 588.5,
+        "excellent": 126,
+        "good": 88.5,
+        "book": 100.5,
+        "inaccuracy": 41.6,
+        "mistake": 9.4,
+        "miss": 2.7,
+        "blunder": 2.7
+      },
+      "counts": {
+        "brilliant": 8,
+        "great": 22,
+        "best": 439,
+        "excellent": 94,
+        "good": 66,
+        "book": 75,
+        "inaccuracy": 31,
+        "mistake": 7,
+        "miss": 2,
+        "blunder": 2
+      }
+    }
+  },
+  "greatPerSideGame": {
+    "mean": 1.46,
+    "max": 9,
+    "distribution": {
+      "0": 106,
+      "1": 71,
+      "2": 43,
+      "3": 33,
+      "4": 9,
+      "5": 7,
+      "6": 3,
+      "7": 2,
+      "8": 3,
+      "9": 3
+    }
+  },
+  "greatDecisions": {},
+  "brilliantDecisions": {},
+  "pathologies": {
+    "sidesWithMoreThan3Great": [
+      "l8uz5kTe:w (9 in 55)",
+      "l8uz5kTe:b (5 in 54)",
+      "LWRtgnrW:w (4 in 48)",
+      "s4NMa0mv:b (4 in 45)",
+      "sy6W0rbM:w (6 in 81)",
+      "sy6W0rbM:b (7 in 81)",
+      "pKu9tDFW:w (5 in 89)",
+      "jdboY3Dg:b (8 in 90)",
+      "0p3t5oSG:b (8 in 81)",
+      "LsJH7KsD:b (7 in 76)",
+      "XibyyHNS:b (9 in 51)",
+      "DbGQjMeS:b (5 in 46)",
+      "KhbmFoyd:w (6 in 69)",
+      "KhbmFoyd:b (5 in 68)",
+      "xy6ZFaRA:b (9 in 49)",
+      "LGIoMyNT:b (4 in 39)",
+      "4D8MDUQC:b (4 in 49)",
+      "TGgo74PF:b (5 in 51)",
+      "ybWdqicc:w (4 in 31)",
+      "drOtd1sX:b (5 in 52)",
+      "wuAoy1Rr:w (4 in 50)",
+      "i0S5ATdQ:w (4 in 55)",
+      "lAB29sx9:w (5 in 74)",
+      "lAB29sx9:b (8 in 73)",
+      "j8sMiXTe:b (4 in 68)",
+      "kasparov-topalov-1999#1:w (6 in 44)",
+      "opera-game-1858#1:w (4 in 17)"
+    ],
+    "greatRecaptures": [],
+    "greatWhileDecided": [],
+    "brilliantsWithoutSacrifice": [],
+    "brilliantsWhereAlternativeAlreadyWon": [],
+    "brilliantsFromLosingPositions": [],
+    "consecutiveBrilliantsSameSide": [
+      "XI7LvCr6#65 Qf1+",
+      "uUmAZq17#38 Nf5",
+      "klMFHlHb#50 Qxc7+",
+      "sYRxdzz0#46 hxg6+",
+      "t0ajxGrU#64 Bxd5+",
+      "t0ajxGrU#139 Nxa6",
+      "kasparov-deep-blue-1997#6#16 O-O",
+      "kasparov-topalov-1999#1#57 Bb7"
+    ],
+    "missShareOfTacticalErrors": 0.219,
+    "bookMovesLosingOver5Points": 0,
+    "maxBookPly": 18,
+    "bookPliesMedian": 6,
+    "bookPliesP95": 14,
+    "bookAfterNonBookMove": 26
+  },
+  "brilliants": [
+    {
+      "game": "2i5XdggO",
+      "ply": 43,
+      "san": "Bxg3",
+      "rating": 1801
+    },
+    {
+      "game": "XI7LvCr6",
+      "ply": 63,
+      "san": "Qxf2+",
+      "rating": 1674
+    },
+    {
+      "game": "XI7LvCr6",
+      "ply": 65,
+      "san": "Qf1+",
+      "rating": 1674
+    },
+    {
+      "game": "KHOlxcmV",
+      "ply": 60,
+      "san": "Qe8+",
+      "rating": 1675
+    },
+    {
+      "game": "2COLusXx",
+      "ply": 25,
+      "san": "axb5",
+      "rating": 1860
+    },
+    {
+      "game": "LWRtgnrW",
+      "ply": 41,
+      "san": "Nxd4",
+      "rating": 1889
+    },
+    {
+      "game": "UKFJwb0g",
+      "ply": 42,
+      "san": "Bxg5",
+      "rating": 2723
+    },
+    {
+      "game": "UKFJwb0g",
+      "ply": 51,
+      "san": "Ne4",
+      "rating": 2733
+    },
+    {
+      "game": "uUmAZq17",
+      "ply": 36,
+      "san": "Qxg4",
+      "rating": 2726
+    },
+    {
+      "game": "uUmAZq17",
+      "ply": 38,
+      "san": "Nf5",
+      "rating": 2726
+    },
+    {
+      "game": "GkvREvBi",
+      "ply": 16,
+      "san": "Bxh7+",
+      "rating": 1852
+    },
+    {
+      "game": "A7wBdbNu",
+      "ply": 8,
+      "san": "e3",
+      "rating": 1736
+    },
+    {
+      "game": "Gn3qs49k",
+      "ply": 20,
+      "san": "Nxe5",
+      "rating": 1856
+    },
+    {
+      "game": "pKu9tDFW",
+      "ply": 45,
+      "san": "Ne3",
+      "rating": 1676
+    },
+    {
+      "game": "jdboY3Dg",
+      "ply": 40,
+      "san": "Ng5",
+      "rating": 2221
+    },
+    {
+      "game": "0p3t5oSG",
+      "ply": 142,
+      "san": "Rxa2+",
+      "rating": 2079
+    },
+    {
+      "game": "dngksa5X",
+      "ply": 129,
+      "san": "Qxf2",
+      "rating": 1730
+    },
+    {
+      "game": "nczffiaL",
+      "ply": 9,
+      "san": "Nd4",
+      "rating": 1687
+    },
+    {
+      "game": "7Eb6nizO",
+      "ply": 48,
+      "san": "Nxf5",
+      "rating": 2052
+    },
+    {
+      "game": "DbGQjMeS",
+      "ply": 79,
+      "san": "Rxg3+",
+      "rating": 2036
+    },
+    {
+      "game": "y2oKWOqB",
+      "ply": 66,
+      "san": "Nxe4",
+      "rating": 2155
+    },
+    {
+      "game": "KlQFTEeZ",
+      "ply": 64,
+      "san": "Qb7",
+      "rating": 1901
+    },
+    {
+      "game": "NPoWQ7UH",
+      "ply": 35,
+      "san": "Nb4",
+      "rating": 2425
+    },
+    {
+      "game": "NPoWQ7UH",
+      "ply": 58,
+      "san": "Ng5+",
+      "rating": 2331
+    },
+    {
+      "game": "NPoWQ7UH",
+      "ply": 62,
+      "san": "Ng5+",
+      "rating": 2331
+    },
+    {
+      "game": "xy6ZFaRA",
+      "ply": 59,
+      "san": "Qxf2+",
+      "rating": 1990
+    },
+    {
+      "game": "xy6ZFaRA",
+      "ply": 63,
+      "san": "Qf2+",
+      "rating": 1990
+    },
+    {
+      "game": "qT26vXXO",
+      "ply": 35,
+      "san": "Nxb4",
+      "rating": 1963
+    },
+    {
+      "game": "TGgo74PF",
+      "ply": 37,
+      "san": "Rac8",
+      "rating": 2237
+    },
+    {
+      "game": "zkQoObZu",
+      "ply": 31,
+      "san": "Nxd4",
+      "rating": 2139
+    },
+    {
+      "game": "8E9fIxZz",
+      "ply": 59,
+      "san": "Rxg3+",
+      "rating": 2090
+    },
+    {
+      "game": "ybWdqicc",
+      "ply": 45,
+      "san": "Nh3+",
+      "rating": 1618
+    },
+    {
+      "game": "klMFHlHb",
+      "ply": 48,
+      "san": "Qxa7+",
+      "rating": 1928
+    },
+    {
+      "game": "klMFHlHb",
+      "ply": 50,
+      "san": "Qxc7+",
+      "rating": 1928
+    },
+    {
+      "game": "S5LWfShI",
+      "ply": 19,
+      "san": "Bxf2+",
+      "rating": 2215
+    },
+    {
+      "game": "WbGVEIl0",
+      "ply": 32,
+      "san": "g3",
+      "rating": 1669
+    },
+    {
+      "game": "8Wx1aGmt",
+      "ply": 59,
+      "san": "Rxe6",
+      "rating": 1992
+    },
+    {
+      "game": "sr8OoFsx",
+      "ply": 36,
+      "san": "Qd5",
+      "rating": 1725
+    },
+    {
+      "game": "sYRxdzz0",
+      "ply": 44,
+      "san": "Ng6+",
+      "rating": 2135
+    },
+    {
+      "game": "sYRxdzz0",
+      "ply": 46,
+      "san": "hxg6+",
+      "rating": 2135
+    },
+    {
+      "game": "lqoXzyWa",
+      "ply": 43,
+      "san": "Qxf2+",
+      "rating": 1797
+    },
+    {
+      "game": "drOtd1sX",
+      "ply": 38,
+      "san": "Rc7",
+      "rating": 1747
+    },
+    {
+      "game": "t0ajxGrU",
+      "ply": 62,
+      "san": "Rxf7",
+      "rating": 1809
+    },
+    {
+      "game": "t0ajxGrU",
+      "ply": 64,
+      "san": "Bxd5+",
+      "rating": 1809
+    },
+    {
+      "game": "t0ajxGrU",
+      "ply": 137,
+      "san": "Nc5+",
+      "rating": 1825
+    },
+    {
+      "game": "t0ajxGrU",
+      "ply": 139,
+      "san": "Nxa6",
+      "rating": 1825
+    },
+    {
+      "game": "lAB29sx9",
+      "ply": 94,
+      "san": "Qxg7+",
+      "rating": 2268
+    },
+    {
+      "game": "lAB29sx9",
+      "ply": 137,
+      "san": "Kg5",
+      "rating": 2221
+    },
+    {
+      "game": "kasparov-deep-blue-1997#1",
+      "ply": 58,
+      "san": "f4"
+    },
+    {
+      "game": "kasparov-deep-blue-1997#6",
+      "ply": 14,
+      "san": "Nxe6"
+    },
+    {
+      "game": "kasparov-deep-blue-1997#6",
+      "ply": 16,
+      "san": "O-O"
+    },
+    {
+      "game": "kasparov-topalov-1999#1",
+      "ply": 55,
+      "san": "Qxd5"
+    },
+    {
+      "game": "kasparov-topalov-1999#1",
+      "ply": 57,
+      "san": "Bb7"
+    },
+    {
+      "game": "kasparov-topalov-1999#1",
+      "ply": 70,
+      "san": "Bf1"
+    },
+    {
+      "game": "opera-game-1858#1",
+      "ply": 18,
+      "san": "Nxb5"
+    },
+    {
+      "game": "opera-game-1858#1",
+      "ply": 30,
+      "san": "Qb8+"
+    }
+  ]
+}
