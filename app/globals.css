@@ -582,8 +582,8 @@ a:focus-visible {
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);
   border-radius: 8px;
-  background: #6a846d;
-  box-shadow: 0 22px 42px rgba(25, 42, 31, 0.18), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  background: #7d9db7;
+  box-shadow: 0 22px 42px rgba(28, 44, 60, 0.22), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
 }
 
 .square {
@@ -594,11 +594,17 @@ a:focus-visible {
 }
 
 .square--light {
-  background: #e8e5d7;
+  background:
+    linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.38) 46%, transparent 54%),
+    radial-gradient(circle at 20% 80%, rgba(129, 160, 184, 0.16), transparent 60%),
+    #dde8ef;
 }
 
 .square--dark {
-  background: #78907a;
+  background:
+    linear-gradient(65deg, transparent 40%, rgba(255, 255, 255, 0.16) 48%, transparent 56%),
+    radial-gradient(circle at 80% 20%, rgba(60, 98, 130, 0.2), transparent 60%),
+    #7b9db8;
 }
 
 .square--last::before {
@@ -619,19 +625,23 @@ a:focus-visible {
 }
 
 .piece--w {
-  color: #fffdf3;
-  filter: drop-shadow(0 2px 1px rgba(17, 25, 20, 0.62));
+  color: #f6f9fb;
+  -webkit-text-stroke: 1.5px #232a31;
+  paint-order: stroke fill;
+  filter: drop-shadow(0 2px 1px rgba(20, 35, 48, 0.4));
 }
 
 .piece--b {
-  color: #17201a;
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22));
+  color: #3a424a;
+  -webkit-text-stroke: 1.5px #14181c;
+  paint-order: stroke fill;
+  filter: drop-shadow(0 2px 1px rgba(20, 35, 48, 0.45));
 }
 
 .coord {
   position: absolute;
   z-index: 3;
-  color: rgba(29, 51, 34, 0.64);
+  color: rgba(88, 126, 158, 0.9);
   font-family: "SFMono-Regular", Consolas, monospace;
   font-size: clamp(7px, 0.72vw, 10px);
   font-weight: 900;
@@ -639,7 +649,7 @@ a:focus-visible {
 }
 
 .square--dark .coord {
-  color: rgba(236, 242, 232, 0.69);
+  color: rgba(228, 238, 245, 0.92);
 }
 
 .coord--rank {

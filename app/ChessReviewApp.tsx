@@ -67,8 +67,8 @@ function resolveBuild(mode: EngineMode, preset: EnginePreset, fullReady: boolean
 type AnalysisState = "idle" | "loading" | "analyzing" | "complete" | "cancelled" | "error";
 
 const PIECES: Record<Color, Record<PieceSymbol, string>> = {
-  w: { k: "♔", q: "♕", r: "♖", b: "♗", n: "♘", p: "♙" },
-  b: { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" },
+  w: { k: "♚\uFE0E", q: "♛\uFE0E", r: "♜\uFE0E", b: "♝\uFE0E", n: "♞\uFE0E", p: "♟\uFE0E" },
+  b: { k: "♚\uFE0E", q: "♛\uFE0E", r: "♜\uFE0E", b: "♝\uFE0E", n: "♞\uFE0E", p: "♟\uFE0E" },
 };
 
 const PIECE_NAMES: Record<PieceSymbol, string> = {
