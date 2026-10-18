@@ -618,18 +618,18 @@ a:focus-visible {
   position: relative;
   z-index: 2;
   display: grid;
-  width: 108%;
-  height: 108%;
+  width: 100%;
+  height: 100%;
   place-items: center;
-  filter: drop-shadow(0 2px 1.5px rgba(20, 35, 48, 0.38));
   user-select: none;
 }
 
-.piece-svg {
+.piece-img {
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 .coord {

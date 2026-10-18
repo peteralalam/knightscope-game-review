@@ -1,6 +1,5 @@
 "use client";
 
-import { ChessPiece, PieceDefs } from "./ChessPieces";
 import { Chess, type Color, type PieceSymbol, type Square } from "chess.js";
 import {
   type ChangeEvent,
@@ -246,7 +245,6 @@ function ChessBoard({
 
   return (
     <div className="board" role="grid" aria-label={`Chess position, ${orientation === "w" ? "white" : "black"} side below`}>
-      <PieceDefs />
       {ranks.flatMap((rank, rowIndex) =>
         files.map((file, columnIndex) => {
           const square = `${file}${rank}` as Square;
@@ -266,7 +264,8 @@ function ChessBoard({
               {rowIndex === 7 && <span className="coord coord--file">{file}</span>}
               {piece && (
                 <span className={`piece piece--${piece.color}`} aria-hidden="true">
-                  <ChessPiece type={piece.type} color={piece.color} />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="piece-img" src={`/pieces/glass/${piece.color}${piece.type}.png`} alt="" draggable={false} />
                 </span>
               )}
               {isDestination && review && (
