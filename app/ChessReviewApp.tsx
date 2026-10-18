@@ -1,5 +1,6 @@
 "use client";
 
+import { ChessPiece, PieceDefs } from "./ChessPieces";
 import { Chess, type Color, type PieceSymbol, type Square } from "chess.js";
 import {
   type ChangeEvent,
@@ -65,11 +66,6 @@ function resolveBuild(mode: EngineMode, preset: EnginePreset, fullReady: boolean
   return preset === "deep" && fullReady ? "full" : "lite";
 }
 type AnalysisState = "idle" | "loading" | "analyzing" | "complete" | "cancelled" | "error";
-
-const PIECES: Record<Color, Record<PieceSymbol, string>> = {
-  w: { k: "♚\uFE0E", q: "♛\uFE0E", r: "♜\uFE0E", b: "♝\uFE0E", n: "♞\uFE0E", p: "♟\uFE0E" },
-  b: { k: "♚\uFE0E", q: "♛\uFE0E", r: "♜\uFE0E", b: "♝\uFE0E", n: "♞\uFE0E", p: "♟\uFE0E" },
-};
 
 const PIECE_NAMES: Record<PieceSymbol, string> = {
   k: "king",
@@ -250,6 +246,7 @@ function ChessBoard({
 
   return (
     <div className="board" role="grid" aria-label={`Chess position, ${orientation === "w" ? "white" : "black"} side below`}>
+      <PieceDefs />
       {ranks.flatMap((rank, rowIndex) =>
         files.map((file, columnIndex) => {
           const square = `${file}${rank}` as Square;
@@ -269,7 +266,7 @@ function ChessBoard({
               {rowIndex === 7 && <span className="coord coord--file">{file}</span>}
               {piece && (
                 <span className={`piece piece--${piece.color}`} aria-hidden="true">
-                  {PIECES[piece.color][piece.type]}
+                  <ChessPiece type={piece.type} color={piece.color} />
                 </span>
               )}
               {isDestination && review && (
