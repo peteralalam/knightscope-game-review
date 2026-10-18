@@ -66,11 +66,6 @@ function resolveBuild(mode: EngineMode, preset: EnginePreset, fullReady: boolean
 }
 type AnalysisState = "idle" | "loading" | "analyzing" | "complete" | "cancelled" | "error";
 
-const PIECES: Record<Color, Record<PieceSymbol, string>> = {
-  w: { k: "♔", q: "♕", r: "♖", b: "♗", n: "♘", p: "♙" },
-  b: { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" },
-};
-
 const PIECE_NAMES: Record<PieceSymbol, string> = {
   k: "king",
   q: "queen",
@@ -269,7 +264,8 @@ function ChessBoard({
               {rowIndex === 7 && <span className="coord coord--file">{file}</span>}
               {piece && (
                 <span className={`piece piece--${piece.color}`} aria-hidden="true">
-                  {PIECES[piece.color][piece.type]}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="piece-img" src={`/pieces/glass/${piece.color}${piece.type}.png`} alt="" draggable={false} />
                 </span>
               )}
               {isDestination && review && (
